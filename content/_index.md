@@ -36,16 +36,4 @@ sections:
         I welcome collaboration on environmental management systems, decarbonisation pathways, and corporate sustainability performance.
     design:
       columns: '1'
-  - block: collection
-    id: papers
-    content:
-      title: Publications
-      text: ''
-      count: 0
-      filters:
-        folders:
-          - publication
-        exclude_featured: false
-    design:
-      view: citation
 ---
