@@ -1,7 +1,7 @@
 ---
 title: "Performance evaluation of green furniture brands in the marketing 4.0 period: An integrated MCDM approach"
 authors:
-  - "Tu{\\u{g}}ba Ye{\\u{g}}in"
+  - "Tugba Yegin"
   - "Muhammad Ikram"
 date: "2022-01-01T00:00:00Z"
 publishDate: "2022-01-01T00:00:00Z"
