@@ -16,7 +16,7 @@ summary: ""
 tags:
   - Green growth
   - Sustainable development
-  - GHGs 
+  - GHGs
   - Environmental Sustainability
   - Emission
   - Sectors
