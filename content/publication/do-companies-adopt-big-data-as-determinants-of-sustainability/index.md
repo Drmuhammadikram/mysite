@@ -1,4 +1,5 @@
 ---
+
 title: "Do companies adopt big data as determinants of sustainability: Evidence from manufacturing companies in Jordan"
 authors:
   - "Luay Jum’a"
