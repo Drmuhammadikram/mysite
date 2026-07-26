@@ -10,7 +10,13 @@ publication_short: "Business Strategy and the Environment"
 doi: "10.1002/bse.70591"
 abstract: "The twin transition to a circular economy (CE) and net zero carbon is necessary yet complex, requiring a holistic set of practices that simultaneously retain resource value and eliminate carbon emissions. However, the literature lacks a unified framework that integrates CE practices aimed at developing resource value retention options (ROs) with net‐zero carbon strategies along the value chain. The aim of this study is to propose a theoretical model, the net zero circular value chain model (NZCVCM), which explains how circular value chain practices (CVCPs), enriched with net‐zero principles, help redevelop ROs. The proposed model builds on the 10R classification of ROs (R0–R9) and extends a prior circular value chain framework by embedding renewable energy use, life‐cycle emissions tracking, carbon‐neutral design, carbon capture and offset, and other climate‐focused practices into each stage. This research follows a systematic literature analysis approach to integrate 40 circular value chains and net zero practices identified across eight value chains, six support categories and three net zero categories. The extended model can be used to understand how CE and decarbonization can be codeveloped in the value chain, expanding current theoretical knowledge and helping stakeholders adopt integrated circular carbon strategies, plans, and actions. This study advances a dual objective framework that couples RO development with scope 3 emissions mitigation through energy and materials decarbonization, integrated carbon analytics, thereby extending circular‐economy theory toward an integrated circular carbon paradigm. Key findings highlight that (i) every resource retention loop (R0–R9) offers opportunities to reduce or eliminate greenhouse gas emissions; (ii) primary circular practices must be powered by renewable energy and guided by carbon metrics to maximize climate benefits; and (iii) support practices for strategic, organizational, and technological enablers to implement zero‐carbon circularity in integration with primary practices. This study provides practical guidance for businesses aiming to simultaneously achieve CE and net‐zero goals. Policymakers and industry stakeholders can leverage these insights to align sustainability initiatives, drive strategic collaborations, and effectively accelerate the transition to a net‐zero CE."
 summary: "The twin transition to a circular economy (CE) and net zero carbon is necessary yet complex, requiring a holistic set of practices that simultaneously retain resource value and eliminate carbon emissi"
-tags: []
+tags:
+circular economy” 
+“circular practices” 
+“net zero” 
+“net zero circular value chain model” 
+“resources retention” 
+“scope 3 emissions”
 featured: false
 url_source: "https://doi.org/10.1002/bse.70591"
 url_pdf: "paper.pdf"   
