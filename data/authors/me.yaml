@@ -95,12 +95,12 @@ experience:
 skills:
   - name: Technical Skills
     items:
+      - label: Matlab
+        level: 5
       - label: Python
         level: 5
-      - label: Machine Learning
+      - label: Stata/Smart pls/Origin Lab Pro/CiteSpace/MS Visio
         level: 5
-      - label: Cloud Computing
-        level: 4
   - name: Research & Communication
     items:
       - label: Academic Writing
