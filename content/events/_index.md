@@ -1,13 +1,17 @@
 ---
-title: Recent & Upcoming Talks
-cms_exclude: true
-#url: talk
+title: Talks
+summary: Invited talks, conference presentations, and seminars.
+type: landing
 
-# View
-view: card
-
-# Optional cover image (relative to `assets/media/` folder).
-image:
-  caption: ''
-  filename: ''
+sections:
+  - block: collection
+    content:
+      title: Talks
+      text: ''
+      count: 0
+      filters:
+        folders:
+          - events
+    design:
+      view: card
 ---
