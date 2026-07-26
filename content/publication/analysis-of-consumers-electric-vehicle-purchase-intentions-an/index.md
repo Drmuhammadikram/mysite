@@ -1,7 +1,7 @@
 ---
 title: "Analysis of consumers’ electric vehicle purchase intentions: An expansion of the theory of planned behavior"
 authors:
-  - "Tu{\\u{g}}ba Ye{\\u{g}}in"
+  - "Tugba Yegin"
   - "Muhammad Ikram"
 date: "2022-01-01T00:00:00Z"
 publishDate: "2022-01-01T00:00:00Z"
