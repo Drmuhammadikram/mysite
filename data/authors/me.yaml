@@ -52,11 +52,11 @@ interests:
 
 education:
   - degree: PhD Management Science and Engineering
-    institution: Stanford University
-    start: 2015-09-01
-    end: 2019-06-30
+    institution: Nanjing University of Aeronautics and Astronautics
+    start: 2016-09-01
+    end: 2019-10-30
     summary: |
-      Thesis on scaling laws for neural language models. Published 5 papers in NeurIPS and ICML.
+      Thesis on corporate sustainability, and integrated management systems.
     button:
       text: Download dissertation
       url: /resume.pdf
