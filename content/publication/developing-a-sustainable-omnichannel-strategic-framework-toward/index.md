@@ -1,7 +1,7 @@
 ---
 title: "Developing a sustainable omnichannel strategic framework toward circular revolution: an integrated approach"
 authors:
-  - "Tu{\\u{g}}ba Ye{\\u{g}}in"
+  - "Tugba Yegin"
   - "Muhammad Ikram"
 date: "2022-01-01T00:00:00Z"
 publishDate: "2022-01-01T00:00:00Z"
