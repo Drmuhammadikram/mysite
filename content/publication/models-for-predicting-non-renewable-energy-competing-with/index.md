@@ -13,10 +13,10 @@ summary: ""
 tags:
   - Renewable energy
   - Sustainability;
-  - Non-renewable energy 
+  - Non-renewable energy 
   - Environmental Sustainability
   - Sustainable development
-  - Consumption 
+  - Consumption 
   - Prediction
   - Primary energy
   - Grey forecasting model
