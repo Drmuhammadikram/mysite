@@ -13,5 +13,5 @@ summary: "The twin transition to a circular economy (CE) and net zero carbon is 
 tags: []
 featured: false
 url_source: "https://doi.org/10.1002/bse.70591"
-# url_pdf: "paper.pdf"   # uncomment once you drop a PDF in this folder
+url_pdf: "paper.pdf"   
 ---
