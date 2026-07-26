@@ -107,15 +107,15 @@ skills:
 
 languages:
   - name: English
-    level: 5
-    label: Native
-  - name: Spanish
     level: 4
     label: Fluent
+  - name: Urdu
+    level: 5
+    label: Native
 
 awards:
-  - title: Best Paper Award
-    awarder: NeurIPS
-    date: "2022-12-01"
-    summary: Awarded for groundbreaking work on efficient training of large models.
+  - title: Top 2 % global scientist
+    awarder: top cited researcher
+    date: "2021-2022-2023-2024-2025"
+    summary: Ranked by Stanford University & Elsevier.
     icon: hero/trophy
