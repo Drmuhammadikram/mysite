@@ -2,9 +2,9 @@ schema: hugoblox/author/v1
 slug: me
 is_owner: true
 name:
-  display: Dr. Alex Johnson
-  given: Alex
-  family: Johnson
+  display: Dr. Muhammad Ikram
+  given: Muhammad
+  family: Ikram
   alternate: ''  # Example: 王伟
   pronunciation: ''  # Example: Wáng Wěi
   pronouns: he/him
@@ -13,84 +13,94 @@ postnominals:
   - MIEEE
 status:
   icon: "☕️"
-role: Senior AI Research Scientist
+role: Professor of Strategy & Sustainability
 bio: |
-  Alex Johnson is a Senior AI Research Scientist at Meta AI. His research
-  has been published in top conferences like NeurIPS and ICML, with over
-  10,000 citations. Alex is passionate about pushing the boundaries of AI
-  while ensuring ethical development.
+  Dr. Muhammad Ikram is a professor of strategy & sustainability at school of BusinessAdministration, Al Akhawayn 
+  University in Ifrane, Morocco. He has been recongnized among the world top 2% scientists by Stanford University 
+  and is a Ceritified Management & Business Educator (CMBE) by the Chartered Association  of Business Schools, UK. 
+  He holds a PhD in Management Science and Engineering and previously served as a postdoctoral researcher at Shenzhen 
+  UniversityDr. Ikram has published more than 70 research articles in leading journals and has reviewed over 500+ aritcles 
+  of 200+ journals. His research focuses on sustainability, corporate social responsibility,environmental management, circular
+  economy, sustainable development goals, decison support system, and green supply chain management.
 
 affiliations:
-  - name: Meta AI
-    url: https://ai.meta.com/
+  - name: Al Akhawayn University in Ifrane (AUI)
+    url: https://aui.ma/
 
 links:
   - icon: at-symbol
-    url: mailto:alex.johnson@example.com
+    url: mailto:i.muhammad@aui.ma
     label: E-mail Me
   - icon: brands/x
-    url: https://x.com/example
+    url: https://x.com/@drmuikram
   - icon: brands/github
     url: https://github.com/example
   - icon: brands/linkedin
-    url: https://www.linkedin.com/in/example/
+    url: https://www.linkedin.com/in/muhammad-ikram-ph-d-352b9648/
   - icon: academicons/google-scholar
-    url: https://scholar.google.com/citations?user=example
+    url: https://scholar.google.com/citations?user=zD2p9JcAAAAJ&hl=en
   - icon: academicons/orcid
-    url: https://orcid.org/0000-0002-1825-0097
+    url: https://orcid.org/0000-0003-2656-9302
 
 interests:
-  - Large Language Models
-  - Computer Vision
-  - Reinforcement Learning
-  - AI Ethics
+  - Sustainable Development Goals
+  - Environmental Management Systems
+  - Business Ethics
+  - Sustainable Production & Consumption
+  - Net-Zero/Carbon Neutrality
+  - ISO 14001
 
 education:
-  - degree: PhD Computer Science
-    institution: Stanford University
-    start: 2015-09-01
-    end: 2019-06-30
+  - degree: PhD Management Science and Engineering
+    institution: Nanjing University of Aeronautics and Astronautics
+    start: 2016-09-01
+    end: 2019-10-30
     summary: |
-      Thesis on scaling laws for neural language models. Published 5 papers in NeurIPS and ICML.
+      Thesis on corporate sustainability, and integrated management systems.
     button:
       text: Download dissertation
       url: /resume.pdf
       icon: hero/arrow-down-tray
-  - degree: MS Computer Science
-    institution: Carnegie Mellon University
-    start: 2013-09-01
-    end: 2015-05-31
-  - degree: BS Computer Science
-    institution: MIT
-    start: 2009-09-01
-    end: 2013-05-31
+  - degree: MS Management Science
+    institution: International Islamic University Islamabad
+    start: 2010-09-01
+    end: 2012-09-22
+  - degree: BS Business Administration
+    institution: University of Sargodha
+    start: 2006-09-01
+    end: 2010-07-29
 
 experience:
-  - role: Senior AI Research Scientist
-    org: Meta AI
+  - role: Assistant Professor
+    org: Al Akhawayn University in Ifrane
     start: 2020-01-01
     summary: |
-      Leading research on multimodal AI systems. Contributed to Llama 2 and other open-source models.
+     Full time professor at school of business adminsitration, al akhawayn university.
     button:
       text: View portfolio
       url: /
       icon: hero/arrow-down-tray
-  - role: AI Research Intern
-    org: OpenAI
-    start: 2019-06-01
-    end: 2019-12-31
+  - role: Postdoc. Researcher
+    org: Shenzhen University
+    start: 2019-12-23
+    end: 2021-10-30
     summary: |
-      Worked on GPT-3 scaling. Co-authored paper on prompt engineering.
+      Collaborated with the Research Institute of Business Analytics and Supply Chain Management exposed 
+      me to interdisciplinary engagements in sustainability, sustainable supply chain management field. 
+      These interactions enriched my understanding of diverse perspectives and their contributions to the 
+      broader research landscape. 
+
+
 
 skills:
   - name: Technical Skills
     items:
+      - label: Matlab
+        level: 5
       - label: Python
         level: 5
-      - label: Machine Learning
+      - label: Stata/Smart pls/Origin Lab Pro/CiteSpace/MS Visio
         level: 5
-      - label: Cloud Computing
-        level: 4
   - name: Research & Communication
     items:
       - label: Academic Writing
@@ -102,15 +112,15 @@ skills:
 
 languages:
   - name: English
-    level: 5
-    label: Native
-  - name: Spanish
     level: 4
     label: Fluent
+  - name: Urdu
+    level: 5
+    label: Native
 
 awards:
-  - title: Best Paper Award
-    awarder: NeurIPS
-    date: "2022-12-01"
-    summary: Awarded for groundbreaking work on efficient training of large models.
+  - title: Top 2 % global scientist
+    awarder: top cited researcher
+    date: "2021-2022-2023-2024-2025"
+    summary: Ranked by Stanford University & Elsevier.
     icon: hero/trophy
