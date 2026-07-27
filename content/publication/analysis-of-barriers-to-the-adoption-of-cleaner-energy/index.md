@@ -14,10 +14,15 @@ abstract: "Pakistan has an enormous amount of renewable and sustainable energy s
 summary: "Abstract Pakistan has an enormous amount of renewable and sustainable energy sources. However, it is unfortunate that the country remains unsuccessful in using these sources to deliver increasing elec"
 tags:
   - Renewable energy barriers
-  - Energy crisis
-  - Pakistan
-  - Modified delphi
-  - FAHP
+  - Energy security
+  - Environmental Sustainability
+  - CO2 emissions
+  - Sustainability
+  - Sustainable cities
+  - Sustainable development
+  - Strategic decision-making
+  - Green technologies
+  - Waste-to-energy technology
 featured: false
 url_source: "https://doi.org/10.1016/j.jclepro.2019.07.020"
 url_pdf: "paper.pdf"   
