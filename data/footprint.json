@@ -1,0 +1,293 @@
+{
+  "year": 2025,
+  "updated": "2026-07-27",
+  "countries": [
+    {
+      "ef": 3.96,
+      "bc": 0.76,
+      "deficit": -3.2,
+      "population": 1268280.0,
+      "name": "Mauritius"
+    },
+    {
+      "ef": 2.56,
+      "bc": 1.16,
+      "deficit": -1.4,
+      "population": 64747301.0,
+      "name": "South Africa"
+    },
+    {
+      "ef": 1.36,
+      "bc": 0.26,
+      "deficit": -1.1,
+      "population": 118366000.0,
+      "name": "Egypt"
+    },
+    {
+      "ef": 1.82,
+      "bc": 0.78,
+      "deficit": -1.04,
+      "population": 1256170.0,
+      "name": "Eswatini"
+    },
+    {
+      "ef": 1.9,
+      "bc": 0.99,
+      "deficit": -0.91,
+      "population": 35064301.0,
+      "name": "Ghana"
+    },
+    {
+      "ef": 1.63,
+      "bc": 0.72,
+      "deficit": -0.91,
+      "population": 12348600.0,
+      "name": "Tunisia"
+    },
+    {
+      "ef": 1.24,
+      "bc": 0.62,
+      "deficit": -0.62,
+      "population": 16950801.0,
+      "name": "Zimbabwe"
+    },
+    {
+      "ef": 1.5,
+      "bc": 0.93,
+      "deficit": -0.57,
+      "population": 18932000.0,
+      "name": "Senegal"
+    },
+    {
+      "ef": 1.07,
+      "bc": 0.51,
+      "deficit": -0.56,
+      "population": 9721610.0,
+      "name": "Togo"
+    },
+    {
+      "ef": 1.06,
+      "bc": 0.53,
+      "deficit": -0.53,
+      "population": 51384898.0,
+      "name": "Uganda"
+    },
+    {
+      "ef": 0.99,
+      "bc": 0.51,
+      "deficit": -0.48,
+      "population": 57532500.0,
+      "name": "Kenya"
+    },
+    {
+      "ef": 1.04,
+      "bc": 0.57,
+      "deficit": -0.47,
+      "population": 14814500.0,
+      "name": "Benin"
+    },
+    {
+      "ef": 0.81,
+      "bc": 0.4,
+      "deficit": -0.41,
+      "population": 14569300.0,
+      "name": "Rwanda"
+    },
+    {
+      "ef": 0.88,
+      "bc": 0.48,
+      "deficit": -0.4,
+      "population": 135472000.0,
+      "name": "Ethiopia"
+    },
+    {
+      "ef": 1.14,
+      "bc": 0.78,
+      "deficit": -0.36,
+      "population": 24074600.0,
+      "name": "Burkina Faso"
+    },
+    {
+      "ef": 0.74,
+      "bc": 0.41,
+      "deficit": -0.33,
+      "population": 237528000.0,
+      "name": "Nigeria"
+    },
+    {
+      "ef": 1.17,
+      "bc": 0.9,
+      "deficit": -0.27,
+      "population": 27917801.0,
+      "name": "Niger"
+    },
+    {
+      "ef": 0.62,
+      "bc": 0.38,
+      "deficit": -0.24,
+      "population": 14390000.0,
+      "name": "Burundi"
+    },
+    {
+      "ef": 0.97,
+      "bc": 0.76,
+      "deficit": -0.21,
+      "population": 70545898.0,
+      "name": "Tanzania"
+    },
+    {
+      "ef": 0.97,
+      "bc": 0.77,
+      "deficit": -0.2,
+      "population": 8819790.0,
+      "name": "Sierra Leone"
+    },
+    {
+      "ef": 0.8,
+      "bc": 0.6,
+      "deficit": -0.2,
+      "population": 19654699.0,
+      "name": "Somalia"
+    },
+    {
+      "ef": 0.78,
+      "bc": 0.62,
+      "deficit": -0.16,
+      "population": 22216100.0,
+      "name": "Malawi"
+    },
+    {
+      "ef": 1.17,
+      "bc": 1.14,
+      "deficit": -0.03,
+      "population": 21003699.0,
+      "name": "Chad"
+    },
+    {
+      "ef": 1.75,
+      "bc": 1.77,
+      "deficit": 0.02,
+      "population": 15099700.0,
+      "name": "Guinea"
+    },
+    {
+      "ef": 1.27,
+      "bc": 1.35,
+      "deficit": 0.08,
+      "population": 51662102.0,
+      "name": "Sudan"
+    },
+    {
+      "ef": 1.15,
+      "bc": 1.32,
+      "deficit": 0.17,
+      "population": 32711500.0,
+      "name": "C\u00f4te d'Ivoire"
+    },
+    {
+      "ef": 1.1,
+      "bc": 1.27,
+      "deficit": 0.17,
+      "population": 25198801.0,
+      "name": "Mali"
+    },
+    {
+      "ef": 1.03,
+      "bc": 1.33,
+      "deficit": 0.3,
+      "population": 29879301.0,
+      "name": "Cameroon"
+    },
+    {
+      "ef": 1.11,
+      "bc": 1.42,
+      "deficit": 0.31,
+      "population": 21913900.0,
+      "name": "Zambia"
+    },
+    {
+      "ef": 0.71,
+      "bc": 1.24,
+      "deficit": 0.53,
+      "population": 39040000.0,
+      "name": "Angola"
+    },
+    {
+      "ef": 0.59,
+      "bc": 1.24,
+      "deficit": 0.65,
+      "population": 35631699.0,
+      "name": "Mozambique"
+    },
+    {
+      "ef": 2.15,
+      "bc": 2.84,
+      "deficit": 0.69,
+      "population": 2562120.0,
+      "name": "Botswana"
+    },
+    {
+      "ef": 0.65,
+      "bc": 1.59,
+      "deficit": 0.94,
+      "population": 112832000.0,
+      "name": "DR Congo"
+    },
+    {
+      "ef": 1.45,
+      "bc": 2.5,
+      "deficit": 1.05,
+      "population": 5731210.0,
+      "name": "Liberia"
+    },
+    {
+      "ef": 0.67,
+      "bc": 1.73,
+      "deficit": 1.06,
+      "population": 32740699.0,
+      "name": "Madagascar"
+    },
+    {
+      "ef": 0.71,
+      "bc": 1.92,
+      "deficit": 1.21,
+      "population": 3607000.0,
+      "name": "Eritrea"
+    },
+    {
+      "ef": 1.89,
+      "bc": 6.94,
+      "deficit": 5.05,
+      "population": 5513280.0,
+      "name": "Central African Republic"
+    },
+    {
+      "ef": 0.97,
+      "bc": 7.16,
+      "deficit": 6.19,
+      "population": 6484440.0,
+      "name": "Congo"
+    }
+  ],
+  "aggregates": {
+    "Africa": {
+      "ef": 1.13,
+      "bc": 0.92,
+      "deficit": -0.21,
+      "population": null
+    },
+    "Northern Africa": {
+      "ef": 1.58,
+      "bc": 0.67,
+      "deficit": -0.91,
+      "population": null
+    },
+    "World": {
+      "ef": 2.51,
+      "bc": 1.48,
+      "deficit": -1.03,
+      "population": 8231610000.0
+    }
+  },
+  "source": "Global Footprint Network National Footprint and Biocapacity Accounts"
+}
