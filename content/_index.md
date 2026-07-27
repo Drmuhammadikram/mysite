@@ -78,21 +78,6 @@ sections:
       columns: '1'
   - block: markdown
     content:
-      title: ''
-      subtitle: ''
-      text: |-
-        <a href="/africa/" style="display:block;text-decoration:none;color:inherit;">
-          <div style="background:rgba(128,128,128,0.06);border-radius:12px;padding:1.5rem 1.75rem;margin:1rem 0;transition:background 0.15s;">
-            <div style="font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;opacity:0.7;margin-bottom:0.75rem;">Data</div>
-            <div style="font-size:1.15rem;font-weight:600;margin-bottom:0.5rem;">Africa: ecological footprint and biocapacity</div>
-            <div style="font-size:0.9rem;opacity:0.75;line-height:1.65;margin-bottom:1rem;">An interactive map tracking ecological deficit and reserve across 38 African countries, with footprint and biocapacity in per-person and total terms. Updated monthly from the Global Footprint Network National Accounts.</div>
-            <span style="font-size:0.85rem;color:#1baf7a;">Explore the map →</span>
-          </div>
-        </a>
-    design:
-      columns: '1'
-  - block: markdown
-    content:
       title: '📚 Research Statement'
       subtitle: ''
       text: |-
