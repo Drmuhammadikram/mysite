@@ -4,6 +4,18 @@ summary: ''
 date: 2022-10-24
 type: landing
 sections:
+  - block: markdown
+    content:
+      title: ''
+      subtitle: ''
+      text: |-
+        <div style="width:100vw;position:relative;left:50%;margin-left:-50vw;padding:0.75rem 0 0;margin-bottom:-3rem;z-index:10;">
+          <img src="/uploads/sdg-poster.png" alt="The 17 UN Sustainable Development Goals" style="display:block;width:100%;max-width:1700px;height:auto;margin:0 auto;border-radius:16px;box-shadow:0 16px 40px rgba(30,41,59,0.14);">
+        </div>
+    design:
+      columns: '1'
+      spacing:
+        padding: ['0', '0', '0', '0']
   - block: resume-biography-3
     content:
       username: me
