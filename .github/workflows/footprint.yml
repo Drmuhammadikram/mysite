@@ -1,0 +1,123 @@
+name: Update footprint data
+
+on:
+  schedule:
+    - cron: '0 7 1 * *'
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch African footprint data
+        env:
+          FOOTPRINT_KEY: ${{ secrets.FOOTPRINT_KEY }}
+        run: |
+          python3 - <<'PY'
+          import json, os, sys, base64, datetime, time
+          import urllib.request, urllib.error
+
+          KEY = os.environ["FOOTPRINT_KEY"]
+          BASE = "https://api.footprintnetwork.org/v1"
+          AUTH = base64.b64encode(f"user:{KEY}".encode()).decode()
+          HEAD = {"Accept": "application/json", "Authorization": f"Basic {AUTH}"}
+
+          AFRICA = {
+              "7":"Angola","29":"Burundi","32":"Cameroon","37":"Central African Republic",
+              "39":"Chad","46":"Congo","53":"Benin","59":"Egypt","62":"Ethiopia PDR",
+              "81":"Ghana","90":"Guinea","107":"Côte d'Ivoire","114":"Kenya",
+              "123":"Liberia","129":"Madagascar","130":"Malawi","133":"Mali",
+              "137":"Mauritius","144":"Mozambique","158":"Niger","159":"Nigeria",
+              "178":"Eritrea","181":"Zimbabwe","184":"Rwanda","195":"Senegal",
+              "197":"Sierra Leone","201":"Somalia","202":"South Africa",
+              "206":"Sudan (former)","209":"Eswatini","215":"Tanzania","217":"Togo",
+              "222":"Tunisia","226":"Uganda","233":"Burkina Faso","238":"Ethiopia",
+              "250":"DR Congo","251":"Zambia","276":"Sudan","20":"Botswana",
+          }
+          AGGREGATES = {"2000":"Africa","1011":"Northern Africa","5001":"World"}
+
+          def get(path, tries=3):
+              for n in range(tries):
+                  try:
+                      req = urllib.request.Request(f"{BASE}{path}", headers=HEAD)
+                      with urllib.request.urlopen(req, timeout=45) as r:
+                          return json.loads(r.read().decode())
+                  except urllib.error.HTTPError as e:
+                      if e.code in (429, 500, 502, 503):
+                          time.sleep(4 * (n + 1)); continue
+                      return None
+                  except Exception:
+                      time.sleep(3); continue
+              return None
+
+          years = get("/years")
+          if not years:
+              print("could not fetch years; leaving file unchanged")
+              sys.exit(0)
+          year = max(int(y["year"]) for y in years)
+          print("latest year:", year)
+
+          def extract(rows):
+              if not rows:
+                  return None
+              ef = bc = pop = None
+              for r in rows:
+                  rec = r.get("record")
+                  val = r.get("value")
+                  if val is None:
+                      continue
+                  if rec == "EFConsPerCap":
+                      ef = round(float(val), 2)
+                  elif rec == "BiocapPerCap":
+                      bc = round(float(val), 2)
+                  elif rec == "Population":
+                      pop = float(val)
+              if ef is None or bc is None:
+                  return None
+              return {"ef": ef, "bc": bc, "deficit": round(bc - ef, 2), "population": pop}
+
+          countries = []
+          for code, name in AFRICA.items():
+              d = extract(get(f"/data/{code}/{year}/all"))
+              if d:
+                  d["name"] = name
+                  countries.append(d)
+                  print(f"  {name}: EF {d['ef']}  BC {d['bc']}")
+              time.sleep(0.35)
+
+          if len(countries) < 10:
+              print("too few countries returned; leaving file unchanged")
+              sys.exit(0)
+
+          aggregates = {}
+          for code, name in AGGREGATES.items():
+              d = extract(get(f"/data/{code}/{year}/all"))
+              if d:
+                  aggregates[name] = d
+              time.sleep(0.35)
+
+          countries.sort(key=lambda c: c["deficit"])
+
+          out = {
+              "year": year,
+              "updated": datetime.date.today().isoformat(),
+              "countries": countries,
+              "aggregates": aggregates,
+              "source": "Global Footprint Network National Footprint and Biocapacity Accounts",
+          }
+
+          os.makedirs("data", exist_ok=True)
+          with open("data/footprint.json", "w") as f:
+              json.dump(out, f, indent=2)
+          print(f"wrote {len(countries)} countries for {year}")
+          PY
+
+      - name: Commit if changed
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/footprint.json
+          git diff --staged --quiet || git commit -m "Update footprint data"
+          git push
