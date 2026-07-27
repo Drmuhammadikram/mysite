@@ -26,6 +26,30 @@ sections:
         shape: circle
   - block: markdown
     content:
+      title: ''
+      subtitle: ''
+      text: |-
+        <div style="display:flex;gap:2.5rem;flex-wrap:wrap;align-items:flex-end;padding:1.75rem 0;border-top:1px solid var(--hb-color-border);border-bottom:1px solid var(--hb-color-border);">
+          <div>
+            <div style="font-size:2.25rem;font-weight:600;line-height:1;letter-spacing:-0.02em;">{{< scholar "citations" >}}</div>
+            <div style="font-size:0.75rem;letter-spacing:0.08em;text-transform:uppercase;opacity:0.65;margin-top:0.4rem;">Citations</div>
+          </div>
+          <div>
+            <div style="font-size:2.25rem;font-weight:600;line-height:1;letter-spacing:-0.02em;">{{< scholar "h_index" >}}</div>
+            <div style="font-size:0.75rem;letter-spacing:0.08em;text-transform:uppercase;opacity:0.65;margin-top:0.4rem;">h-index</div>
+          </div>
+          <div>
+            <div style="font-size:2.25rem;font-weight:600;line-height:1;letter-spacing:-0.02em;">{{< scholar "i10_index" >}}</div>
+            <div style="font-size:0.75rem;letter-spacing:0.08em;text-transform:uppercase;opacity:0.65;margin-top:0.4rem;">i10-index</div>
+          </div>
+          <div style="margin-left:auto;font-size:0.8rem;opacity:0.65;">
+            <a href="https://scholar.google.com/citations?user=zD2p9JcAAAAJ">Google Scholar →</a>
+          </div>
+        </div>
+    design:
+      columns: '1'
+  - block: markdown
+    content:
       title: '📚 Research'
       subtitle: ''
       text: |-
