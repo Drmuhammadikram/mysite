@@ -26,6 +26,18 @@ sections:
         shape: circle
   - block: markdown
     content:
+      title: ''
+      subtitle: ''
+      text: |-
+        ### Research across the Sustainable Development Goals
+
+        My work maps how environmental management systems contribute to all 17 UN Sustainable Development Goals — from SDG 7 (Affordable and Clean Energy) and SDG 12 (Responsible Consumption and Production) through to SDG 13 (Climate Action), SDG 16 (Peace, Justice and Strong Institutions), and SDG 17 (Partnerships for the Goals).
+
+        ![The 17 UN Sustainable Development Goals](sdg-banner.png)
+    design:
+      columns: '1'
+  - block: markdown
+    content:
       title: '📚 Research'
       subtitle: ''
       text: |-
