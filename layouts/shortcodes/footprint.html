@@ -1,0 +1,37 @@
+{{- $d := site.Data.footprint -}}
+{{- with $d -}}
+{{- $cs := .countries -}}
+{{- $n := len $cs -}}
+{{- $max := 1.0 -}}
+{{- range $cs -}}
+  {{- if gt .ef $max }}{{ $max = .ef }}{{ end -}}
+  {{- if gt .bc $max }}{{ $max = .bc }}{{ end -}}
+{{- end -}}
+{{- $rowH := 26 -}}
+{{- $labelW := 150 -}}
+{{- $barW := 430 -}}
+{{- $h := add (mul $n $rowH) 44 -}}
+<div style="overflow-x:auto;">
+<svg viewBox="0 0 620 {{ $h }}" style="width:100%;min-width:560px;" role="img" aria-label="Ecological Footprint and biocapacity per person for African countries, {{ .year }}">
+  <text x="{{ $labelW }}" y="14" font-size="10" fill="currentColor" opacity="0.6" letter-spacing="0.08em">GLOBAL HECTARES PER PERSON</text>
+  <g font-size="10" fill="currentColor" opacity="0.55">
+    <rect x="{{ add $labelW 250 }}" y="6" width="9" height="9" rx="2" fill="#c2703f"/>
+    <text x="{{ add $labelW 264 }}" y="14">Footprint</text>
+    <rect x="{{ add $labelW 330 }}" y="6" width="9" height="9" rx="2" fill="#4a9d78"/>
+    <text x="{{ add $labelW 344 }}" y="14">Biocapacity</text>
+  </g>
+  {{- range $i, $c := $cs -}}
+  {{- $y := add (mul $i $rowH) 30 -}}
+  {{- $efw := div (mul $c.ef $barW) $max -}}
+  {{- $bcw := div (mul $c.bc $barW) $max -}}
+  {{- $hl := eq $c.name "Morocco" -}}
+  <text x="{{ sub $labelW 10 }}" y="{{ add $y 12 }}" text-anchor="end" font-size="11" fill="currentColor" opacity="{{ if $hl }}1{{ else }}0.78{{ end }}" font-weight="{{ if $hl }}600{{ else }}400{{ end }}">{{ $c.name }}</text>
+  <rect x="{{ $labelW }}" y="{{ add $y 2 }}" width="{{ $bcw }}" height="8" rx="2" fill="#4a9d78" opacity="0.85"></rect>
+  <rect x="{{ $labelW }}" y="{{ add $y 12 }}" width="{{ $efw }}" height="8" rx="2" fill="#c2703f" opacity="0.85"></rect>
+  <text x="{{ add $labelW (add $barW 14) }}" y="{{ add $y 15 }}" font-size="10" fill="{{ if lt $c.deficit 0.0 }}#c2703f{{ else }}#4a9d78{{ end }}" opacity="0.9">{{ if gt $c.deficit 0.0 }}+{{ end }}{{ $c.deficit }}</text>
+  {{- end -}}
+  <line x1="{{ $labelW }}" y1="24" x2="{{ $labelW }}" y2="{{ sub $h 12 }}" stroke="currentColor" stroke-opacity="0.15" stroke-width="1"/>
+</svg>
+</div>
+<p style="font-size:0.7rem;opacity:0.55;margin-top:0.75rem;line-height:1.5;">Data for {{ .year }}. A negative figure indicates an ecological deficit — the country's Footprint exceeds its biocapacity. Source: {{ .source }}, via the <a href="https://data.footprintnetwork.org">Open Data Platform</a>.</p>
+{{- end -}}
