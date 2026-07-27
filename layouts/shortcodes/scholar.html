@@ -1,0 +1,4 @@
+{{- $key := .Get 0 -}}
+{{- with site.Data.scholar -}}
+{{- index . $key -}}
+{{- end -}}
