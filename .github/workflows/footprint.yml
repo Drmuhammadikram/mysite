@@ -24,17 +24,23 @@ jobs:
           AUTH = base64.b64encode(f"user:{KEY}".encode()).decode()
           HEAD = {"Accept": "application/json", "Authorization": f"Basic {AUTH}"}
 
+          # api code -> (display name, ISO-3166-1 numeric, used to join the map)
           AFRICA = {
-              "7":"Angola","29":"Burundi","32":"Cameroon","37":"Central African Republic",
-              "39":"Chad","46":"Congo","53":"Benin","59":"Egypt","62":"Ethiopia PDR",
-              "81":"Ghana","90":"Guinea","107":"Côte d'Ivoire","114":"Kenya",
-              "123":"Liberia","129":"Madagascar","130":"Malawi","133":"Mali",
-              "137":"Mauritius","144":"Mozambique","158":"Niger","159":"Nigeria",
-              "178":"Eritrea","181":"Zimbabwe","184":"Rwanda","195":"Senegal",
-              "197":"Sierra Leone","201":"Somalia","202":"South Africa",
-              "206":"Sudan (former)","209":"Eswatini","215":"Tanzania","217":"Togo",
-              "222":"Tunisia","226":"Uganda","233":"Burkina Faso","238":"Ethiopia",
-              "250":"DR Congo","251":"Zambia","276":"Sudan","20":"Botswana",
+              "7":("Angola","024"), "20":("Botswana","072"), "29":("Burundi","108"),
+              "32":("Cameroon","120"), "37":("Central African Republic","140"),
+              "39":("Chad","148"), "46":("Congo","178"), "53":("Benin","204"),
+              "59":("Egypt","818"), "81":("Ghana","288"), "90":("Guinea","324"),
+              "107":("Côte d'Ivoire","384"), "114":("Kenya","404"),
+              "123":("Liberia","430"), "129":("Madagascar","450"),
+              "130":("Malawi","454"), "133":("Mali","466"), "137":("Mauritius","480"),
+              "144":("Mozambique","508"), "158":("Niger","562"), "159":("Nigeria","566"),
+              "178":("Eritrea","232"), "181":("Zimbabwe","716"), "184":("Rwanda","646"),
+              "195":("Senegal","686"), "197":("Sierra Leone","694"),
+              "201":("Somalia","706"), "202":("South Africa","710"),
+              "209":("Eswatini","748"), "215":("Tanzania","834"), "217":("Togo","768"),
+              "222":("Tunisia","788"), "226":("Uganda","800"),
+              "233":("Burkina Faso","854"), "238":("Ethiopia","231"),
+              "250":("DR Congo","180"), "251":("Zambia","894"), "276":("Sudan","729"),
           }
           AGGREGATES = {"2000":"Africa","1011":"Northern Africa","5001":"World"}
 
@@ -62,7 +68,7 @@ jobs:
           def extract(rows):
               if not rows:
                   return None
-              ef = bc = pop = None
+              ef = bc = pop = ef_tot = bc_tot = None
               for r in rows:
                   rec = r.get("record")
                   val = r.get("value")
@@ -72,17 +78,23 @@ jobs:
                       ef = round(float(val), 2)
                   elif rec == "BiocapPerCap":
                       bc = round(float(val), 2)
+                  elif rec == "EFConsTotGHA":
+                      ef_tot = round(float(val))
+                  elif rec == "BiocapTotGHA":
+                      bc_tot = round(float(val))
                   elif rec == "Population":
                       pop = float(val)
               if ef is None or bc is None:
                   return None
-              return {"ef": ef, "bc": bc, "deficit": round(bc - ef, 2), "population": pop}
+              return {"ef": ef, "bc": bc, "deficit": round(bc - ef, 2),
+                      "ef_total": ef_tot, "bc_total": bc_tot, "population": pop}
 
           countries = []
-          for code, name in AFRICA.items():
+          for code, (name, iso) in AFRICA.items():
               d = extract(get(f"/data/{code}/{year}/all"))
               if d:
                   d["name"] = name
+                  d["iso"] = iso
                   countries.append(d)
                   print(f"  {name}: EF {d['ef']}  BC {d['bc']}")
               time.sleep(0.35)
