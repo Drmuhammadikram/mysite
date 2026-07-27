@@ -66,14 +66,21 @@ sections:
       columns: '1'
   - block: markdown
     content:
-      title: '📚 Research'
+      title: '📚 Research Statement'
       subtitle: ''
       text: |-
-        My research examines how formal environmental management systems — particularly ISO 14001 — translate into measurable carbon and sustainability outcomes, and how organisations in emerging economies navigate the transition to low-carbon operations.
 
-        I work across bibliometric analysis, systematic review, grey systems modelling, and multi-criteria decision analysis, with published work in *Journal of Cleaner Production*, *Business Strategy and the Environment*, *Sustainable Production and Consumption*, and *Corporate Social Responsibility and Environmental Management*.
+My research examines how organizations, industries, and public institutions can respond strategically to complex sustainability challenges through responsible management, technological innovation, and data-driven decision-making. Positioned at the intersection of sustainability, strategic management, and decision sciences, my work develops practical frameworks that help decision-makers address environmental uncertainty, resource constraints, institutional complexity, and competing stakeholder priorities.
 
-        I welcome collaboration on environmental management systems, decarbonisation pathways, and corporate sustainability performance.
-    design:
+A central theme of my research is the development of integrated decision-support systems for sustainable development. I employ advanced quantitative and analytical approaches—including fuzzy multi-criteria decision-making, grey systems theory, data envelopment analysis, structural equation modelling, bibliometric analysis, and composite-index construction—to evaluate sustainability performance, prioritize strategic alternatives, and support policy formulation. Rather than viewing sustainability as a single environmental objective, my research considers its economic, social, technological, institutional, and governance dimensions.
+
+My current work focuses on several interconnected areas. The first investigates sustainable resource management, particularly water resilience, energy management, food security, and environmental performance in emerging economies. This research explores how technological solutions, policy interventions, and governance mechanisms can be combined to strengthen resilience and improve equitable access to essential resources. The second area examines the strategic adoption of green technologies, circular-economy practices, low-carbon production systems, and digital technologies such as artificial intelligence, Industry 4.0, autonomous systems, and decision intelligence.
+
+A further stream of my research explores corporate sustainability, responsible management, environmental certification, green marketing, corporate social responsibility, and stakeholder behaviour. Through this work, I seek to explain how organizational capabilities, leadership decisions, consumer perceptions, and institutional pressures influence sustainable business performance. I am particularly interested in how firms can translate environmental and social commitments into measurable competitive advantages while avoiding symbolic or fragmented sustainability practices.
+
+Geographically, much of my research is situated in Morocco, North Africa, the Middle East, and other emerging-market contexts. These regions face distinctive environmental, institutional, and socioeconomic challenges, yet they remain underrepresented in mainstream management and sustainability research. By incorporating local evidence into globally relevant theoretical and analytical frameworks, my work aims to produce knowledge that is both academically rigorous and contextually meaningful.
+
+My broader research objective is to bridge the gap between academic analysis and practical implementation. I seek to develop research that informs managers, policymakers, communities, and international organizations while contributing to scholarly debates in sustainability management, strategic decision-making, responsible innovation, and organizational transformation. Through interdisciplinary collaboration, methodological innovation, and engagement with real-world problems, my research supports the transition toward more resilient, inclusive, and environmentally responsible economic systems.
+design:
       columns: '1'
 ---
