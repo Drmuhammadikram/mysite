@@ -1,18 +1,16 @@
-{{- $key := .Get 0 -}}
-{{- $d := site.Data.scholar -}}
-{{- if eq $key "chart" -}}
-{{- with $d.by_year -}}
-{{- $max := 1 -}}
-{{- range . -}}{{- if gt .citations $max -}}{{- $max = .citations -}}{{- end -}}{{- end -}}
-{{- $n := len . -}}
-<svg viewBox="0 0 {{ mul $n 20 }} 92" style="width:100%;height:130px" role="img" aria-label="Citations per year">
-{{- range $i, $y := . -}}
-{{- $h := div (mul $y.citations 60.0) $max -}}
-<rect x="{{ add (mul $i 20) 3 }}" y="{{ sub 68 $h }}" width="14" height="{{ $h }}" rx="2" fill="currentColor" opacity="0.7"></rect>
-<text x="{{ add (mul $i 20) 10 }}" y="82" text-anchor="middle" font-size="7" fill="currentColor" opacity="0.55">{{ $y.year }}</text>
-{{- end -}}
-</svg>
-{{- end -}}
-{{- else -}}
-{{- index $d $key -}}
-{{- end -}}
+{
+  "citations": 6956,
+  "h_index": 41,
+  "i10_index": 60,
+  "updated": "2026-07-27",
+  "by_year": [
+    { "year": 2019, "citations": 37 },
+    { "year": 2020, "citations": 253 },
+    { "year": 2021, "citations": 682 },
+    { "year": 2022, "citations": 1150 },
+    { "year": 2023, "citations": 1448 },
+    { "year": 2024, "citations": 1341 },
+    { "year": 2025, "citations": 1320 },
+    { "year": 2026, "citations": 657 }
+  ]
+}
