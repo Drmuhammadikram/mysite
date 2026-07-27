@@ -1,0 +1,65 @@
+name: Update Scholar stats
+on:
+  schedule:
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch stats from SerpApi
+        env:
+          SERPAPI_KEY: ${{ secrets.SERPAPI_KEY }}
+        run: |
+          python3 - <<'PY'
+          import json, os, urllib.request, urllib.parse, datetime, sys
+          key = os.environ["SERPAPI_KEY"]
+          params = urllib.parse.urlencode({
+              "engine": "google_scholar_author",
+              "author_id": "zD2p9JcAAAAJ",
+              "api_key": key,
+              "hl": "en",
+          })
+          url = "https://serpapi.com/search.json?" + params
+          try:
+              with urllib.request.urlopen(url, timeout=60) as r:
+                  data = json.loads(r.read().decode())
+          except Exception as e:
+              print("fetch failed:", e)
+              sys.exit(0)
+          cited = data.get("cited_by", {})
+          table = cited.get("table", [])
+          def pick(name):
+              for row in table:
+                  if name in row:
+                      return row[name].get("all")
+              return None
+          citations = pick("citations")
+          h_index   = pick("h_index")
+          i10       = pick("i10_index")
+          if not citations:
+              print("no citation data; leaving file unchanged")
+              print(json.dumps(data)[:800])
+              sys.exit(0)
+          graph = cited.get("graph", [])
+          out = {
+              "citations": citations,
+              "h_index": h_index,
+              "i10_index": i10,
+              "updated": datetime.date.today().isoformat(),
+              "by_year": [{"year": g.get("year"), "citations": g.get("citations")}
+                          for g in graph if g.get("year")],
+          }
+          os.makedirs("data", exist_ok=True)
+          with open("data/scholar.json", "w") as f:
+              json.dump(out, f, indent=2)
+          print("wrote", out)
+          PY
+      - name: Commit if changed
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/scholar.json
+          git diff --staged --quiet || git commit -m "Update Scholar stats"
+          git push

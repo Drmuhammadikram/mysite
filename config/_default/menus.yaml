@@ -8,6 +8,9 @@ main:
   - name: Talks
     url: /events/
     weight: 15
+  - name: Africa Data
+    url: /africa/
+    weight: 16
   - name: Experience
     url: experience/
     weight: 20
