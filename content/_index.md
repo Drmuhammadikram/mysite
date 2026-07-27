@@ -1,9 +1,18 @@
+
 ---
 title: ''
 summary: ''
 date: 2022-10-24
 type: landing
 sections:
+  - block: markdown
+    content:
+      title: ''
+      subtitle: ''
+      text: |-
+        ![The 17 UN Sustainable Development Goals](/uploads/sdg-banner.png)
+    design:
+      columns: '1'
   - block: resume-biography-3
     content:
       username: me
@@ -24,14 +33,6 @@ sections:
       avatar:
         size: medium
         shape: circle
-  - block: markdown
-    content:
-      title: ''
-      subtitle: ''
-      text: |-
-        ![The 17 UN Sustainable Development Goals](/uploads/sdg-banner.png)
-    design:
-      columns: '1'
   - block: markdown
     content:
       title: '📚 Research'
