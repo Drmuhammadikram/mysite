@@ -33,4 +33,14 @@ sections:
         {{< carboncalc >}}
     design:
       columns: '1'
+  - block: markdown
+    content:
+      title: 'Live air quality worldwide'
+      subtitle: ''
+      text: |-
+        Real-time readings from monitoring stations in more than 100 countries. Pan and zoom to load stations for any region, or search for a city.
+
+        {{< airquality >}}
+    design:
+      columns: '1'
 ---
