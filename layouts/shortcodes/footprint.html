@@ -27,7 +27,7 @@
 <div id="fp-tabs" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1.25rem;"></div>
 
 <div style="display:grid;grid-template-columns:1fr 190px;gap:20px;align-items:start;" id="fp-wrap">
-  <div id="fp-map" style="width:100%;"></div>
+  <div id="fp-map" style="width:100%;margin-top:-1.5rem;"></div>
   <div>
     <div id="fp-legend-title" style="font-size:0.78rem;opacity:0.75;margin-bottom:0.7rem;line-height:1.45;"></div>
     <div id="fp-legend"></div>
@@ -43,7 +43,7 @@
   <a href="https://data.footprintnetwork.org">Open Data Platform</a>.
 </p>
 
-<style>@media(max-width:760px){#fp-wrap{grid-template-columns:1fr!important}}</style>
+<style>@media(max-width:760px){#fp-wrap{grid-template-columns:1fr!important}#fp-map{margin-top:0!important}}</style>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
@@ -84,9 +84,9 @@ function colorFor(m, v){
 }
 
 var svg = d3.select('#fp-map').append('svg')
-  .attr('viewBox','0 0 900 460').attr('width','100%').style('min-height','520px')
+  .attr('viewBox','0 0 900 420').attr('width','100%').style('min-height','560px').style('display','block')
   .attr('role','img').attr('aria-label','World map coloured by ecological footprint and biocapacity');
-var path = d3.geoPath(d3.geoNaturalEarth1().scale(178).translate([450, 232]));
+var path = d3.geoPath(d3.geoNaturalEarth1().scale(196).translate([450, 218]));
 
 function render(){
   var m = METRICS[cur];
