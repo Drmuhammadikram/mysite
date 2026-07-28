@@ -10,7 +10,7 @@
   <div>
     <div style="font-size:0.78rem;opacity:0.75;margin-bottom:0.7rem;line-height:1.45;">
       <strong style="font-weight:600;opacity:1;">Air Quality Index</strong><br>
-      Live readings from monitoring stations worldwide.
+      Numbered circles are ground stations. Shaded areas are modelled estimates.
     </div>
     <div id="aq-legend"></div>
     <div id="aq-readout" style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid rgba(128,128,128,0.2);min-height:90px;">
@@ -20,12 +20,12 @@
 </div>
 
 <p style="font-size:0.72rem;opacity:0.55;margin-top:1.25rem;line-height:1.6;">
-  Station readings from the <a href="https://waqi.info">World Air Quality Index project</a>,
-  covering more than 12,000 stations in over 100 countries. The index is based on particulate
-  matter (PM2.5 and PM10), ozone, nitrogen dioxide, sulphur dioxide and carbon monoxide.
-  The modelled background layer draws on the Copernicus Atmosphere Monitoring Service via
-  <a href="https://open-meteo.com">Open-Meteo</a> (CC BY 4.0), and covers regions with no
-  ground monitoring. Where stations exist, they measure; the model estimates.
+  Station readings from the <a href="https://waqi.info">World Air Quality Index project</a>.
+  The shaded background is modelled from the Copernicus Atmosphere Monitoring Service via
+  <a href="https://open-meteo.com">Open-Meteo</a> (CC BY 4.0), and covers regions without
+  ground monitoring. Where stations exist and are reporting, they measure directly; elsewhere
+  the model estimates. Some stations appear on the map but report no current value, which
+  reflects the state of monitoring infrastructure rather than air quality itself.
 </p>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
@@ -41,7 +41,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
 (function(){
-  var TOKEN = 'dc6ad272f691ae0998d466e17facbd6a20854c34';
+  var TOKEN = 'PUT_YOUR_WAQI_TOKEN_HERE';
 
   var dark = matchMedia('(prefers-color-scheme: dark)').matches;
 
@@ -78,8 +78,9 @@
     { attribution:'&copy; OpenStreetMap, &copy; CARTO', subdomains:'abcd' }
   ).addTo(map);
 
+  var modelled = L.layerGroup().addTo(map);
   var layer = L.layerGroup().addTo(map);
-  var loading = false;
+  var loading = false, modelLoaded = false;
 
   function show(s){
     var v = parseInt(s.aqi, 10);
@@ -120,41 +121,21 @@
       .then(function(j){
         loading = false;
         if (j.status !== 'ok' || !j.data) {
-          document.getElementById('aq-count').textContent = 'Could not load station data';
+          document.getElementById('aq-count').textContent = '';
           return;
         }
         layer.clearLayers();
         var n = 0;
         j.data.forEach(function(s){ var m = show(s); if (m) { layer.addLayer(m); n++; } });
-        document.getElementById('aq-count').textContent =
-          n.toLocaleString() + ' station' + (n === 1 ? '' : 's') + ' in view';
+        document.getElementById('aq-count').textContent = n
+          ? n.toLocaleString() + ' reporting station' + (n === 1 ? '' : 's') + ' in view'
+          : 'No reporting stations here — showing modelled estimates';
       })
       .catch(function(){
         loading = false;
-        document.getElementById('aq-count').textContent = 'Could not load station data';
+        document.getElementById('aq-count').textContent = '';
       });
   }
-
-  var t = null;
-  map.on('moveend', function(){ clearTimeout(t); t = setTimeout(load, 500); });
-  load();
-
-  document.getElementById('aq-search').addEventListener('keydown', function(e){
-    if (e.key !== 'Enter') return;
-    var q = this.value.trim();
-    if (!q) return;
-    fetch('https://api.waqi.info/search/?keyword=' + encodeURIComponent(q) + '&token=' + TOKEN)
-      .then(function(r){ return r.json(); })
-      .then(function(j){
-        if (j.status === 'ok' && j.data && j.data.length) {
-          var g = j.data[0].station.geo;
-          map.setView([g[0], g[1]], 9);
-        }
-      });
-  });
-
-  var modelled = L.layerGroup();
-  var modelLoaded = false;
 
   function loadModelled(){
     if (modelLoaded) return;
@@ -182,8 +163,31 @@
       .catch(function(){ modelLoaded = false; });
   }
 
+  var t = null;
+  map.on('moveend', function(){ clearTimeout(t); t = setTimeout(load, 500); });
+
+  document.getElementById('aq-search').addEventListener('keydown', function(e){
+    if (e.key !== 'Enter') return;
+    var q = this.value.trim();
+    if (!q) return;
+    document.getElementById('aq-count').textContent = 'Searching…';
+    fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + encodeURIComponent(q))
+      .then(function(r){ return r.json(); })
+      .then(function(j){
+        if (j && j.length) {
+          map.setView([parseFloat(j[0].lat), parseFloat(j[0].lon)], 9);
+        } else {
+          document.getElementById('aq-count').textContent = 'Place not found';
+        }
+      })
+      .catch(function(){ document.getElementById('aq-count').textContent = 'Search unavailable'; });
+  });
+
   L.control.layers(null, { 'Modelled background': modelled },
                    { collapsed:false, position:'bottomright' }).addTo(map);
   map.on('overlayadd', function(e){ if (e.name.indexOf('Modelled') === 0) loadModelled(); });
+
+  load();
+  loadModelled();
 })();
 </script>
