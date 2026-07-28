@@ -1,0 +1,148 @@
+<div id="cf-calc" style="display:grid;grid-template-columns:1fr 300px;gap:28px;align-items:start;">
+
+  <div>
+    <div style="margin-bottom:1.75rem;">
+      <div style="font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;opacity:0.7;margin-bottom:0.9rem;">Home energy</div>
+      <label style="display:block;font-size:0.85rem;margin-bottom:0.35rem;">Electricity <span style="opacity:0.6;">kWh per month</span></label>
+      <input type="range" id="cf-elec" min="0" max="1500" step="10" value="250" style="width:100%;">
+      <div style="display:flex;justify-content:space-between;font-size:0.75rem;opacity:0.6;margin-bottom:1rem;"><span>0</span><span id="cf-elec-v" style="opacity:1;font-weight:600;">250 kWh</span><span>1500</span></div>
+
+      <label style="display:block;font-size:0.85rem;margin-bottom:0.35rem;">Gas or heating <span style="opacity:0.6;">kWh per month</span></label>
+      <input type="range" id="cf-gas" min="0" max="2000" step="10" value="400" style="width:100%;">
+      <div style="display:flex;justify-content:space-between;font-size:0.75rem;opacity:0.6;"><span>0</span><span id="cf-gas-v" style="opacity:1;font-weight:600;">400 kWh</span><span>2000</span></div>
+    </div>
+
+    <div style="margin-bottom:1.75rem;">
+      <div style="font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;opacity:0.7;margin-bottom:0.9rem;">Travel</div>
+      <label style="display:block;font-size:0.85rem;margin-bottom:0.35rem;">Car <span style="opacity:0.6;">km per week</span></label>
+      <input type="range" id="cf-car" min="0" max="800" step="10" value="150" style="width:100%;">
+      <div style="display:flex;justify-content:space-between;font-size:0.75rem;opacity:0.6;margin-bottom:1rem;"><span>0</span><span id="cf-car-v" style="opacity:1;font-weight:600;">150 km</span><span>800</span></div>
+
+      <label style="display:block;font-size:0.85rem;margin-bottom:0.35rem;">Public transport <span style="opacity:0.6;">km per week</span></label>
+      <input type="range" id="cf-pt" min="0" max="500" step="10" value="30" style="width:100%;">
+      <div style="display:flex;justify-content:space-between;font-size:0.75rem;opacity:0.6;margin-bottom:1rem;"><span>0</span><span id="cf-pt-v" style="opacity:1;font-weight:600;">30 km</span><span>500</span></div>
+
+      <label style="display:block;font-size:0.85rem;margin-bottom:0.35rem;">Flights <span style="opacity:0.6;">hours in the air per year</span></label>
+      <input type="range" id="cf-fly" min="0" max="120" step="1" value="8" style="width:100%;">
+      <div style="display:flex;justify-content:space-between;font-size:0.75rem;opacity:0.6;"><span>0</span><span id="cf-fly-v" style="opacity:1;font-weight:600;">8 hours</span><span>120</span></div>
+    </div>
+
+    <div>
+      <div style="font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;opacity:0.7;margin-bottom:0.9rem;">Diet</div>
+      <div id="cf-diet" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+    </div>
+  </div>
+
+  <div>
+    <div style="background:rgba(128,128,128,0.06);border-radius:12px;padding:1.5rem;">
+      <div style="font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;opacity:0.7;margin-bottom:0.5rem;">Your estimated footprint</div>
+      <div style="display:flex;align-items:baseline;gap:8px;">
+        <span id="cf-total" style="font-size:3rem;line-height:1;font-weight:600;letter-spacing:-0.02em;font-variant-numeric:tabular-nums;">0.0</span>
+        <span style="font-size:0.9rem;opacity:0.65;">t CO₂e / year</span>
+      </div>
+
+      <div id="cf-bars" style="margin-top:1.5rem;"></div>
+
+      <div style="margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid rgba(128,128,128,0.2);">
+        <div style="font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;opacity:0.7;margin-bottom:0.75rem;">For comparison</div>
+        <div id="cf-compare" style="font-size:0.8rem;line-height:2;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p style="font-size:0.72rem;opacity:0.55;margin-top:1.5rem;line-height:1.65;">
+  An indicative estimate, not an audit. Energy and transport factors are from the
+  <a href="https://www.gov.uk/government/collections/government-conversion-factors-for-company-reporting">UK Government GHG conversion factors (2024)</a>;
+  dietary factors are derived from Poore &amp; Nemecek (2018), <em>Science</em> 360(6392).
+  Grid intensity varies substantially by country, so results outside the UK should be read as
+  approximate. The 1.5 °C reference is the per-person budget consistent with the Paris Agreement.
+</p>
+
+<style>@media(max-width:760px){#cf-calc{grid-template-columns:1fr!important}}</style>
+
+<script>
+(function(){
+  var F = { elec:0.207, gas:0.183, car:0.170, pt:0.068, fly:250 };
+  var DIETS = [
+    {k:'vegan',  l:'Vegan',        v:1.1},
+    {k:'veg',    l:'Vegetarian',   v:1.4},
+    {k:'low',    l:'Low meat',     v:1.9},
+    {k:'avg',    l:'Average',      v:2.5},
+    {k:'high',   l:'High meat',    v:3.3}
+  ];
+  var diet = 3;
+
+  var el = function(id){ return document.getElementById(id); };
+
+  var dietWrap = el('cf-diet');
+  DIETS.forEach(function(d, i){
+    var b = document.createElement('button');
+    b.type = 'button'; b.textContent = d.l;
+    b.style.cssText = 'font-size:0.78rem;padding:7px 13px;cursor:pointer;border-radius:6px;' +
+      'border:1px solid rgba(128,128,128,0.3);background:transparent;color:inherit;';
+    b.onclick = function(){ diet = i; paint(); calc(); };
+    dietWrap.appendChild(b);
+  });
+
+  function paint(){
+    Array.prototype.forEach.call(dietWrap.children, function(b, i){
+      b.style.background = i === diet ? 'rgba(128,128,128,0.16)' : 'transparent';
+      b.style.fontWeight = i === diet ? '600' : '400';
+      b.style.opacity    = i === diet ? '1' : '0.7';
+    });
+  }
+
+  function calc(){
+    var elec = +el('cf-elec').value, gas = +el('cf-gas').value;
+    var car  = +el('cf-car').value,  pt  = +el('cf-pt').value;
+    var fly  = +el('cf-fly').value;
+
+    el('cf-elec-v').textContent = elec + ' kWh';
+    el('cf-gas-v').textContent  = gas + ' kWh';
+    el('cf-car-v').textContent  = car + ' km';
+    el('cf-pt-v').textContent   = pt + ' km';
+    el('cf-fly-v').textContent  = fly + ' hours';
+
+    var parts = [
+      {l:'Home energy', v:(elec*F.elec + gas*F.gas) * 12 / 1000, c:'#d85a30'},
+      {l:'Car',         v:car*F.car*52/1000,                     c:'#c2703f'},
+      {l:'Transit',     v:pt*F.pt*52/1000,                       c:'#e0a56b'},
+      {l:'Flights',     v:fly*F.fly/1000,                        c:'#8f3417'},
+      {l:'Diet',        v:DIETS[diet].v,                         c:'#1d9e75'}
+    ];
+    var total = parts.reduce(function(a,p){ return a + p.v; }, 0);
+    el('cf-total').textContent = total.toFixed(1);
+
+    var max = Math.max.apply(null, parts.map(function(p){ return p.v; })) || 1;
+    el('cf-bars').innerHTML = parts.map(function(p){
+      return '<div style="margin-bottom:9px;">' +
+        '<div style="display:flex;justify-content:space-between;font-size:0.75rem;opacity:0.8;margin-bottom:3px;">' +
+        '<span>' + p.l + '</span><span style="font-variant-numeric:tabular-nums;">' + p.v.toFixed(1) + '</span></div>' +
+        '<div style="height:5px;border-radius:3px;background:rgba(128,128,128,0.15);overflow:hidden;">' +
+        '<div style="height:100%;width:' + (p.v/max*100).toFixed(1) + '%;background:' + p.c + ';border-radius:3px;"></div>' +
+        '</div></div>';
+    }).join('');
+
+    var refs = [
+      {l:'1.5 °C budget', v:2.3},
+      {l:'World average', v:4.7},
+      {l:'Morocco',       v:2.0},
+      {l:'EU average',    v:7.4},
+      {l:'United States', v:14.3}
+    ];
+    el('cf-compare').innerHTML = refs.map(function(r){
+      var over = total > r.v;
+      return '<div style="display:flex;justify-content:space-between;">' +
+        '<span style="opacity:0.75;">' + r.l + '</span>' +
+        '<span style="font-variant-numeric:tabular-nums;color:' +
+          (over ? '#d85a30' : '#1d9e75') + ';">' + r.v.toFixed(1) + '</span></div>';
+    }).join('');
+  }
+
+  ['cf-elec','cf-gas','cf-car','cf-pt','cf-fly'].forEach(function(id){
+    el(id).addEventListener('input', calc);
+  });
+  paint(); calc();
+})();
+</script>
