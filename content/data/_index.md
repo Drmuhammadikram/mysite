@@ -1,6 +1,6 @@
 ---
 title: Sustainability Data
-summary: Interactive datasets on ecological footprint, biocapacity, and sustainable development worldwide.
+summary: Interactive datasets on ecological footprint, biocapacity, and progress toward the Sustainable Development Goals.
 type: landing
 
 sections:
@@ -12,6 +12,16 @@ sections:
         Every country either draws more from nature than its ecosystems can regenerate, or holds a reserve. This map tracks that balance across 130 countries, alongside footprint and biocapacity in both per-person and total terms.
 
         {{< footprint >}}
+    design:
+      columns: '1'
+  - block: markdown
+    content:
+      title: 'SDG Index: progress toward the Goals'
+      subtitle: ''
+      text: |-
+        The SDG Index scores countries from 0 to 100 on their progress across all 17 Sustainable Development Goals, where 100 means every Goal has been achieved. Compiled annually by the Sustainable Development Solutions Network.
+
+        {{< sdgindex >}}
     design:
       columns: '1'
 ---
