@@ -1,13 +1,37 @@
 {{- $d := site.Data.footprint -}}
 {{- with $d -}}
+{{- $w := index .aggregates "World" -}}
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:1.5rem;">
+  <div style="background:rgba(128,128,128,0.06);border-radius:8px;padding:1rem;">
+    <div style="font-size:0.75rem;opacity:0.7;margin-bottom:0.4rem;">World footprint</div>
+    <div style="font-size:1.9rem;line-height:1;font-weight:600;font-variant-numeric:tabular-nums;">{{ $w.ef }}</div>
+    <div style="font-size:0.68rem;opacity:0.55;margin-top:0.3rem;">gha per person</div>
+  </div>
+  <div style="background:rgba(128,128,128,0.06);border-radius:8px;padding:1rem;">
+    <div style="font-size:0.75rem;opacity:0.7;margin-bottom:0.4rem;">World biocapacity</div>
+    <div style="font-size:1.9rem;line-height:1;font-weight:600;font-variant-numeric:tabular-nums;">{{ $w.bc }}</div>
+    <div style="font-size:0.68rem;opacity:0.55;margin-top:0.3rem;">gha per person</div>
+  </div>
+  <div style="background:rgba(128,128,128,0.06);border-radius:8px;padding:1rem;">
+    <div style="font-size:0.75rem;opacity:0.7;margin-bottom:0.4rem;">Global deficit</div>
+    <div style="font-size:1.9rem;line-height:1;font-weight:600;font-variant-numeric:tabular-nums;color:#d85a30;">{{ $w.deficit }}</div>
+    <div style="font-size:0.68rem;opacity:0.55;margin-top:0.3rem;">gha per person</div>
+  </div>
+  <div style="background:rgba(128,128,128,0.06);border-radius:8px;padding:1rem;">
+    <div style="font-size:0.75rem;opacity:0.7;margin-bottom:0.4rem;">Countries</div>
+    <div style="font-size:1.9rem;line-height:1;font-weight:600;font-variant-numeric:tabular-nums;">{{ len .countries }}</div>
+    <div style="font-size:0.68rem;opacity:0.55;margin-top:0.3rem;">with published data</div>
+  </div>
+</div>
+
 <div id="fp-tabs" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1.25rem;"></div>
 
-<div style="display:grid;grid-template-columns:1fr 200px;gap:24px;align-items:start;" id="fp-wrap">
+<div style="display:grid;grid-template-columns:1fr 210px;gap:24px;align-items:start;" id="fp-wrap">
   <div id="fp-map" style="width:100%;"></div>
   <div>
     <div id="fp-legend-title" style="font-size:0.78rem;opacity:0.75;margin-bottom:0.7rem;line-height:1.45;"></div>
     <div id="fp-legend"></div>
-    <div id="fp-readout" style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid rgba(128,128,128,0.2);min-height:70px;">
+    <div id="fp-readout" style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid rgba(128,128,128,0.2);min-height:80px;">
       <div style="font-size:0.75rem;opacity:0.5;">Hover a country</div>
     </div>
   </div>
@@ -19,7 +43,7 @@
   <a href="https://data.footprintnetwork.org">Open Data Platform</a>.
 </p>
 
-<style>@media(max-width:700px){#fp-wrap{grid-template-columns:1fr!important}}</style>
+<style>@media(max-width:760px){#fp-wrap{grid-template-columns:1fr!important}}</style>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
@@ -35,19 +59,19 @@ var byIso = {}; DATA.forEach(function(d){ byIso[String(+d.i)] = d; });
 
 var METRICS = [
  {k:'d', label:'Ecological deficit / reserve', note:'A deficit means a country uses more than its ecosystems regenerate.',
-  bands:[[0.5,'Reserve > 0.5'],[0,'Reserve 0–0.5'],[-0.5,'Deficit 0–0.5'],[-1,'Deficit 0.5–1'],[-99,'Deficit > 1']],
-  cols:['#0f6e56','#5dcaa5','#f0997b','#d85a30','#993c1d']},
+  bands:[[2,'Reserve > 2'],[0.5,'Reserve 0.5–2'],[0,'Reserve 0–0.5'],[-1,'Deficit 0–1'],[-3,'Deficit 1–3'],[-99,'Deficit > 3']],
+  cols:['#04342c','#0f6e56','#5dcaa5','#f0997b','#d85a30','#8f3417']},
  {k:'ef', label:'Footprint per person', note:'Ecological Footprint of consumption divided by population.',
-  bands:[[2,'> 2'],[1.5,'1.5–2'],[1,'1–1.5'],[0.75,'0.75–1'],[0,'< 0.75']],
-  cols:['#993c1d','#d85a30','#f0997b','#f5c4b3','#faece7']},
- {k:'bc', label:'Biocapacity per person', note:'Total biocapacity divided by population.',
-  bands:[[5,'> 5'],[1.7,'1.7–5'],[1,'1–1.7'],[0.5,'0.5–1'],[0,'< 0.5']],
-  cols:['#04342c','#0f6e56','#1d9e75','#9fe1cb','#e1f5ee']},
+  bands:[[6,'> 6'],[4,'4–6'],[2.5,'2.5–4'],[1.5,'1.5–2.5'],[0.8,'0.8–1.5'],[0,'< 0.8']],
+  cols:['#8f3417','#d85a30','#f0997b','#f5c4b3','#faece7','#fdf7f4']},
+ {k:'bc', label:'Biocapacity per person', note:'Total biocapacity divided by population. World average is {{ $w.bc }}.',
+  bands:[[8,'> 8'],[4,'4–8'],[1.7,'1.7–4'],[1,'1–1.7'],[0.5,'0.5–1'],[0,'< 0.5']],
+  cols:['#04342c','#0f6e56','#1d9e75','#5dcaa5','#9fe1cb','#e1f5ee']},
  {k:'eft', label:'Total footprint', note:'Total Ecological Footprint of consumption, in global hectares.',
-  bands:[[1e8,'> 100M'],[5e7,'50–100M'],[2.5e7,'25–50M'],[1e7,'10–25M'],[0,'< 10M']],
-  cols:['#993c1d','#d85a30','#f0997b','#f5c4b3','#faece7']},
+  bands:[[1e9,'> 1B'],[2.5e8,'250M–1B'],[1e8,'100–250M'],[2.5e7,'25–100M'],[0,'< 25M']],
+  cols:['#8f3417','#d85a30','#f0997b','#f5c4b3','#faece7']},
  {k:'bct', label:'Total biocapacity', note:'Total biocapacity available within a country, in global hectares.',
-  bands:[[1e8,'> 100M'],[5e7,'50–100M'],[2.5e7,'25–50M'],[1e7,'10–25M'],[0,'< 10M']],
+  bands:[[1e9,'> 1B'],[2.5e8,'250M–1B'],[1e8,'100–250M'],[2.5e7,'25–100M'],[0,'< 25M']],
   cols:['#04342c','#0f6e56','#1d9e75','#9fe1cb','#e1f5ee']}];
 
 var cur = 0, paths = null;
@@ -58,18 +82,19 @@ function colorFor(m, v){
   for (var j = 0; j < m.bands.length; j++) if (v >= m.bands[j][0]) return m.cols[j];
   return m.cols[m.cols.length - 1];
 }
+function fmt(v){ return Math.abs(v) >= 1e6 ? (v/1e6).toFixed(0) + 'M' : v; }
 
 var svg = d3.select('#fp-map').append('svg')
-  .attr('viewBox','0 0 460 480').attr('width','100%')
-  .attr('role','img').attr('aria-label','Map of Africa coloured by ecological footprint and biocapacity');
-var path = d3.geoPath(d3.geoMercator().center([18,2]).scale(300).translate([230,240]));
+  .attr('viewBox','0 0 900 440').attr('width','100%')
+  .attr('role','img').attr('aria-label','World map coloured by ecological footprint and biocapacity');
+var path = d3.geoPath(d3.geoNaturalEarth1().scale(160).translate([450, 215]));
 
 function render(){
   var m = METRICS[cur];
   d3.select('#fp-legend-title').html('<strong style="font-weight:600;opacity:1">' + m.label + '</strong><br>' + m.note);
   d3.select('#fp-legend').html(m.bands.map(function(b,j){
     return '<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;font-size:0.72rem;opacity:0.75;">' +
-      '<span style="width:16px;height:11px;border-radius:2px;background:' + m.cols[j] + ';flex-shrink:0;"></span>' + b[1] + '</div>';
+      '<span style="width:16px;height:11px;border-radius:2px;background:' + m.cols[j] + ';flex-shrink:0;border:1px solid rgba(128,128,128,0.2);"></span>' + b[1] + '</div>';
   }).join('') + '<div style="display:flex;align-items:center;gap:8px;margin-top:8px;font-size:0.72rem;opacity:0.5;">' +
     '<span style="width:16px;height:11px;border-radius:2px;background:' + noData + ';flex-shrink:0;"></span>No data</div>');
   d3.selectAll('#fp-tabs button')
@@ -87,19 +112,18 @@ d3.select('#fp-tabs').selectAll('button').data(METRICS).join('button')
   .on('click', function(e,d){ cur = METRICS.indexOf(d); render(); });
 
 d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(function(w){
-  var AFR = ['012','024','072','108','120','132','140','148','174','178','180','204','226','231','232','262','266','270','288','324','384','404','426','430','434','450','454','466','478','480','508','516','562','566','624','646','686','690','694','706','710','716','728','729','748','768','788','800','818','834','854','894'];
   var moroccoParts = w.objects.countries.geometries.filter(function(g){
     var id = String(+g.id); return id === '504' || id === '732';
   });
   var feats = topojson.feature(w, w.objects.countries).features
-    .filter(function(f){ return AFR.indexOf(String(+f.id).padStart(3,'0')) !== -1; });
+    .filter(function(f){ var id = String(+f.id); return id !== '504' && id !== '732' && id !== '010'; });
   if (moroccoParts.length) {
     feats.push({ type:'Feature', id:504, properties:{name:'Morocco'},
                  geometry: topojson.merge(w, moroccoParts) });
   }
   paths = svg.selectAll('path').data(feats).join('path')
     .attr('d', path)
-    .attr('stroke', dark ? 'rgba(255,255,255,.16)' : '#fff').attr('stroke-width', 0.5)
+    .attr('stroke', dark ? 'rgba(255,255,255,.14)' : '#fff').attr('stroke-width', 0.4)
     .style('cursor','pointer')
     .on('mouseenter', function(e,f){
       var r = byIso[String(+f.id)];
