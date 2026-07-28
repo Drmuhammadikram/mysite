@@ -20,11 +20,12 @@
 </div>
 
 <p style="font-size:0.72rem;opacity:0.55;margin-top:1.25rem;line-height:1.6;">
-  Live data from the <a href="https://waqi.info">World Air Quality Index project</a>,
-  covering more than 12,000 stations in over 100 countries. The index is based on
-  particulate matter (PM2.5 and PM10), ozone, nitrogen dioxide, sulphur dioxide and
-  carbon monoxide. Readings update hourly and reflect the most recent measurement
-  available at each station.
+  Station readings from the <a href="https://waqi.info">World Air Quality Index project</a>,
+  covering more than 12,000 stations in over 100 countries. The index is based on particulate
+  matter (PM2.5 and PM10), ozone, nitrogen dioxide, sulphur dioxide and carbon monoxide.
+  The modelled background layer draws on the Copernicus Atmosphere Monitoring Service via
+  <a href="https://open-meteo.com">Open-Meteo</a> (CC BY 4.0), and covers regions with no
+  ground monitoring. Where stations exist, they measure; the model estimates.
 </p>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
@@ -34,12 +35,13 @@
   .aq-dot{border-radius:50%;display:flex;align-items:center;justify-content:center;
           font-size:11px;font-weight:600;color:#fff;border:1.5px solid rgba(255,255,255,0.85);
           box-sizing:border-box;}
+  .leaflet-control-layers{font-size:0.72rem!important;}
 </style>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
 (function(){
-  var TOKEN = 'dc6ad272f691ae0998d466e17facbd6a20854c34';
+  var TOKEN = 'PUT_YOUR_WAQI_TOKEN_HERE';
 
   var dark = matchMedia('(prefers-color-scheme: dark)').matches;
 
@@ -150,5 +152,38 @@
         }
       });
   });
+
+  var modelled = L.layerGroup();
+  var modelLoaded = false;
+
+  function loadModelled(){
+    if (modelLoaded) return;
+    modelLoaded = true;
+    var pts = [];
+    for (var la = -50; la <= 65; la += 10)
+      for (var lo = -170; lo <= 175; lo += 12)
+        pts.push([la, lo]);
+    var lats = pts.map(function(p){ return p[0]; }).join(',');
+    var lons = pts.map(function(p){ return p[1]; }).join(',');
+    fetch('https://air-quality-api.open-meteo.com/v1/air-quality?latitude=' + lats +
+          '&longitude=' + lons + '&current=us_aqi&timezone=UTC')
+      .then(function(r){ return r.json(); })
+      .then(function(j){
+        var arr = Array.isArray(j) ? j : [j];
+        arr.forEach(function(d, i){
+          var v = d.current && d.current.us_aqi;
+          if (v == null || !pts[i]) return;
+          var b = band(v);
+          modelled.addLayer(L.circleMarker([pts[i][0], pts[i][1]], {
+            radius:11, fillColor:b[2], fillOpacity:0.30, weight:0, interactive:false
+          }));
+        });
+      })
+      .catch(function(){ modelLoaded = false; });
+  }
+
+  L.control.layers(null, { 'Modelled background': modelled },
+                   { collapsed:false, position:'bottomright' }).addTo(map);
+  map.on('overlayadd', function(e){ if (e.name.indexOf('Modelled') === 0) loadModelled(); });
 })();
 </script>
