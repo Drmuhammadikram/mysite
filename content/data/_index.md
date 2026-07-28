@@ -2,7 +2,6 @@
 title: Sustainability Data
 summary: Interactive datasets on ecological footprint, biocapacity, and progress toward the Sustainable Development Goals.
 type: landing
-
 sections:
   - block: markdown
     content:
@@ -22,6 +21,16 @@ sections:
         The SDG Index scores countries from 0 to 100 on their progress across all 17 Sustainable Development Goals, where 100 means every Goal has been achieved. Compiled annually by the Sustainable Development Solutions Network.
 
         {{< sdgindex >}}
+    design:
+      columns: '1'
+  - block: markdown
+    content:
+      title: 'Estimate your carbon footprint'
+      subtitle: ''
+      text: |-
+        Adjust the inputs to see how household energy, travel, and diet contribute to an annual carbon footprint, and how the total compares against national averages and the per-person budget consistent with 1.5 °C.
+
+        {{< carboncalc >}}
     design:
       columns: '1'
 ---
