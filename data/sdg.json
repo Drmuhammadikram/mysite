@@ -1,0 +1,1176 @@
+{
+  "edition": 2024,
+  "updated": "2026-07-28",
+  "countries": [
+    {
+      "name": "Finland",
+      "iso": "246",
+      "region": "OECD",
+      "score": 86.4,
+      "rank": 1
+    },
+    {
+      "name": "Sweden",
+      "iso": "752",
+      "region": "OECD",
+      "score": 85.7,
+      "rank": 2
+    },
+    {
+      "name": "Denmark",
+      "iso": "208",
+      "region": "OECD",
+      "score": 85.0,
+      "rank": 3
+    },
+    {
+      "name": "Germany",
+      "iso": "276",
+      "region": "OECD",
+      "score": 83.4,
+      "rank": 4
+    },
+    {
+      "name": "France",
+      "iso": "250",
+      "region": "OECD",
+      "score": 82.8,
+      "rank": 5
+    },
+    {
+      "name": "Austria",
+      "iso": "040",
+      "region": "OECD",
+      "score": 82.5,
+      "rank": 6
+    },
+    {
+      "name": "United Kingdom",
+      "iso": "826",
+      "region": "OECD",
+      "score": 82.2,
+      "rank": 9
+    },
+    {
+      "name": "Croatia",
+      "iso": "191",
+      "region": "E. Europe & C. Asia",
+      "score": 82.2,
+      "rank": 8
+    },
+    {
+      "name": "Norway",
+      "iso": "578",
+      "region": "OECD",
+      "score": 82.2,
+      "rank": 7
+    },
+    {
+      "name": "Poland",
+      "iso": "616",
+      "region": "OECD",
+      "score": 81.7,
+      "rank": 10
+    },
+    {
+      "name": "Slovenia",
+      "iso": "705",
+      "region": "OECD",
+      "score": 81.3,
+      "rank": 11
+    },
+    {
+      "name": "Czechia",
+      "iso": "203",
+      "region": "OECD",
+      "score": 81.3,
+      "rank": 12
+    },
+    {
+      "name": "Latvia",
+      "iso": "428",
+      "region": "OECD",
+      "score": 81.0,
+      "rank": 13
+    },
+    {
+      "name": "Spain",
+      "iso": "724",
+      "region": "OECD",
+      "score": 80.7,
+      "rank": 14
+    },
+    {
+      "name": "Estonia",
+      "iso": "233",
+      "region": "OECD",
+      "score": 80.5,
+      "rank": 15
+    },
+    {
+      "name": "Portugal",
+      "iso": "620",
+      "region": "OECD",
+      "score": 80.2,
+      "rank": 16
+    },
+    {
+      "name": "Belgium",
+      "iso": "056",
+      "region": "OECD",
+      "score": 80.0,
+      "rank": 17
+    },
+    {
+      "name": "Japan",
+      "iso": "392",
+      "region": "OECD",
+      "score": 79.9,
+      "rank": 18
+    },
+    {
+      "name": "Hungary",
+      "iso": "348",
+      "region": "OECD",
+      "score": 79.5,
+      "rank": 20
+    },
+    {
+      "name": "Iceland",
+      "iso": "352",
+      "region": "OECD",
+      "score": 79.5,
+      "rank": 19
+    },
+    {
+      "name": "Slovak Republic",
+      "iso": "703",
+      "region": "OECD",
+      "score": 79.4,
+      "rank": 21
+    },
+    {
+      "name": "Italy",
+      "iso": "380",
+      "region": "OECD",
+      "score": 79.3,
+      "rank": 23
+    },
+    {
+      "name": "Switzerland",
+      "iso": "756",
+      "region": "OECD",
+      "score": 79.3,
+      "rank": 22
+    },
+    {
+      "name": "Netherlands",
+      "iso": "528",
+      "region": "OECD",
+      "score": 79.2,
+      "rank": 24
+    },
+    {
+      "name": "New Zealand",
+      "iso": "554",
+      "region": "OECD",
+      "score": 78.8,
+      "rank": 26
+    },
+    {
+      "name": "Moldova",
+      "iso": "498",
+      "region": "E. Europe & C. Asia",
+      "score": 78.8,
+      "rank": 27
+    },
+    {
+      "name": "Canada",
+      "iso": "124",
+      "region": "OECD",
+      "score": 78.8,
+      "rank": 25
+    },
+    {
+      "name": "Greece",
+      "iso": "300",
+      "region": "OECD",
+      "score": 78.7,
+      "rank": 29
+    },
+    {
+      "name": "Ireland",
+      "iso": "372",
+      "region": "OECD",
+      "score": 78.7,
+      "rank": 28
+    },
+    {
+      "name": "Belarus",
+      "iso": "112",
+      "region": "E. Europe & C. Asia",
+      "score": 78.6,
+      "rank": 30
+    },
+    {
+      "name": "Lithuania",
+      "iso": "440",
+      "region": "OECD",
+      "score": 78.1,
+      "rank": 31
+    },
+    {
+      "name": "Chile",
+      "iso": "152",
+      "region": "OECD",
+      "score": 77.8,
+      "rank": 32
+    },
+    {
+      "name": "Korea, Rep.",
+      "iso": "410",
+      "region": "OECD",
+      "score": 77.3,
+      "rank": 33
+    },
+    {
+      "name": "Uruguay",
+      "iso": "858",
+      "region": "LAC",
+      "score": 77.1,
+      "rank": 34
+    },
+    {
+      "name": "Malta",
+      "iso": "470",
+      "region": "E. Europe & C. Asia",
+      "score": 77.0,
+      "rank": 36
+    },
+    {
+      "name": "Serbia",
+      "iso": "688",
+      "region": "E. Europe & C. Asia",
+      "score": 77.0,
+      "rank": 35
+    },
+    {
+      "name": "Australia",
+      "iso": "036",
+      "region": "OECD",
+      "score": 76.9,
+      "rank": 37
+    },
+    {
+      "name": "Luxembourg",
+      "iso": "442",
+      "region": "OECD",
+      "score": 76.8,
+      "rank": 38
+    },
+    {
+      "name": "Romania",
+      "iso": "642",
+      "region": "E. Europe & C. Asia",
+      "score": 76.7,
+      "rank": 40
+    },
+    {
+      "name": "Cuba",
+      "iso": "192",
+      "region": "LAC",
+      "score": 76.7,
+      "rank": 39
+    },
+    {
+      "name": "Bulgaria",
+      "iso": "100",
+      "region": "E. Europe & C. Asia",
+      "score": 75.5,
+      "rank": 41
+    },
+    {
+      "name": "Albania",
+      "iso": "008",
+      "region": "E. Europe & C. Asia",
+      "score": 75.0,
+      "rank": 42
+    },
+    {
+      "name": "Georgia",
+      "iso": "268",
+      "region": "E. Europe & C. Asia",
+      "score": 74.9,
+      "rank": 43
+    },
+    {
+      "name": "Ukraine",
+      "iso": "804",
+      "region": "E. Europe & C. Asia",
+      "score": 74.8,
+      "rank": 44
+    },
+    {
+      "name": "Thailand",
+      "iso": "764",
+      "region": "East & South Asia",
+      "score": 74.7,
+      "rank": 45
+    },
+    {
+      "name": "United States",
+      "iso": "840",
+      "region": "OECD",
+      "score": 74.4,
+      "rank": 46
+    },
+    {
+      "name": "Argentina",
+      "iso": "032",
+      "region": "LAC",
+      "score": 74.4,
+      "rank": 47
+    },
+    {
+      "name": "Kyrgyz Republic",
+      "iso": "417",
+      "region": "E. Europe & C. Asia",
+      "score": 74.2,
+      "rank": 48
+    },
+    {
+      "name": "Armenia",
+      "iso": "051",
+      "region": "E. Europe & C. Asia",
+      "score": 74.1,
+      "rank": 49
+    },
+    {
+      "name": "Bosnia and Herzegovina",
+      "iso": "070",
+      "region": "E. Europe & C. Asia",
+      "score": 74.0,
+      "rank": 50
+    },
+    {
+      "name": "North Macedonia",
+      "iso": "807",
+      "region": "E. Europe & C. Asia",
+      "score": 73.8,
+      "rank": 51
+    },
+    {
+      "name": "Brazil",
+      "iso": "076",
+      "region": "LAC",
+      "score": 73.8,
+      "rank": 52
+    },
+    {
+      "name": "Israel",
+      "iso": "376",
+      "region": "OECD",
+      "score": 73.5,
+      "rank": 53
+    },
+    {
+      "name": "Vietnam",
+      "iso": "704",
+      "region": "East & South Asia",
+      "score": 73.3,
+      "rank": 54
+    },
+    {
+      "name": "Dominican Republic",
+      "iso": "214",
+      "region": "LAC",
+      "score": 73.1,
+      "rank": 55
+    },
+    {
+      "name": "Russian Federation",
+      "iso": "643",
+      "region": "E. Europe & C. Asia",
+      "score": 73.1,
+      "rank": 56
+    },
+    {
+      "name": "Montenegro",
+      "iso": "499",
+      "region": "E. Europe & C. Asia",
+      "score": 73.1,
+      "rank": 57
+    },
+    {
+      "name": "Costa Rica",
+      "iso": "188",
+      "region": "OECD",
+      "score": 72.9,
+      "rank": 59
+    },
+    {
+      "name": "Cyprus",
+      "iso": "196",
+      "region": "E. Europe & C. Asia",
+      "score": 72.9,
+      "rank": 58
+    },
+    {
+      "name": "Bhutan",
+      "iso": "064",
+      "region": "East & South Asia",
+      "score": 72.5,
+      "rank": 61
+    },
+    {
+      "name": "Tunisia",
+      "iso": "788",
+      "region": "MENA",
+      "score": 72.5,
+      "rank": 60
+    },
+    {
+      "name": "Fiji",
+      "iso": "242",
+      "region": "Oceania",
+      "score": 72.3,
+      "rank": 62
+    },
+    {
+      "name": "Azerbaijan",
+      "iso": "031",
+      "region": "E. Europe & C. Asia",
+      "score": 72.2,
+      "rank": 63
+    },
+    {
+      "name": "Peru",
+      "iso": "604",
+      "region": "LAC",
+      "score": 71.9,
+      "rank": 64
+    },
+    {
+      "name": "Singapore",
+      "iso": "702",
+      "region": "East & South Asia",
+      "score": 71.4,
+      "rank": 65
+    },
+    {
+      "name": "Kazakhstan",
+      "iso": "398",
+      "region": "E. Europe & C. Asia",
+      "score": 71.1,
+      "rank": 66
+    },
+    {
+      "name": "Maldives",
+      "iso": "462",
+      "region": "East & South Asia",
+      "score": 70.9,
+      "rank": 67
+    },
+    {
+      "name": "China",
+      "iso": "156",
+      "region": "East & South Asia",
+      "score": 70.9,
+      "rank": 68
+    },
+    {
+      "name": "Morocco",
+      "iso": "504",
+      "region": "MENA",
+      "score": 70.9,
+      "rank": 69
+    },
+    {
+      "name": "United Arab Emirates",
+      "iso": "784",
+      "region": "MENA",
+      "score": 70.5,
+      "rank": 70
+    },
+    {
+      "name": "Algeria",
+      "iso": "012",
+      "region": "MENA",
+      "score": 70.5,
+      "rank": 71
+    },
+    {
+      "name": "T\u00fcrkiye",
+      "iso": "792",
+      "region": "OECD",
+      "score": 70.5,
+      "rank": 72
+    },
+    {
+      "name": "Mauritius",
+      "iso": "480",
+      "region": "Sub-Saharan Africa",
+      "score": 70.4,
+      "rank": 73
+    },
+    {
+      "name": "Colombia",
+      "iso": "170",
+      "region": "OECD",
+      "score": 70.3,
+      "rank": 74
+    },
+    {
+      "name": "Ecuador",
+      "iso": "218",
+      "region": "LAC",
+      "score": 70.1,
+      "rank": 75
+    },
+    {
+      "name": "Suriname",
+      "iso": "740",
+      "region": "LAC",
+      "score": 70.0,
+      "rank": 76
+    },
+    {
+      "name": "Jamaica",
+      "iso": "388",
+      "region": "LAC",
+      "score": 69.5,
+      "rank": 77
+    },
+    {
+      "name": "Indonesia",
+      "iso": "360",
+      "region": "East & South Asia",
+      "score": 69.4,
+      "rank": 78
+    },
+    {
+      "name": "Mexico",
+      "iso": "484",
+      "region": "OECD",
+      "score": 69.3,
+      "rank": 80
+    },
+    {
+      "name": "Malaysia",
+      "iso": "458",
+      "region": "East & South Asia",
+      "score": 69.3,
+      "rank": 79
+    },
+    {
+      "name": "Barbados",
+      "iso": "052",
+      "region": "LAC",
+      "score": 69.2,
+      "rank": 82
+    },
+    {
+      "name": "Uzbekistan",
+      "iso": "860",
+      "region": "E. Europe & C. Asia",
+      "score": 69.2,
+      "rank": 81
+    },
+    {
+      "name": "Egypt, Arab Rep.",
+      "iso": "818",
+      "region": "MENA",
+      "score": 69.1,
+      "rank": 83
+    },
+    {
+      "name": "Jordan",
+      "iso": "400",
+      "region": "MENA",
+      "score": 69.1,
+      "rank": 85
+    },
+    {
+      "name": "Panama",
+      "iso": "591",
+      "region": "LAC",
+      "score": 69.1,
+      "rank": 84
+    },
+    {
+      "name": "Iran, Islamic Rep.",
+      "iso": "364",
+      "region": "MENA",
+      "score": 69.0,
+      "rank": 86
+    },
+    {
+      "name": "El Salvador",
+      "iso": "222",
+      "region": "LAC",
+      "score": 68.6,
+      "rank": 87
+    },
+    {
+      "name": "Cabo Verde",
+      "iso": "132",
+      "region": "Sub-Saharan Africa",
+      "score": 68.2,
+      "rank": 88
+    },
+    {
+      "name": "Bolivia",
+      "iso": "068",
+      "region": "LAC",
+      "score": 68.1,
+      "rank": 90
+    },
+    {
+      "name": "Tajikistan",
+      "iso": "762",
+      "region": "E. Europe & C. Asia",
+      "score": 68.1,
+      "rank": 89
+    },
+    {
+      "name": "Paraguay",
+      "iso": "600",
+      "region": "LAC",
+      "score": 68.0,
+      "rank": 91
+    },
+    {
+      "name": "Philippines",
+      "iso": "608",
+      "region": "East & South Asia",
+      "score": 67.5,
+      "rank": 92
+    },
+    {
+      "name": "Sri Lanka",
+      "iso": "144",
+      "region": "East & South Asia",
+      "score": 67.4,
+      "rank": 93
+    },
+    {
+      "name": "Turkmenistan",
+      "iso": "795",
+      "region": "E. Europe & C. Asia",
+      "score": 67.1,
+      "rank": 94
+    },
+    {
+      "name": "Nepal",
+      "iso": "524",
+      "region": "East & South Asia",
+      "score": 67.1,
+      "rank": 95
+    },
+    {
+      "name": "Brunei Darussalam",
+      "iso": "096",
+      "region": "East & South Asia",
+      "score": 67.0,
+      "rank": 96
+    },
+    {
+      "name": "Guyana",
+      "iso": "328",
+      "region": "LAC",
+      "score": 66.7,
+      "rank": 97
+    },
+    {
+      "name": "Namibia",
+      "iso": "516",
+      "region": "Sub-Saharan Africa",
+      "score": 66.5,
+      "rank": 98
+    },
+    {
+      "name": "Mongolia",
+      "iso": "496",
+      "region": "East & South Asia",
+      "score": 66.3,
+      "rank": 99
+    },
+    {
+      "name": "Oman",
+      "iso": "512",
+      "region": "MENA",
+      "score": 66.1,
+      "rank": 100
+    },
+    {
+      "name": "Belize",
+      "iso": "084",
+      "region": "LAC",
+      "score": 65.5,
+      "rank": 101
+    },
+    {
+      "name": "Gabon",
+      "iso": "266",
+      "region": "Sub-Saharan Africa",
+      "score": 64.9,
+      "rank": 105
+    },
+    {
+      "name": "Cambodia",
+      "iso": "116",
+      "region": "East & South Asia",
+      "score": 64.9,
+      "rank": 104
+    },
+    {
+      "name": "Qatar",
+      "iso": "634",
+      "region": "MENA",
+      "score": 64.9,
+      "rank": 102
+    },
+    {
+      "name": "Saudi Arabia",
+      "iso": "682",
+      "region": "MENA",
+      "score": 64.9,
+      "rank": 103
+    },
+    {
+      "name": "Nicaragua",
+      "iso": "558",
+      "region": "LAC",
+      "score": 64.7,
+      "rank": 106
+    },
+    {
+      "name": "Bangladesh",
+      "iso": "050",
+      "region": "East & South Asia",
+      "score": 64.3,
+      "rank": 107
+    },
+    {
+      "name": "Iraq",
+      "iso": "368",
+      "region": "MENA",
+      "score": 64.2,
+      "rank": 108
+    },
+    {
+      "name": "India",
+      "iso": "356",
+      "region": "East & South Asia",
+      "score": 64.0,
+      "rank": 109
+    },
+    {
+      "name": "Lebanon",
+      "iso": "422",
+      "region": "MENA",
+      "score": 63.9,
+      "rank": 110
+    },
+    {
+      "name": "Kuwait",
+      "iso": "414",
+      "region": "MENA",
+      "score": 63.8,
+      "rank": 111
+    },
+    {
+      "name": "Bahamas, The",
+      "iso": "044",
+      "region": "LAC",
+      "score": 63.7,
+      "rank": 112
+    },
+    {
+      "name": "Bahrain",
+      "iso": "048",
+      "region": "MENA",
+      "score": 63.6,
+      "rank": 113
+    },
+    {
+      "name": "Botswana",
+      "iso": "072",
+      "region": "Sub-Saharan Africa",
+      "score": 63.4,
+      "rank": 114
+    },
+    {
+      "name": "South Africa",
+      "iso": "710",
+      "region": "Sub-Saharan Africa",
+      "score": 63.4,
+      "rank": 115
+    },
+    {
+      "name": "Senegal",
+      "iso": "686",
+      "region": "Sub-Saharan Africa",
+      "score": 63.4,
+      "rank": 116
+    },
+    {
+      "name": "Ghana",
+      "iso": "288",
+      "region": "Sub-Saharan Africa",
+      "score": 63.0,
+      "rank": 117
+    },
+    {
+      "name": "Lao PDR",
+      "iso": "418",
+      "region": "East & South Asia",
+      "score": 63.0,
+      "rank": 119
+    },
+    {
+      "name": "Sao Tome and Principe",
+      "iso": "678",
+      "region": "Sub-Saharan Africa",
+      "score": 63.0,
+      "rank": 118
+    },
+    {
+      "name": "Myanmar",
+      "iso": "104",
+      "region": "East & South Asia",
+      "score": 62.8,
+      "rank": 120
+    },
+    {
+      "name": "Cote d'Ivoire",
+      "iso": "384",
+      "region": "Sub-Saharan Africa",
+      "score": 62.7,
+      "rank": 121
+    },
+    {
+      "name": "Venezuela, RB",
+      "iso": "862",
+      "region": "LAC",
+      "score": 62.5,
+      "rank": 122
+    },
+    {
+      "name": "Kenya",
+      "iso": "404",
+      "region": "Sub-Saharan Africa",
+      "score": 62.2,
+      "rank": 123
+    },
+    {
+      "name": "Honduras",
+      "iso": "340",
+      "region": "LAC",
+      "score": 62.0,
+      "rank": 124
+    },
+    {
+      "name": "Trinidad and Tobago",
+      "iso": "780",
+      "region": "LAC",
+      "score": 61.8,
+      "rank": 125
+    },
+    {
+      "name": "Rwanda",
+      "iso": "646",
+      "region": "Sub-Saharan Africa",
+      "score": 60.9,
+      "rank": 126
+    },
+    {
+      "name": "Syrian Arab Republic",
+      "iso": "760",
+      "region": "MENA",
+      "score": 60.6,
+      "rank": 127
+    },
+    {
+      "name": "Guatemala",
+      "iso": "320",
+      "region": "LAC",
+      "score": 59.4,
+      "rank": 128
+    },
+    {
+      "name": "Togo",
+      "iso": "768",
+      "region": "Sub-Saharan Africa",
+      "score": 58.4,
+      "rank": 129
+    },
+    {
+      "name": "Mauritania",
+      "iso": "478",
+      "region": "Sub-Saharan Africa",
+      "score": 58.2,
+      "rank": 132
+    },
+    {
+      "name": "Sierra Leone",
+      "iso": "694",
+      "region": "Sub-Saharan Africa",
+      "score": 58.2,
+      "rank": 131
+    },
+    {
+      "name": "Tanzania",
+      "iso": "834",
+      "region": "Sub-Saharan Africa",
+      "score": 58.2,
+      "rank": 130
+    },
+    {
+      "name": "Eswatini",
+      "iso": "748",
+      "region": "Sub-Saharan Africa",
+      "score": 57.8,
+      "rank": 133
+    },
+    {
+      "name": "Zimbabwe",
+      "iso": "716",
+      "region": "Sub-Saharan Africa",
+      "score": 57.8,
+      "rank": 134
+    },
+    {
+      "name": "Gambia, The",
+      "iso": "270",
+      "region": "Sub-Saharan Africa",
+      "score": 57.6,
+      "rank": 135
+    },
+    {
+      "name": "Cameroon",
+      "iso": "120",
+      "region": "Sub-Saharan Africa",
+      "score": 57.3,
+      "rank": 136
+    },
+    {
+      "name": "Pakistan",
+      "iso": "586",
+      "region": "East & South Asia",
+      "score": 57.0,
+      "rank": 137
+    },
+    {
+      "name": "Mali",
+      "iso": "466",
+      "region": "Sub-Saharan Africa",
+      "score": 56.8,
+      "rank": 138
+    },
+    {
+      "name": "Malawi",
+      "iso": "454",
+      "region": "Sub-Saharan Africa",
+      "score": 56.8,
+      "rank": 140
+    },
+    {
+      "name": "Benin",
+      "iso": "204",
+      "region": "Sub-Saharan Africa",
+      "score": 56.8,
+      "rank": 139
+    },
+    {
+      "name": "Guinea",
+      "iso": "324",
+      "region": "Sub-Saharan Africa",
+      "score": 56.4,
+      "rank": 141
+    },
+    {
+      "name": "Burundi",
+      "iso": "108",
+      "region": "Sub-Saharan Africa",
+      "score": 56.1,
+      "rank": 143
+    },
+    {
+      "name": "Uganda",
+      "iso": "800",
+      "region": "Sub-Saharan Africa",
+      "score": 56.1,
+      "rank": 142
+    },
+    {
+      "name": "Lesotho",
+      "iso": "426",
+      "region": "Sub-Saharan Africa",
+      "score": 55.5,
+      "rank": 144
+    },
+    {
+      "name": "Ethiopia",
+      "iso": "231",
+      "region": "Sub-Saharan Africa",
+      "score": 55.2,
+      "rank": 145
+    },
+    {
+      "name": "Nigeria",
+      "iso": "566",
+      "region": "Sub-Saharan Africa",
+      "score": 54.6,
+      "rank": 146
+    },
+    {
+      "name": "Zambia",
+      "iso": "894",
+      "region": "Sub-Saharan Africa",
+      "score": 54.4,
+      "rank": 147
+    },
+    {
+      "name": "Mozambique",
+      "iso": "508",
+      "region": "Sub-Saharan Africa",
+      "score": 54.3,
+      "rank": 148
+    },
+    {
+      "name": "Burkina Faso",
+      "iso": "854",
+      "region": "Sub-Saharan Africa",
+      "score": 52.9,
+      "rank": 149
+    },
+    {
+      "name": "Congo, Rep.",
+      "iso": "178",
+      "region": "Sub-Saharan Africa",
+      "score": 52.7,
+      "rank": 150
+    },
+    {
+      "name": "Haiti",
+      "iso": "332",
+      "region": "LAC",
+      "score": 52.7,
+      "rank": 151
+    },
+    {
+      "name": "Liberia",
+      "iso": "430",
+      "region": "Sub-Saharan Africa",
+      "score": 52.5,
+      "rank": 152
+    },
+    {
+      "name": "Comoros",
+      "iso": "174",
+      "region": "Sub-Saharan Africa",
+      "score": 52.4,
+      "rank": 153
+    },
+    {
+      "name": "Papua New Guinea",
+      "iso": "598",
+      "region": "Oceania",
+      "score": 52.0,
+      "rank": 154
+    },
+    {
+      "name": "Angola",
+      "iso": "024",
+      "region": "Sub-Saharan Africa",
+      "score": 51.9,
+      "rank": 155
+    },
+    {
+      "name": "Guinea-Bissau",
+      "iso": "624",
+      "region": "Sub-Saharan Africa",
+      "score": 51.9,
+      "rank": 156
+    },
+    {
+      "name": "Djibouti",
+      "iso": "262",
+      "region": "Sub-Saharan Africa",
+      "score": 51.7,
+      "rank": 157
+    },
+    {
+      "name": "Madagascar",
+      "iso": "450",
+      "region": "Sub-Saharan Africa",
+      "score": 51.2,
+      "rank": 158
+    },
+    {
+      "name": "Sudan",
+      "iso": "729",
+      "region": "Sub-Saharan Africa",
+      "score": 49.9,
+      "rank": 159
+    },
+    {
+      "name": "Niger",
+      "iso": "562",
+      "region": "Sub-Saharan Africa",
+      "score": 49.9,
+      "rank": 160
+    },
+    {
+      "name": "Congo, Dem. Rep.",
+      "iso": "180",
+      "region": "Sub-Saharan Africa",
+      "score": 48.7,
+      "rank": 161
+    },
+    {
+      "name": "Afghanistan",
+      "iso": "004",
+      "region": "E. Europe & C. Asia",
+      "score": 48.2,
+      "rank": 162
+    },
+    {
+      "name": "Yemen, Rep.",
+      "iso": "887",
+      "region": "MENA",
+      "score": 46.9,
+      "rank": 163
+    },
+    {
+      "name": "Somalia",
+      "iso": "706",
+      "region": "Sub-Saharan Africa",
+      "score": 45.4,
+      "rank": 164
+    },
+    {
+      "name": "Chad",
+      "iso": "148",
+      "region": "Sub-Saharan Africa",
+      "score": 45.1,
+      "rank": 165
+    },
+    {
+      "name": "Central African Republic",
+      "iso": "140",
+      "region": "Sub-Saharan Africa",
+      "score": 44.2,
+      "rank": 166
+    },
+    {
+      "name": "South Sudan",
+      "iso": "728",
+      "region": "Sub-Saharan Africa",
+      "score": 40.1,
+      "rank": 167
+    }
+  ],
+  "source": "Sustainable Development Report, SDSN"
+}
