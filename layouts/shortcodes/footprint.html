@@ -26,7 +26,7 @@
 
 <div id="fp-tabs" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1.25rem;"></div>
 
-<div style="display:grid;grid-template-columns:1fr 210px;gap:24px;align-items:start;" id="fp-wrap">
+<div style="display:grid;grid-template-columns:1fr 190px;gap:20px;align-items:start;" id="fp-wrap">
   <div id="fp-map" style="width:100%;"></div>
   <div>
     <div id="fp-legend-title" style="font-size:0.78rem;opacity:0.75;margin-bottom:0.7rem;line-height:1.45;"></div>
@@ -82,12 +82,11 @@ function colorFor(m, v){
   for (var j = 0; j < m.bands.length; j++) if (v >= m.bands[j][0]) return m.cols[j];
   return m.cols[m.cols.length - 1];
 }
-function fmt(v){ return Math.abs(v) >= 1e6 ? (v/1e6).toFixed(0) + 'M' : v; }
 
 var svg = d3.select('#fp-map').append('svg')
-  .attr('viewBox','0 0 900 440').attr('width','100%')
+  .attr('viewBox','0 0 900 460').attr('width','100%').style('min-height','520px')
   .attr('role','img').attr('aria-label','World map coloured by ecological footprint and biocapacity');
-var path = d3.geoPath(d3.geoNaturalEarth1().scale(160).translate([450, 215]));
+var path = d3.geoPath(d3.geoNaturalEarth1().scale(178).translate([450, 232]));
 
 function render(){
   var m = METRICS[cur];
