@@ -1,0 +1,154 @@
+<div id="aq-bar" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:1.1rem;">
+  <input type="text" id="aq-search" placeholder="Search a city"
+         style="flex:1;min-width:180px;padding:8px 12px;font-size:0.85rem;border-radius:6px;
+                border:1px solid rgba(128,128,128,0.3);background:transparent;color:inherit;">
+  <span id="aq-count" style="font-size:0.75rem;opacity:0.6;"></span>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 200px;gap:20px;align-items:start;" id="aq-wrap">
+  <div id="aq-map" style="width:100%;height:560px;border-radius:12px;overflow:hidden;"></div>
+  <div>
+    <div style="font-size:0.78rem;opacity:0.75;margin-bottom:0.7rem;line-height:1.45;">
+      <strong style="font-weight:600;opacity:1;">Air Quality Index</strong><br>
+      Live readings from monitoring stations worldwide.
+    </div>
+    <div id="aq-legend"></div>
+    <div id="aq-readout" style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid rgba(128,128,128,0.2);min-height:90px;">
+      <div style="font-size:0.75rem;opacity:0.5;">Click a station</div>
+    </div>
+  </div>
+</div>
+
+<p style="font-size:0.72rem;opacity:0.55;margin-top:1.25rem;line-height:1.6;">
+  Live data from the <a href="https://waqi.info">World Air Quality Index project</a>,
+  covering more than 12,000 stations in over 100 countries. The index is based on
+  particulate matter (PM2.5 and PM10), ozone, nitrogen dioxide, sulphur dioxide and
+  carbon monoxide. Readings update hourly and reflect the most recent measurement
+  available at each station.
+</p>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<style>
+  @media(max-width:760px){#aq-wrap{grid-template-columns:1fr!important}#aq-map{height:420px!important}}
+  #aq-map .leaflet-container{background:rgba(128,128,128,0.05);}
+  .aq-dot{border-radius:50%;display:flex;align-items:center;justify-content:center;
+          font-size:11px;font-weight:600;color:#fff;border:1.5px solid rgba(255,255,255,0.85);
+          box-sizing:border-box;}
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+(function(){
+  var TOKEN = 'PUT_YOUR_WAQI_TOKEN_HERE';
+
+  var dark = matchMedia('(prefers-color-scheme: dark)').matches;
+
+  var BANDS = [
+    [0,   50,  '#009966', 'Good',            'Air quality is satisfactory.'],
+    [51,  100, '#ffde33', 'Moderate',        'Acceptable, though some pollutants may affect very sensitive people.'],
+    [101, 150, '#ff9933', 'Unhealthy for sensitive groups', 'Sensitive groups may experience health effects.'],
+    [151, 200, '#cc0033', 'Unhealthy',       'Everyone may begin to experience health effects.'],
+    [201, 300, '#660099', 'Very unhealthy',  'Health alert: everyone may experience more serious effects.'],
+    [301, 999, '#7e0023', 'Hazardous',       'Health warning of emergency conditions.']
+  ];
+
+  function band(v){
+    for (var i = 0; i < BANDS.length; i++) if (v <= BANDS[i][1]) return BANDS[i];
+    return BANDS[BANDS.length - 1];
+  }
+
+  document.getElementById('aq-legend').innerHTML = BANDS.map(function(b){
+    return '<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;font-size:0.72rem;opacity:0.78;">' +
+      '<span style="width:16px;height:11px;border-radius:2px;background:' + b[2] +
+      ';flex-shrink:0;border:1px solid rgba(128,128,128,0.2);"></span>' +
+      b[0] + '–' + (b[1] === 999 ? '+' : b[1]) + '</div>';
+  }).join('');
+
+  var map = L.map('aq-map', { worldCopyJump:true, minZoom:2, maxZoom:11,
+                              scrollWheelZoom:false, attributionControl:true })
+             .setView([25, 10], 2);
+  map.on('click', function(){ map.scrollWheelZoom.enable(); });
+  map.on('mouseout', function(){ map.scrollWheelZoom.disable(); });
+
+  L.tileLayer(
+    dark ? 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_nolabels/{z}/{x}/{y}.png'
+         : 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_nolabels/{z}/{x}/{y}.png',
+    { attribution:'&copy; OpenStreetMap, &copy; CARTO', subdomains:'abcd' }
+  ).addTo(map);
+
+  var layer = L.layerGroup().addTo(map);
+  var loading = false;
+
+  function show(s){
+    var v = parseInt(s.aqi, 10);
+    if (isNaN(v)) return null;
+    var b = band(v);
+    var size = v > 150 ? 34 : v > 100 ? 30 : 26;
+    var icon = L.divIcon({
+      className:'',
+      html:'<div class="aq-dot" style="width:' + size + 'px;height:' + size + 'px;background:' +
+           b[2] + ';color:' + (v > 50 && v <= 100 ? '#403300' : '#fff') + ';">' + v + '</div>',
+      iconSize:[size,size], iconAnchor:[size/2,size/2]
+    });
+    var m = L.marker([s.lat, s.lon], { icon:icon, title:s.station.name });
+    m.on('click', function(){
+      document.getElementById('aq-readout').innerHTML =
+        '<div style="font-size:0.82rem;font-weight:600;margin-bottom:0.4rem;line-height:1.35;">' +
+          s.station.name + '</div>' +
+        '<div style="display:flex;align-items:baseline;gap:6px;margin-bottom:0.4rem;">' +
+          '<span style="font-size:1.6rem;font-weight:600;font-variant-numeric:tabular-nums;color:' +
+          b[2] + ';">' + v + '</span>' +
+          '<span style="font-size:0.75rem;opacity:0.7;">AQI</span></div>' +
+        '<div style="font-size:0.75rem;font-weight:600;margin-bottom:0.3rem;">' + b[3] + '</div>' +
+        '<div style="font-size:0.72rem;opacity:0.68;line-height:1.55;">' + b[4] + '</div>' +
+        (s.station.time ? '<div style="font-size:0.68rem;opacity:0.45;margin-top:0.5rem;">' +
+          s.station.time.slice(0,16).replace('T',' ') + '</div>' : '');
+    });
+    return m;
+  }
+
+  function load(){
+    if (loading) return;
+    loading = true;
+    var b = map.getBounds();
+    var box = [b.getSouth(), b.getWest(), b.getNorth(), b.getEast()]
+                .map(function(n){ return n.toFixed(3); }).join(',');
+    fetch('https://api.waqi.info/map/bounds/?latlng=' + box + '&token=' + TOKEN)
+      .then(function(r){ return r.json(); })
+      .then(function(j){
+        loading = false;
+        if (j.status !== 'ok' || !j.data) {
+          document.getElementById('aq-count').textContent = 'Could not load station data';
+          return;
+        }
+        layer.clearLayers();
+        var n = 0;
+        j.data.forEach(function(s){ var m = show(s); if (m) { layer.addLayer(m); n++; } });
+        document.getElementById('aq-count').textContent =
+          n.toLocaleString() + ' station' + (n === 1 ? '' : 's') + ' in view';
+      })
+      .catch(function(){
+        loading = false;
+        document.getElementById('aq-count').textContent = 'Could not load station data';
+      });
+  }
+
+  var t = null;
+  map.on('moveend', function(){ clearTimeout(t); t = setTimeout(load, 500); });
+  load();
+
+  document.getElementById('aq-search').addEventListener('keydown', function(e){
+    if (e.key !== 'Enter') return;
+    var q = this.value.trim();
+    if (!q) return;
+    fetch('https://api.waqi.info/search/?keyword=' + encodeURIComponent(q) + '&token=' + TOKEN)
+      .then(function(r){ return r.json(); })
+      .then(function(j){
+        if (j.status === 'ok' && j.data && j.data.length) {
+          var g = j.data[0].station.geo;
+          map.setView([g[0], g[1]], 9);
+        }
+      });
+  });
+})();
+</script>
