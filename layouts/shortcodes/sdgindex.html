@@ -1,0 +1,111 @@
+{{- $d := site.Data.sdg -}}
+{{- with $d -}}
+{{- $cs := .countries -}}
+{{- $top := index $cs 0 -}}
+{{- $last := index $cs (sub (len $cs) 1) -}}
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:1.5rem;">
+  <div style="background:rgba(128,128,128,0.06);border-radius:8px;padding:1rem;">
+    <div style="font-size:0.75rem;opacity:0.7;margin-bottom:0.4rem;">Highest</div>
+    <div style="font-size:1.9rem;line-height:1;font-weight:600;font-variant-numeric:tabular-nums;">{{ $top.score }}</div>
+    <div style="font-size:0.68rem;opacity:0.55;margin-top:0.3rem;">{{ $top.name }}</div>
+  </div>
+  <div style="background:rgba(128,128,128,0.06);border-radius:8px;padding:1rem;">
+    <div style="font-size:0.75rem;opacity:0.7;margin-bottom:0.4rem;">Lowest</div>
+    <div style="font-size:1.9rem;line-height:1;font-weight:600;font-variant-numeric:tabular-nums;">{{ $last.score }}</div>
+    <div style="font-size:0.68rem;opacity:0.55;margin-top:0.3rem;">{{ $last.name }}</div>
+  </div>
+  <div style="background:rgba(128,128,128,0.06);border-radius:8px;padding:1rem;">
+    <div style="font-size:0.75rem;opacity:0.7;margin-bottom:0.4rem;">Countries</div>
+    <div style="font-size:1.9rem;line-height:1;font-weight:600;font-variant-numeric:tabular-nums;">{{ len $cs }}</div>
+    <div style="font-size:0.68rem;opacity:0.55;margin-top:0.3rem;">ranked</div>
+  </div>
+  <div style="background:rgba(128,128,128,0.06);border-radius:8px;padding:1rem;">
+    <div style="font-size:0.75rem;opacity:0.7;margin-bottom:0.4rem;">Edition</div>
+    <div style="font-size:1.9rem;line-height:1;font-weight:600;font-variant-numeric:tabular-nums;">{{ .edition }}</div>
+    <div style="font-size:0.68rem;opacity:0.55;margin-top:0.3rem;">SDG Index</div>
+  </div>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 190px;gap:20px;align-items:start;" id="sdg-wrap">
+  <div id="sdg-map" style="width:100%;margin-top:-1.5rem;"></div>
+  <div>
+    <div style="font-size:0.78rem;opacity:0.75;margin-bottom:0.7rem;line-height:1.45;">
+      <strong style="font-weight:600;opacity:1">SDG Index score</strong><br>
+      A composite measure of progress across all 17 Goals, scored 0–100.
+    </div>
+    <div id="sdg-legend"></div>
+    <div id="sdg-readout" style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid rgba(128,128,128,0.2);min-height:80px;">
+      <div style="font-size:0.75rem;opacity:0.5;">Hover a country</div>
+    </div>
+  </div>
+</div>
+
+<p style="font-size:0.72rem;opacity:0.55;margin-top:1.25rem;line-height:1.6;">
+  SDG Index {{ .edition }}. Countries in grey are not included in the Index.
+  Source: {{ .source }} — Sachs, J.D., Lafortune, G., Fuller, G., Iablonovski, G.
+  <em>Sustainable Development Report</em>. Accessed via the
+  <a href="https://datasource.kapsarc.org/explore/assets/global-sdg-index/">KAPSARC Data Portal</a>.
+</p>
+
+<style>@media(max-width:760px){#sdg-wrap{grid-template-columns:1fr!important}#sdg-map{margin-top:0!important}}</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+<script>
+(function(){
+var DATA = [
+{{- range $i, $c := $cs -}}
+{{- if $i }},{{ end }}{n:"{{ $c.name }}",i:"{{ $c.iso }}",s:{{ $c.score }},r:{{ if $c.rank }}{{ $c.rank }}{{ else }}null{{ end }},g:"{{ $c.region }}"}
+{{- end -}}
+];
+var dark = matchMedia('(prefers-color-scheme: dark)').matches;
+var byIso = {}; DATA.forEach(function(d){ byIso[String(+d.i)] = d; });
+var noData = dark ? '#2c2c2a' : '#eceae4';
+
+var BANDS = [[80,'80–100'],[70,'70–80'],[60,'60–70'],[50,'50–60'],[0,'Below 50']];
+var COLS  = ['#0d5c46','#2e9e74','#7fc9a4','#f0b775','#d8663a'];
+
+function colorFor(v){
+  if (v == null) return noData;
+  for (var j = 0; j < BANDS.length; j++) if (v >= BANDS[j][0]) return COLS[j];
+  return COLS[COLS.length - 1];
+}
+
+d3.select('#sdg-legend').html(BANDS.map(function(b,j){
+  return '<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;font-size:0.72rem;opacity:0.75;">' +
+    '<span style="width:16px;height:11px;border-radius:2px;background:' + COLS[j] + ';flex-shrink:0;border:1px solid rgba(128,128,128,0.2);"></span>' + b[1] + '</div>';
+}).join('') + '<div style="display:flex;align-items:center;gap:8px;margin-top:8px;font-size:0.72rem;opacity:0.5;">' +
+  '<span style="width:16px;height:11px;border-radius:2px;background:' + noData + ';flex-shrink:0;"></span>Not ranked</div>');
+
+var svg = d3.select('#sdg-map').append('svg')
+  .attr('viewBox','0 0 900 420').attr('width','100%').style('min-height','560px').style('display','block')
+  .attr('role','img').attr('aria-label','World map coloured by SDG Index score');
+var path = d3.geoPath(d3.geoNaturalEarth1().scale(196).translate([450, 218]));
+
+d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(function(w){
+  var moroccoParts = w.objects.countries.geometries.filter(function(g){
+    var id = String(+g.id); return id === '504' || id === '732';
+  });
+  var feats = topojson.feature(w, w.objects.countries).features
+    .filter(function(f){ var id = String(+f.id); return id !== '504' && id !== '732' && id !== '010'; });
+  if (moroccoParts.length) {
+    feats.push({ type:'Feature', id:504, properties:{name:'Morocco'},
+                 geometry: topojson.merge(w, moroccoParts) });
+  }
+  svg.selectAll('path').data(feats).join('path')
+    .attr('d', path)
+    .attr('fill', function(f){ var r = byIso[String(+f.id)]; return colorFor(r ? r.s : null); })
+    .attr('stroke', dark ? 'rgba(255,255,255,.14)' : '#fff').attr('stroke-width', 0.4)
+    .style('cursor','pointer')
+    .on('mouseenter', function(e,f){
+      var r = byIso[String(+f.id)];
+      d3.select('#sdg-readout').html(r ?
+        '<div style="font-size:0.85rem;font-weight:600;margin-bottom:0.4rem;">' + r.n + '</div>' +
+        '<div style="font-size:0.75rem;opacity:0.75;line-height:1.75;">Score ' + r.s + ' / 100' +
+        (r.r ? '<br>Rank ' + r.r + ' of ' + DATA.length : '') + '<br>' + r.g + '</div>'
+        : '<div style="font-size:0.75rem;opacity:0.5;">Not in the Index</div>');
+    });
+});
+})();
+</script>
+{{- end -}}
