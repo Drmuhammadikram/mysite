@@ -180,7 +180,7 @@
       .catch(function(){ d3.select('#aq-count').text('Search unavailable'); });
   });
 
-  d3.select('#aq-reset').on('click', function(){
+  document.getElementById('aq-reset').addEventListener('click', function(){
     document.getElementById('aq-search').value = '';
     loadStations('-60,-180,75,180');
   });
