@@ -159,7 +159,7 @@
       });
   }
 
-  d3.select('#aq-search').on('keydown', function(e){
+  document.getElementById('aq-search').addEventListener('keydown', function(e){
     if (e.key !== 'Enter') return;
     var q = this.value.trim();
     if (!q) return;
