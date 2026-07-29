@@ -46,6 +46,25 @@ interests:
   - Sustainable Production & Consumption
   - Net-Zero/Carbon Neutrality
   - ISO 14001
+education:
+  - degree: PhD Management Science and Engineering
+    institution: Nanjing University of Aeronautics and Astronautics
+    start: 2016-09-01
+    end: 2019-10-30
+    summary: |
+      Thesis on corporate sustainability, and integrated management systems.
+    button:
+      text: Download dissertation
+      url: /resume.pdf
+      icon: hero/arrow-down-tray
+  - degree: MS Management Science
+    institution: International Islamic University Islamabad
+    start: 2010-09-01
+    end: 2012-09-22
+  - degree: BS Business Administration
+    institution: University of Sargodha
+    start: 2006-09-01
+    end: 2010-07-29
 experience:
   - role: Assistant Professor
     org: Al Akhawayn University in Ifrane
