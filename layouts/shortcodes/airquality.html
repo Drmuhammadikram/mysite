@@ -1,20 +1,23 @@
-<div id="aq-bar" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:1.1rem;">
+<div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:1.1rem;">
   <input type="text" id="aq-search" placeholder="Search a city"
-         style="flex:1;min-width:180px;padding:8px 12px;font-size:0.85rem;border-radius:6px;
+         style="flex:1;min-width:180px;max-width:280px;padding:8px 12px;font-size:0.85rem;border-radius:6px;
                 border:1px solid rgba(128,128,128,0.3);background:transparent;color:inherit;">
+  <button type="button" id="aq-reset"
+          style="font-size:0.75rem;padding:7px 13px;cursor:pointer;border-radius:6px;
+                 border:1px solid rgba(128,128,128,0.3);background:transparent;color:inherit;">World view</button>
   <span id="aq-count" style="font-size:0.75rem;opacity:0.6;"></span>
 </div>
 
-<div style="display:grid;grid-template-columns:1fr 200px;gap:20px;align-items:start;" id="aq-wrap">
-  <div id="aq-map" style="width:100%;height:560px;border-radius:12px;overflow:hidden;"></div>
+<div style="display:grid;grid-template-columns:1fr 190px;gap:20px;align-items:start;" id="aq-wrap">
+  <div id="aq-map" style="width:100%;margin-top:-6.5rem;"></div>
   <div>
     <div style="font-size:0.78rem;opacity:0.75;margin-bottom:0.7rem;line-height:1.45;">
       <strong style="font-weight:600;opacity:1;">Air Quality Index</strong><br>
-      Numbered circles are ground stations. Shaded areas are modelled estimates.
+      Circles are ground stations. Shaded cells are modelled estimates.
     </div>
     <div id="aq-legend"></div>
     <div id="aq-readout" style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid rgba(128,128,128,0.2);min-height:90px;">
-      <div style="font-size:0.75rem;opacity:0.5;">Click a station</div>
+      <div style="font-size:0.75rem;opacity:0.5;">Hover a station</div>
     </div>
   </div>
 </div>
@@ -22,172 +25,167 @@
 <p style="font-size:0.72rem;opacity:0.55;margin-top:1.25rem;line-height:1.6;">
   Station readings from the <a href="https://waqi.info">World Air Quality Index project</a>.
   The shaded background is modelled from the Copernicus Atmosphere Monitoring Service via
-  <a href="https://open-meteo.com">Open-Meteo</a> (CC BY 4.0), and covers regions without
-  ground monitoring. Where stations exist and are reporting, they measure directly; elsewhere
-  the model estimates. Some stations appear on the map but report no current value, which
-  reflects the state of monitoring infrastructure rather than air quality itself.
+  <a href="https://open-meteo.com">Open-Meteo</a> (CC BY 4.0), covering regions without ground
+  monitoring. Where stations exist and report, they measure directly; elsewhere the model
+  estimates. Gaps in station coverage reflect monitoring infrastructure, not air quality.
 </p>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
-<style>
-  @media(max-width:760px){#aq-wrap{grid-template-columns:1fr!important}#aq-map{height:420px!important}}
-  #aq-map .leaflet-container{background:rgba(128,128,128,0.05);}
-  .aq-dot{border-radius:50%;display:flex;align-items:center;justify-content:center;
-          font-size:11px;font-weight:600;color:#fff;border:1.5px solid rgba(255,255,255,0.85);
-          box-sizing:border-box;}
-  .leaflet-control-layers{font-size:0.72rem!important;}
-</style>
+<style>@media(max-width:760px){#aq-wrap{grid-template-columns:1fr!important}#aq-map{margin-top:0!important}}</style>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
 <script>
 (function(){
-  var TOKEN = 'PUT_YOUR_WAQI_TOKEN_HERE';
+  var TOKEN = 'dc6ad272f691ae0998d466e17facbd6a20854c34';
 
   var dark = matchMedia('(prefers-color-scheme: dark)').matches;
+  var land = dark ? '#2c2c2a' : '#eceae4';
 
   var BANDS = [
-    [0,   50,  '#009966', 'Good',            'Air quality is satisfactory.'],
-    [51,  100, '#ffde33', 'Moderate',        'Acceptable, though some pollutants may affect very sensitive people.'],
-    [101, 150, '#ff9933', 'Unhealthy for sensitive groups', 'Sensitive groups may experience health effects.'],
-    [151, 200, '#cc0033', 'Unhealthy',       'Everyone may begin to experience health effects.'],
-    [201, 300, '#660099', 'Very unhealthy',  'Health alert: everyone may experience more serious effects.'],
-    [301, 999, '#7e0023', 'Hazardous',       'Health warning of emergency conditions.']
+    [50,  '#009966', '0–50',    'Good',            'Air quality is satisfactory.'],
+    [100, '#ffde33', '51–100',  'Moderate',        'Acceptable, though sensitive people may be affected.'],
+    [150, '#ff9933', '101–150', 'Unhealthy for sensitive groups', 'Sensitive groups may experience effects.'],
+    [200, '#cc0033', '151–200', 'Unhealthy',       'Everyone may begin to experience health effects.'],
+    [300, '#660099', '201–300', 'Very unhealthy',  'Health alert: everyone may experience serious effects.'],
+    [9999,'#7e0023', '301+',    'Hazardous',       'Health warning of emergency conditions.']
   ];
-
   function band(v){
-    for (var i = 0; i < BANDS.length; i++) if (v <= BANDS[i][1]) return BANDS[i];
+    for (var i = 0; i < BANDS.length; i++) if (v <= BANDS[i][0]) return BANDS[i];
     return BANDS[BANDS.length - 1];
   }
 
-  document.getElementById('aq-legend').innerHTML = BANDS.map(function(b){
+  d3.select('#aq-legend').html(BANDS.map(function(b){
     return '<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;font-size:0.72rem;opacity:0.78;">' +
-      '<span style="width:16px;height:11px;border-radius:2px;background:' + b[2] +
-      ';flex-shrink:0;border:1px solid rgba(128,128,128,0.2);"></span>' +
-      b[0] + '–' + (b[1] === 999 ? '+' : b[1]) + '</div>';
-  }).join('');
+      '<span style="width:16px;height:11px;border-radius:2px;background:' + b[1] +
+      ';flex-shrink:0;border:1px solid rgba(128,128,128,0.2);"></span>' + b[2] + '</div>';
+  }).join(''));
 
-  var map = L.map('aq-map', { worldCopyJump:true, minZoom:2, maxZoom:11,
-                              scrollWheelZoom:false, attributionControl:true })
-             .setView([25, 10], 2);
-  map.on('click', function(){ map.scrollWheelZoom.enable(); });
-  map.on('mouseout', function(){ map.scrollWheelZoom.disable(); });
+  var W = 960, H = 440;
+  var svg = d3.select('#aq-map').append('svg')
+    .attr('viewBox', '0 0 ' + W + ' ' + H).attr('width','100%')
+    .style('min-height','700px').style('display','block')
+    .attr('role','img').attr('aria-label','World map of air quality index readings');
 
-  L.tileLayer(
-    dark ? 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_nolabels/{z}/{x}/{y}.png'
-         : 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_nolabels/{z}/{x}/{y}.png',
-    { attribution:'&copy; OpenStreetMap, &copy; CARTO', subdomains:'abcd' }
-  ).addTo(map);
+  var proj = d3.geoNaturalEarth1().scale(235).translate([460, 205]);
+  var path = d3.geoPath(proj);
 
-  var modelled = L.layerGroup().addTo(map);
-  var layer = L.layerGroup().addTo(map);
-  var loading = false, modelLoaded = false;
+  var gLand  = svg.append('g');
+  var gModel = svg.append('g');
+  var gStat  = svg.append('g');
 
-  function show(s){
-    var v = parseInt(s.aqi, 10);
-    if (isNaN(v)) return null;
-    var b = band(v);
-    var size = v > 150 ? 34 : v > 100 ? 30 : 26;
-    var icon = L.divIcon({
-      className:'',
-      html:'<div class="aq-dot" style="width:' + size + 'px;height:' + size + 'px;background:' +
-           b[2] + ';color:' + (v > 50 && v <= 100 ? '#403300' : '#fff') + ';">' + v + '</div>',
-      iconSize:[size,size], iconAnchor:[size/2,size/2]
-    });
-    var m = L.marker([s.lat, s.lon], { icon:icon, title:s.station.name });
-    m.on('click', function(){
-      document.getElementById('aq-readout').innerHTML =
-        '<div style="font-size:0.82rem;font-weight:600;margin-bottom:0.4rem;line-height:1.35;">' +
-          s.station.name + '</div>' +
-        '<div style="display:flex;align-items:baseline;gap:6px;margin-bottom:0.4rem;">' +
-          '<span style="font-size:1.6rem;font-weight:600;font-variant-numeric:tabular-nums;color:' +
-          b[2] + ';">' + v + '</span>' +
+  d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(function(w){
+    gLand.selectAll('path')
+      .data(topojson.feature(w, w.objects.countries).features
+        .filter(function(f){ return String(+f.id) !== '10'; }))
+      .join('path')
+      .attr('d', path)
+      .attr('fill', land)
+      .attr('stroke', dark ? 'rgba(255,255,255,.10)' : '#fff')
+      .attr('stroke-width', 0.4);
+  });
+
+  function readout(html){ d3.select('#aq-readout').html(html); }
+
+  function drawStations(rows){
+    var pts = rows.map(function(s){
+      var v = parseInt(s.aqi, 10);
+      if (isNaN(v)) return null;
+      var xy = proj([s.lon, s.lat]);
+      if (!xy) return null;
+      return { x:xy[0], y:xy[1], v:v, n:s.station.name, t:s.station.time };
+    }).filter(Boolean);
+
+    gStat.selectAll('circle').data(pts).join('circle')
+      .attr('cx', function(d){ return d.x; })
+      .attr('cy', function(d){ return d.y; })
+      .attr('r', function(d){ return d.v > 150 ? 5.5 : d.v > 100 ? 4.5 : 3.8; })
+      .attr('fill', function(d){ return band(d.v)[1]; })
+      .attr('stroke', dark ? 'rgba(0,0,0,.45)' : 'rgba(255,255,255,.85)')
+      .attr('stroke-width', 1)
+      .style('cursor','pointer')
+      .on('mouseenter', function(e,d){
+        var b = band(d.v);
+        readout('<div style="font-size:0.82rem;font-weight:600;margin-bottom:0.4rem;line-height:1.35;">' + d.n + '</div>' +
+          '<div style="display:flex;align-items:baseline;gap:6px;margin-bottom:0.4rem;">' +
+          '<span style="font-size:1.6rem;font-weight:600;font-variant-numeric:tabular-nums;color:' + b[1] + ';">' + d.v + '</span>' +
           '<span style="font-size:0.75rem;opacity:0.7;">AQI</span></div>' +
-        '<div style="font-size:0.75rem;font-weight:600;margin-bottom:0.3rem;">' + b[3] + '</div>' +
-        '<div style="font-size:0.72rem;opacity:0.68;line-height:1.55;">' + b[4] + '</div>' +
-        (s.station.time ? '<div style="font-size:0.68rem;opacity:0.45;margin-top:0.5rem;">' +
-          s.station.time.slice(0,16).replace('T',' ') + '</div>' : '');
-    });
-    return m;
+          '<div style="font-size:0.75rem;font-weight:600;margin-bottom:0.3rem;">' + b[3] + '</div>' +
+          '<div style="font-size:0.72rem;opacity:0.68;line-height:1.55;">' + b[4] + '</div>' +
+          (d.t ? '<div style="font-size:0.68rem;opacity:0.45;margin-top:0.5rem;">' +
+            d.t.slice(0,16).replace('T',' ') + '</div>' : ''));
+      });
+
+    d3.select('#aq-count').text(pts.length
+      ? pts.length.toLocaleString() + ' reporting stations'
+      : 'No reporting stations in this area');
   }
 
-  function load(){
-    if (loading) return;
-    loading = true;
-    var b = map.getBounds();
-    var box = [b.getSouth(), b.getWest(), b.getNorth(), b.getEast()]
-                .map(function(n){ return n.toFixed(3); }).join(',');
+  function loadStations(box){
+    d3.select('#aq-count').text('Loading…');
     fetch('https://api.waqi.info/map/bounds/?latlng=' + box + '&token=' + TOKEN)
       .then(function(r){ return r.json(); })
       .then(function(j){
-        loading = false;
-        if (j.status !== 'ok' || !j.data) {
-          document.getElementById('aq-count').textContent = '';
-          return;
-        }
-        layer.clearLayers();
-        var n = 0;
-        j.data.forEach(function(s){ var m = show(s); if (m) { layer.addLayer(m); n++; } });
-        document.getElementById('aq-count').textContent = n
-          ? n.toLocaleString() + ' reporting station' + (n === 1 ? '' : 's') + ' in view'
-          : 'No reporting stations here — showing modelled estimates';
+        if (j.status === 'ok' && j.data) drawStations(j.data);
+        else d3.select('#aq-count').text('Could not load station data');
       })
-      .catch(function(){
-        loading = false;
-        document.getElementById('aq-count').textContent = '';
-      });
+      .catch(function(){ d3.select('#aq-count').text('Could not load station data'); });
   }
 
   function loadModelled(){
-    if (modelLoaded) return;
-    modelLoaded = true;
     var pts = [];
-    for (var la = -50; la <= 65; la += 10)
-      for (var lo = -170; lo <= 175; lo += 12)
+    for (var la = -55; la <= 70; la += 7)
+      for (var lo = -175; lo <= 178; lo += 8)
         pts.push([la, lo]);
-    var lats = pts.map(function(p){ return p[0]; }).join(',');
-    var lons = pts.map(function(p){ return p[1]; }).join(',');
-    fetch('https://air-quality-api.open-meteo.com/v1/air-quality?latitude=' + lats +
-          '&longitude=' + lons + '&current=us_aqi&timezone=UTC')
+    fetch('https://air-quality-api.open-meteo.com/v1/air-quality?latitude=' +
+          pts.map(function(p){ return p[0]; }).join(',') + '&longitude=' +
+          pts.map(function(p){ return p[1]; }).join(',') + '&current=us_aqi&timezone=UTC')
       .then(function(r){ return r.json(); })
       .then(function(j){
         var arr = Array.isArray(j) ? j : [j];
+        var cells = [];
         arr.forEach(function(d, i){
           var v = d.current && d.current.us_aqi;
           if (v == null || !pts[i]) return;
-          var b = band(v);
-          modelled.addLayer(L.circleMarker([pts[i][0], pts[i][1]], {
-            radius:11, fillColor:b[2], fillOpacity:0.30, weight:0, interactive:false
-          }));
+          var xy = proj([pts[i][1], pts[i][0]]);
+          if (xy) cells.push({ x:xy[0], y:xy[1], v:v });
         });
-      })
-      .catch(function(){ modelLoaded = false; });
+        gModel.selectAll('circle').data(cells).join('circle')
+          .attr('cx', function(d){ return d.x; })
+          .attr('cy', function(d){ return d.y; })
+          .attr('r', 7)
+          .attr('fill', function(d){ return band(d.v)[1]; })
+          .attr('opacity', 0.34)
+          .style('pointer-events','none');
+      });
   }
 
-  var t = null;
-  map.on('moveend', function(){ clearTimeout(t); t = setTimeout(load, 500); });
-
-  document.getElementById('aq-search').addEventListener('keydown', function(e){
+  d3.select('#aq-search').on('keydown', function(e){
     if (e.key !== 'Enter') return;
     var q = this.value.trim();
     if (!q) return;
-    document.getElementById('aq-count').textContent = 'Searching…';
-    fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + encodeURIComponent(q))
+    d3.select('#aq-count').text('Searching…');
+    fetch('https://geocoding-api.open-meteo.com/v1/search?count=1&name=' + encodeURIComponent(q))
       .then(function(r){ return r.json(); })
       .then(function(j){
-        if (j && j.length) {
-          map.setView([parseFloat(j[0].lat), parseFloat(j[0].lon)], 9);
-        } else {
-          document.getElementById('aq-count').textContent = 'Place not found';
-        }
+        if (!j.results || !j.results.length) { d3.select('#aq-count').text('Place not found'); return; }
+        var la = j.results[0].latitude, lo = j.results[0].longitude;
+        loadStations([la-6, lo-8, la+6, lo+8].map(function(n){ return n.toFixed(3); }).join(','));
+        var xy = proj([lo, la]);
+        gStat.selectAll('circle.pin').remove();
+        gStat.append('circle').attr('class','pin')
+          .attr('cx', xy[0]).attr('cy', xy[1]).attr('r', 14)
+          .attr('fill','none').attr('stroke', dark ? '#fff' : '#111')
+          .attr('stroke-width', 1.5).attr('opacity', 0.7);
       })
-      .catch(function(){ document.getElementById('aq-count').textContent = 'Search unavailable'; });
+      .catch(function(){ d3.select('#aq-count').text('Search unavailable'); });
   });
 
-  L.control.layers(null, { 'Modelled background': modelled },
-                   { collapsed:false, position:'bottomright' }).addTo(map);
-  map.on('overlayadd', function(e){ if (e.name.indexOf('Modelled') === 0) loadModelled(); });
+  d3.select('#aq-reset').on('click', function(){
+    document.getElementById('aq-search').value = '';
+    loadStations('-60,-180,75,180');
+  });
 
-  load();
+  loadStations('-60,-180,75,180');
   loadModelled();
 })();
 </script>
