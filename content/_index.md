@@ -41,6 +41,36 @@ sections:
       title: ''
       subtitle: ''
       text: |-
+        <div style="font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;opacity:0.7;margin-bottom:0.9rem;">Education</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:14px;margin-bottom:1rem;">
+          <div style="background:rgba(128,128,128,0.06);border-radius:10px;padding:1.1rem 1.2rem;">
+            <div style="font-size:0.68rem;letter-spacing:0.06em;text-transform:uppercase;opacity:0.55;margin-bottom:0.45rem;">2024</div>
+            <div style="font-size:0.88rem;font-weight:600;line-height:1.35;margin-bottom:0.35rem;">Future of Sustainable Business</div>
+            <div style="font-size:0.76rem;opacity:0.68;line-height:1.45;">University of Oxford</div>
+          </div>
+          <div style="background:rgba(128,128,128,0.06);border-radius:10px;padding:1.1rem 1.2rem;">
+            <div style="font-size:0.68rem;letter-spacing:0.06em;text-transform:uppercase;opacity:0.55;margin-bottom:0.45rem;">2016 – 2019</div>
+            <div style="font-size:0.88rem;font-weight:600;line-height:1.35;margin-bottom:0.35rem;">PhD, Management Science and Engineering</div>
+            <div style="font-size:0.76rem;opacity:0.68;line-height:1.45;">Nanjing University of Aeronautics and Astronautics</div>
+          </div>
+          <div style="background:rgba(128,128,128,0.06);border-radius:10px;padding:1.1rem 1.2rem;">
+            <div style="font-size:0.68rem;letter-spacing:0.06em;text-transform:uppercase;opacity:0.55;margin-bottom:0.45rem;">2010 – 2012</div>
+            <div style="font-size:0.88rem;font-weight:600;line-height:1.35;margin-bottom:0.35rem;">MS, Management Science</div>
+            <div style="font-size:0.76rem;opacity:0.68;line-height:1.45;">International Islamic University Islamabad</div>
+          </div>
+          <div style="background:rgba(128,128,128,0.06);border-radius:10px;padding:1.1rem 1.2rem;">
+            <div style="font-size:0.68rem;letter-spacing:0.06em;text-transform:uppercase;opacity:0.55;margin-bottom:0.45rem;">2006 – 2010</div>
+            <div style="font-size:0.88rem;font-weight:600;line-height:1.35;margin-bottom:0.35rem;">BS, Business Administration</div>
+            <div style="font-size:0.76rem;opacity:0.68;line-height:1.45;">University of Sargodha</div>
+          </div>
+        </div>
+    design:
+      columns: '1'
+  - block: markdown
+    content:
+      title: ''
+      subtitle: ''
+      text: |-
         <div style="background:rgba(128,128,128,0.06);border-radius:12px;padding:1.5rem 1.75rem;margin:1rem 0;">
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:1.5rem;flex-wrap:wrap;">
             <svg width="18" height="18" viewBox="0 0 512 512" aria-hidden="true" style="flex-shrink:0;">
