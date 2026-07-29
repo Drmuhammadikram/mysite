@@ -1,5 +1,5 @@
-<div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:1.1rem;">
-  <input type="text" id="aq-search" placeholder="Search a city"
+<div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:1.1rem;position:relative;z-index:5;">
+  <input type="text" id="aq-search" placeholder="Search a city" autocomplete="off" spellcheck="false"
          style="flex:1;min-width:180px;max-width:280px;padding:8px 12px;font-size:0.85rem;border-radius:6px;
                 border:1px solid rgba(128,128,128,0.3);background:transparent;color:inherit;">
   <button type="button" id="aq-reset"
@@ -72,6 +72,7 @@
   var gLand  = svg.append('g');
   var gModel = svg.append('g');
   var gStat  = svg.append('g');
+  var gPin   = svg.append('g');
 
   d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(function(w){
     gLand.selectAll('path')
@@ -83,8 +84,6 @@
       .attr('stroke', dark ? 'rgba(255,255,255,.10)' : '#fff')
       .attr('stroke-width', 0.4);
   });
-
-  function readout(html){ d3.select('#aq-readout').html(html); }
 
   function drawStations(rows){
     var pts = rows.map(function(s){
@@ -105,7 +104,8 @@
       .style('cursor','pointer')
       .on('mouseenter', function(e,d){
         var b = band(d.v);
-        readout('<div style="font-size:0.82rem;font-weight:600;margin-bottom:0.4rem;line-height:1.35;">' + d.n + '</div>' +
+        d3.select('#aq-readout').html(
+          '<div style="font-size:0.82rem;font-weight:600;margin-bottom:0.4rem;line-height:1.35;">' + d.n + '</div>' +
           '<div style="display:flex;align-items:baseline;gap:6px;margin-bottom:0.4rem;">' +
           '<span style="font-size:1.6rem;font-weight:600;font-variant-numeric:tabular-nums;color:' + b[1] + ';">' + d.v + '</span>' +
           '<span style="font-size:0.75rem;opacity:0.7;">AQI</span></div>' +
@@ -114,19 +114,20 @@
           (d.t ? '<div style="font-size:0.68rem;opacity:0.45;margin-top:0.5rem;">' +
             d.t.slice(0,16).replace('T',' ') + '</div>' : ''));
       });
-
-    d3.select('#aq-count').text(pts.length
-      ? pts.length.toLocaleString() + ' reporting stations'
-      : 'No reporting stations in this area');
+    return pts.length;
   }
 
-  function loadStations(box){
-    d3.select('#aq-count').text('Loading…');
+  function loadStations(box, label){
     fetch('https://api.waqi.info/map/bounds/?latlng=' + box + '&token=' + TOKEN)
       .then(function(r){ return r.json(); })
       .then(function(j){
-        if (j.status === 'ok' && j.data) drawStations(j.data);
-        else d3.select('#aq-count').text('Could not load station data');
+        if (j.status === 'ok' && j.data) {
+          var n = drawStations(j.data);
+          d3.select('#aq-count').text((label ? label + ' — ' : '') +
+            (n ? n.toLocaleString() + ' reporting stations' : 'no reporting stations here'));
+        } else {
+          d3.select('#aq-count').text('Could not load station data');
+        }
       })
       .catch(function(){ d3.select('#aq-count').text('Could not load station data'); });
   }
@@ -164,28 +165,32 @@
     var q = this.value.trim();
     if (!q) return;
     d3.select('#aq-count').text('Searching…');
-    fetch('https://geocoding-api.open-meteo.com/v1/search?count=1&name=' + encodeURIComponent(q))
+    fetch('https://geocoding-api.open-meteo.com/v1/search?count=10&name=' + encodeURIComponent(q))
       .then(function(r){ return r.json(); })
       .then(function(j){
         if (!j.results || !j.results.length) { d3.select('#aq-count').text('Place not found'); return; }
-        var la = j.results[0].latitude, lo = j.results[0].longitude;
-        loadStations([la-6, lo-8, la+6, lo+8].map(function(n){ return n.toFixed(3); }).join(','));
+        var best = j.results.slice().sort(function(a,b){
+          return (b.population || 0) - (a.population || 0);
+        })[0];
+        var la = best.latitude, lo = best.longitude;
+        var label = best.name + (best.country ? ', ' + best.country : '');
+        loadStations([la-6, lo-8, la+6, lo+8].map(function(n){ return n.toFixed(3); }).join(','), label);
         var xy = proj([lo, la]);
-        gStat.selectAll('circle.pin').remove();
-        gStat.append('circle').attr('class','pin')
-          .attr('cx', xy[0]).attr('cy', xy[1]).attr('r', 14)
+        gPin.selectAll('circle').data([0]).join('circle')
+          .attr('cx', xy[0]).attr('cy', xy[1]).attr('r', 15)
           .attr('fill','none').attr('stroke', dark ? '#fff' : '#111')
-          .attr('stroke-width', 1.5).attr('opacity', 0.7);
+          .attr('stroke-width', 1.6).attr('opacity', 0.75);
       })
       .catch(function(){ d3.select('#aq-count').text('Search unavailable'); });
   });
 
   document.getElementById('aq-reset').addEventListener('click', function(){
     document.getElementById('aq-search').value = '';
-    loadStations('-60,-180,75,180');
+    gPin.selectAll('circle').remove();
+    loadStations('-60,-180,75,180', '');
   });
 
-  loadStations('-60,-180,75,180');
+  loadStations('-60,-180,75,180', '');
   loadModelled();
 })();
 </script>
