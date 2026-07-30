@@ -1,7 +1,127 @@
 {
   "year": 2025,
-  "updated": "2026-07-27",
+  "updated": "2026-07-28",
   "countries": [
+    {
+      "ef": 11.73,
+      "bc": 0.83,
+      "deficit": -10.9,
+      "ef_total": 36555862,
+      "bc_total": 2594437,
+      "population": 3115890.0,
+      "name": "Qatar",
+      "iso": "634"
+    },
+    {
+      "ef": 10.12,
+      "bc": 1.2,
+      "deficit": -8.92,
+      "ef_total": 6885706,
+      "bc_total": 813893,
+      "population": 680453.0,
+      "name": "Luxembourg",
+      "iso": "442"
+    },
+    {
+      "ef": 5.66,
+      "bc": 0.42,
+      "deficit": -5.24,
+      "ef_total": 3086376,
+      "bc_total": 227093,
+      "population": 545405.0,
+      "name": "Malta",
+      "iso": "470"
+    },
+    {
+      "ef": 5.11,
+      "bc": 0.65,
+      "deficit": -4.46,
+      "ef_total": 263801033,
+      "bc_total": 33624614,
+      "population": 51667000.0,
+      "name": "South Korea",
+      "iso": "410"
+    },
+    {
+      "ef": 4.49,
+      "bc": 0.28,
+      "deficit": -4.21,
+      "ef_total": 1268219,
+      "bc_total": 79243,
+      "population": 282623.0,
+      "name": "Barbados",
+      "iso": "052"
+    },
+    {
+      "ef": 4.82,
+      "bc": 0.98,
+      "deficit": -3.84,
+      "ef_total": 56629411,
+      "bc_total": 11566149,
+      "population": 11758600.0,
+      "name": "Belgium",
+      "iso": "056"
+    },
+    {
+      "ef": 3.98,
+      "bc": 0.19,
+      "deficit": -3.79,
+      "ef_total": 37906600,
+      "bc_total": 1847885,
+      "population": 9517180.0,
+      "name": "Israel",
+      "iso": "376"
+    },
+    {
+      "ef": 4.72,
+      "bc": 0.94,
+      "deficit": -3.78,
+      "ef_total": 444973,
+      "bc_total": 88365,
+      "population": 94209.0,
+      "name": "Antigua and Barbuda",
+      "iso": "028"
+    },
+    {
+      "ef": 4.0,
+      "bc": 0.29,
+      "deficit": -3.71,
+      "ef_total": 5479627,
+      "bc_total": 400770,
+      "population": 1370750.0,
+      "name": "Cyprus",
+      "iso": "196"
+    },
+    {
+      "ef": 4.94,
+      "bc": 1.3,
+      "deficit": -3.64,
+      "ef_total": 27170749,
+      "bc_total": 7121788,
+      "population": 5494690.0,
+      "name": "Oman",
+      "iso": "512"
+    },
+    {
+      "ef": 7.05,
+      "bc": 3.68,
+      "deficit": -3.37,
+      "ef_total": 2449288480,
+      "bc_total": 1278581402,
+      "population": 347276000.0,
+      "name": "United States",
+      "iso": "840"
+    },
+    {
+      "ef": 3.94,
+      "bc": 0.67,
+      "deficit": -3.27,
+      "ef_total": 484512048,
+      "bc_total": 82777500,
+      "population": 123103000.0,
+      "name": "Japan",
+      "iso": "392"
+    },
     {
       "ef": 3.96,
       "bc": 0.76,
@@ -13,6 +133,316 @@
       "iso": "480"
     },
     {
+      "ef": 3.97,
+      "bc": 0.98,
+      "deficit": -2.99,
+      "ef_total": 234935368,
+      "bc_total": 58008726,
+      "population": 59179801.0,
+      "name": "Italy",
+      "iso": "380"
+    },
+    {
+      "ef": 3.76,
+      "bc": 0.79,
+      "deficit": -2.97,
+      "ef_total": 5437739319,
+      "bc_total": 1148621032,
+      "population": 1447330000.0,
+      "name": "China",
+      "iso": "156"
+    },
+    {
+      "ef": 5.39,
+      "bc": 2.43,
+      "deficit": -2.96,
+      "ef_total": 11418022,
+      "bc_total": 5154715,
+      "population": 2117070.0,
+      "name": "Slovenia",
+      "iso": "705"
+    },
+    {
+      "ef": 3.87,
+      "bc": 1.06,
+      "deficit": -2.81,
+      "ef_total": 34690602,
+      "bc_total": 9537601,
+      "population": 8967410.0,
+      "name": "Switzerland",
+      "iso": "756"
+    },
+    {
+      "ef": 6.45,
+      "bc": 3.71,
+      "deficit": -2.74,
+      "ef_total": 38686809,
+      "bc_total": 22266547,
+      "population": 6002510.0,
+      "name": "Denmark",
+      "iso": "208"
+    },
+    {
+      "ef": 4.26,
+      "bc": 1.62,
+      "deficit": -2.64,
+      "ef_total": 44361038,
+      "bc_total": 16834955,
+      "population": 10411800.0,
+      "name": "Portugal",
+      "iso": "620"
+    },
+    {
+      "ef": 5.38,
+      "bc": 2.76,
+      "deficit": -2.62,
+      "ef_total": 49008129,
+      "bc_total": 25110039,
+      "population": 9113570.0,
+      "name": "Austria",
+      "iso": "040"
+    },
+    {
+      "ef": 5.05,
+      "bc": 2.52,
+      "deficit": -2.53,
+      "ef_total": 53626069,
+      "bc_total": 26775572,
+      "population": 10609200.0,
+      "name": "Czechia",
+      "iso": "203"
+    },
+    {
+      "ef": 3.41,
+      "bc": 1.08,
+      "deficit": -2.33,
+      "ef_total": 237083087,
+      "bc_total": 74879007,
+      "population": 69551297.0,
+      "name": "United Kingdom",
+      "iso": "826"
+    },
+    {
+      "ef": 2.72,
+      "bc": 0.42,
+      "deficit": -2.3,
+      "ef_total": 489543,
+      "bc_total": 75855,
+      "population": 180149.0,
+      "name": "St. Lucia",
+      "iso": "662"
+    },
+    {
+      "ef": 4.93,
+      "bc": 2.64,
+      "deficit": -2.29,
+      "ef_total": 3117446,
+      "bc_total": 1668955,
+      "population": 632729.0,
+      "name": "Montenegro",
+      "iso": "499"
+    },
+    {
+      "ef": 3.76,
+      "bc": 1.48,
+      "deficit": -2.28,
+      "ef_total": 390012,
+      "bc_total": 153541,
+      "population": 103742.0,
+      "name": "Tonga",
+      "iso": "776"
+    },
+    {
+      "ef": 4.23,
+      "bc": 1.96,
+      "deficit": -2.27,
+      "ef_total": 32258728,
+      "bc_total": 14935343,
+      "population": 7618850.0,
+      "name": "Turkmenistan",
+      "iso": "795"
+    },
+    {
+      "ef": 4.34,
+      "bc": 2.1,
+      "deficit": -2.24,
+      "ef_total": 165377585,
+      "bc_total": 79993287,
+      "population": 38140898.0,
+      "name": "Poland",
+      "iso": "616"
+    },
+    {
+      "ef": 4.76,
+      "bc": 2.55,
+      "deficit": -2.21,
+      "ef_total": 18305034,
+      "bc_total": 9822078,
+      "population": 3848160.0,
+      "name": "Croatia",
+      "iso": "191"
+    },
+    {
+      "ef": 4.11,
+      "bc": 1.91,
+      "deficit": -2.2,
+      "ef_total": 147912472,
+      "bc_total": 68566266,
+      "population": 35977801.0,
+      "name": "Malaysia",
+      "iso": "458"
+    },
+    {
+      "ef": 3.78,
+      "bc": 1.6,
+      "deficit": -2.18,
+      "ef_total": 317614927,
+      "bc_total": 134438690,
+      "population": 84075102.0,
+      "name": "Germany",
+      "iso": "276"
+    },
+    {
+      "ef": 3.56,
+      "bc": 1.42,
+      "deficit": -2.14,
+      "ef_total": 35358048,
+      "bc_total": 14143197,
+      "population": 9938840.0,
+      "name": "Greece",
+      "iso": "300"
+    },
+    {
+      "ef": 4.25,
+      "bc": 2.14,
+      "deficit": -2.11,
+      "ef_total": 28414108,
+      "bc_total": 14292397,
+      "population": 6689040.0,
+      "name": "Serbia",
+      "iso": "688"
+    },
+    {
+      "ef": 4.45,
+      "bc": 2.5,
+      "deficit": -1.95,
+      "ef_total": 296798586,
+      "bc_total": 166849852,
+      "population": 66689102.0,
+      "name": "France",
+      "iso": "250"
+    },
+    {
+      "ef": 3.18,
+      "bc": 1.23,
+      "deficit": -1.95,
+      "ef_total": 152105465,
+      "bc_total": 58680909,
+      "population": 47890000.0,
+      "name": "Spain",
+      "iso": "724"
+    },
+    {
+      "ef": 2.16,
+      "bc": 0.32,
+      "deficit": -1.84,
+      "ef_total": 12657733,
+      "bc_total": 1877225,
+      "population": 5849420.0,
+      "name": "Lebanon",
+      "iso": "422"
+    },
+    {
+      "ef": 3.68,
+      "bc": 1.85,
+      "deficit": -1.83,
+      "ef_total": 432237,
+      "bc_total": 217029,
+      "population": 117303.0,
+      "name": "Grenada",
+      "iso": "308"
+    },
+    {
+      "ef": 2.02,
+      "bc": 0.29,
+      "deficit": -1.73,
+      "ef_total": 94872429,
+      "bc_total": 13683904,
+      "population": 47020801.0,
+      "name": "Iraq",
+      "iso": "368"
+    },
+    {
+      "ef": 3.39,
+      "bc": 1.72,
+      "deficit": -1.67,
+      "ef_total": 6148537,
+      "bc_total": 3128772,
+      "population": 1813790.0,
+      "name": "Macedonia",
+      "iso": "807"
+    },
+    {
+      "ef": 3.18,
+      "bc": 1.51,
+      "deficit": -1.67,
+      "ef_total": 278987387,
+      "bc_total": 132643016,
+      "population": 87685398.0,
+      "name": "Turkiye",
+      "iso": "792"
+    },
+    {
+      "ef": 2.15,
+      "bc": 0.54,
+      "deficit": -1.61,
+      "ef_total": 13712875,
+      "bc_total": 3419721,
+      "population": 6365500.0,
+      "name": "El Salvador",
+      "iso": "222"
+    },
+    {
+      "ef": 2.3,
+      "bc": 0.73,
+      "deficit": -1.57,
+      "ef_total": 26522975,
+      "bc_total": 8357149,
+      "population": 11520500.0,
+      "name": "Dominican Republic",
+      "iso": "214"
+    },
+    {
+      "ef": 2.3,
+      "bc": 0.81,
+      "deficit": -1.49,
+      "ef_total": 85040495,
+      "bc_total": 29828536,
+      "population": 37053398.0,
+      "name": "Uzbekistan",
+      "iso": "860"
+    },
+    {
+      "ef": 2.65,
+      "bc": 1.17,
+      "deficit": -1.48,
+      "ef_total": 349180266,
+      "bc_total": 154094954,
+      "population": 131947000.0,
+      "name": "Mexico",
+      "iso": "484"
+    },
+    {
+      "ef": 1.95,
+      "bc": 0.52,
+      "deficit": -1.43,
+      "ef_total": 5527751,
+      "bc_total": 1480932,
+      "population": 2837080.0,
+      "name": "Jamaica",
+      "iso": "388"
+    },
+    {
       "ef": 2.56,
       "bc": 1.16,
       "deficit": -1.4,
@@ -21,6 +451,66 @@
       "population": 64747301.0,
       "name": "South Africa",
       "iso": "710"
+    },
+    {
+      "ef": 2.3,
+      "bc": 0.91,
+      "deficit": -1.39,
+      "ef_total": 233427068,
+      "bc_total": 92008865,
+      "population": 101599000.0,
+      "name": "Viet Nam",
+      "iso": "704"
+    },
+    {
+      "ef": 2.46,
+      "bc": 1.12,
+      "deficit": -1.34,
+      "ef_total": 176317450,
+      "bc_total": 80471156,
+      "population": 71619898.0,
+      "name": "Thailand",
+      "iso": "764"
+    },
+    {
+      "ef": 2.4,
+      "bc": 1.11,
+      "deficit": -1.29,
+      "ef_total": 6656224,
+      "bc_total": 3068724,
+      "population": 2771510.0,
+      "name": "Albania",
+      "iso": "008"
+    },
+    {
+      "ef": 4.02,
+      "bc": 2.78,
+      "deficit": -1.24,
+      "ef_total": 22016873,
+      "bc_total": 15243650,
+      "population": 5474880.0,
+      "name": "Slovakia",
+      "iso": "703"
+    },
+    {
+      "ef": 1.38,
+      "bc": 0.16,
+      "deficit": -1.22,
+      "ef_total": 15841420,
+      "bc_total": 1804413,
+      "population": 11520700.0,
+      "name": "Jordan",
+      "iso": "400"
+    },
+    {
+      "ef": 2.62,
+      "bc": 1.45,
+      "deficit": -1.17,
+      "ef_total": 13476965,
+      "bc_total": 7480243,
+      "population": 5152950.0,
+      "name": "Costa Rica",
+      "iso": "188"
     },
     {
       "ef": 1.36,
@@ -39,8 +529,38 @@
       "ef_total": 2288424,
       "bc_total": 976490,
       "population": 1256170.0,
-      "name": "Eswatini",
+      "name": "Swaziland",
       "iso": "748"
+    },
+    {
+      "ef": 1.37,
+      "bc": 0.43,
+      "deficit": -0.94,
+      "ef_total": 160038458,
+      "bc_total": 50291843,
+      "population": 116787000.0,
+      "name": "Philippines",
+      "iso": "608"
+    },
+    {
+      "ef": 2.29,
+      "bc": 1.35,
+      "deficit": -0.94,
+      "ef_total": 501487,
+      "bc_total": 295565,
+      "population": 219306.0,
+      "name": "Samoa",
+      "iso": "882"
+    },
+    {
+      "ef": 1.11,
+      "bc": 0.17,
+      "deficit": -0.94,
+      "ef_total": 6213657,
+      "bc_total": 931985,
+      "population": 5589620.0,
+      "name": "Palestine",
+      "iso": "275"
     },
     {
       "ef": 1.9,
@@ -63,6 +583,46 @@
       "iso": "788"
     },
     {
+      "ef": 1.13,
+      "bc": 0.38,
+      "deficit": -0.75,
+      "ef_total": 1654674039,
+      "bc_total": 556469942,
+      "population": 1463870000.0,
+      "name": "India",
+      "iso": "356"
+    },
+    {
+      "ef": 1.27,
+      "bc": 0.54,
+      "deficit": -0.73,
+      "ef_total": 29538617,
+      "bc_total": 12634064,
+      "population": 23229500.0,
+      "name": "Sri Lanka",
+      "iso": "144"
+    },
+    {
+      "ef": 3.12,
+      "bc": 2.42,
+      "deficit": -0.7,
+      "ef_total": 2913161,
+      "bc_total": 2262496,
+      "population": 933154.0,
+      "name": "Fiji",
+      "iso": "242"
+    },
+    {
+      "ef": 3.76,
+      "bc": 3.11,
+      "deficit": -0.65,
+      "ef_total": 74638389,
+      "bc_total": 61731538,
+      "population": 19859900.0,
+      "name": "Chile",
+      "iso": "152"
+    },
+    {
       "ef": 1.24,
       "bc": 0.62,
       "deficit": -0.62,
@@ -71,6 +631,36 @@
       "population": 16950801.0,
       "name": "Zimbabwe",
       "iso": "716"
+    },
+    {
+      "ef": 1.7,
+      "bc": 1.09,
+      "deficit": -0.61,
+      "ef_total": 18614321,
+      "bc_total": 11901448,
+      "population": 10937200.0,
+      "name": "Cuba",
+      "iso": "192"
+    },
+    {
+      "ef": 0.91,
+      "bc": 0.32,
+      "deficit": -0.59,
+      "ef_total": 159155041,
+      "bc_total": 56210355,
+      "population": 175687000.0,
+      "name": "Bangladesh",
+      "iso": "050"
+    },
+    {
+      "ef": 1.03,
+      "bc": 0.44,
+      "deficit": -0.59,
+      "ef_total": 11142513,
+      "bc_total": 4799279,
+      "population": 10786700.0,
+      "name": "Tajikistan",
+      "iso": "762"
     },
     {
       "ef": 1.5,
@@ -93,6 +683,16 @@
       "iso": "768"
     },
     {
+      "ef": 4.12,
+      "bc": 3.59,
+      "deficit": -0.53,
+      "ef_total": 37073426,
+      "bc_total": 32314474,
+      "population": 8997600.0,
+      "name": "Belarus",
+      "iso": "112"
+    },
+    {
       "ef": 1.06,
       "bc": 0.53,
       "deficit": -0.53,
@@ -101,6 +701,26 @@
       "population": 51384898.0,
       "name": "Uganda",
       "iso": "800"
+    },
+    {
+      "ef": 1.66,
+      "bc": 1.15,
+      "deficit": -0.51,
+      "ef_total": 474099645,
+      "bc_total": 327815645,
+      "population": 285721000.0,
+      "name": "Indonesia",
+      "iso": "360"
+    },
+    {
+      "ef": 1.58,
+      "bc": 1.07,
+      "deficit": -0.51,
+      "ef_total": 28272249,
+      "bc_total": 19149990,
+      "population": 17848000.0,
+      "name": "Cambodia",
+      "iso": "116"
     },
     {
       "ef": 0.99,
@@ -113,6 +733,16 @@
       "iso": "404"
     },
     {
+      "ef": 0.89,
+      "bc": 0.41,
+      "deficit": -0.48,
+      "ef_total": 26267528,
+      "bc_total": 12241192,
+      "population": 29618100.0,
+      "name": "Nepal",
+      "iso": "524"
+    },
+    {
       "ef": 1.04,
       "bc": 0.57,
       "deficit": -0.47,
@@ -121,6 +751,16 @@
       "population": 14814500.0,
       "name": "Benin",
       "iso": "204"
+    },
+    {
+      "ef": 3.05,
+      "bc": 2.61,
+      "deficit": -0.44,
+      "ef_total": 57669925,
+      "bc_total": 49267168,
+      "population": 18908699.0,
+      "name": "Romania",
+      "iso": "642"
     },
     {
       "ef": 0.81,
@@ -143,6 +783,16 @@
       "iso": "231"
     },
     {
+      "ef": 0.62,
+      "bc": 0.23,
+      "deficit": -0.39,
+      "ef_total": 7424225,
+      "bc_total": 2727676,
+      "population": 11906100.0,
+      "name": "Haiti",
+      "iso": "332"
+    },
+    {
       "ef": 1.14,
       "bc": 0.78,
       "deficit": -0.36,
@@ -163,6 +813,46 @@
       "iso": "566"
     },
     {
+      "ef": 0.8,
+      "bc": 0.48,
+      "deficit": -0.32,
+      "ef_total": 20498382,
+      "bc_total": 12171427,
+      "population": 25620400.0,
+      "name": "Syria",
+      "iso": "760"
+    },
+    {
+      "ef": 0.72,
+      "bc": 0.41,
+      "deficit": -0.31,
+      "ef_total": 184365056,
+      "bc_total": 104517507,
+      "population": 255220000.0,
+      "name": "Pakistan",
+      "iso": "586"
+    },
+    {
+      "ef": 5.71,
+      "bc": 5.41,
+      "deficit": -0.3,
+      "ef_total": 16164602,
+      "bc_total": 15306678,
+      "population": 2830140.0,
+      "name": "Lithuania",
+      "iso": "440"
+    },
+    {
+      "ef": 0.77,
+      "bc": 0.5,
+      "deficit": -0.27,
+      "ef_total": 33888827,
+      "bc_total": 21853999,
+      "population": 43844102.0,
+      "name": "Afghanistan",
+      "iso": "004"
+    },
+    {
       "ef": 1.17,
       "bc": 0.9,
       "deficit": -0.27,
@@ -181,6 +871,16 @@
       "population": 14390000.0,
       "name": "Burundi",
       "iso": "108"
+    },
+    {
+      "ef": 0.51,
+      "bc": 0.28,
+      "deficit": -0.23,
+      "ef_total": 21464076,
+      "bc_total": 11643028,
+      "population": 41773898.0,
+      "name": "Yemen",
+      "iso": "887"
     },
     {
       "ef": 0.97,
@@ -223,6 +923,16 @@
       "iso": "454"
     },
     {
+      "ef": 4.77,
+      "bc": 4.64,
+      "deficit": -0.13,
+      "ef_total": 3801089,
+      "bc_total": 3693387,
+      "population": 796682.0,
+      "name": "Bhutan",
+      "iso": "064"
+    },
+    {
       "ef": 1.17,
       "bc": 1.14,
       "deficit": -0.03,
@@ -259,7 +969,7 @@
       "ef_total": 37605640,
       "bc_total": 43175815,
       "population": 32711500.0,
-      "name": "C\u00f4te d'Ivoire",
+      "name": "Cote d'Ivoire",
       "iso": "384"
     },
     {
@@ -271,6 +981,16 @@
       "population": 25198801.0,
       "name": "Mali",
       "iso": "466"
+    },
+    {
+      "ef": 1.1,
+      "bc": 1.34,
+      "deficit": 0.24,
+      "ef_total": 60338472,
+      "bc_total": 73272491,
+      "population": 54850602.0,
+      "name": "Myanmar",
+      "iso": "104"
     },
     {
       "ef": 1.03,
@@ -303,6 +1023,26 @@
       "iso": "024"
     },
     {
+      "ef": 0.94,
+      "bc": 1.51,
+      "deficit": 0.57,
+      "ef_total": 7398194,
+      "bc_total": 11893346,
+      "population": 7873050.0,
+      "name": "Laos",
+      "iso": "418"
+    },
+    {
+      "ef": 0.89,
+      "bc": 1.47,
+      "deficit": 0.58,
+      "ef_total": 1267296,
+      "bc_total": 2080565,
+      "population": 1418520.0,
+      "name": "Timor-Leste",
+      "iso": "626"
+    },
+    {
       "ef": 0.59,
       "bc": 1.24,
       "deficit": 0.65,
@@ -329,8 +1069,18 @@
       "ef_total": 72987568,
       "bc_total": 178935185,
       "population": 112832000.0,
-      "name": "DR Congo",
+      "name": "Congo DR",
       "iso": "180"
+    },
+    {
+      "ef": 1.93,
+      "bc": 2.9,
+      "deficit": 0.97,
+      "ef_total": 54901937,
+      "bc_total": 82627237,
+      "population": 28516900.0,
+      "name": "Venezuela",
+      "iso": "862"
     },
     {
       "ef": 1.45,
@@ -353,6 +1103,16 @@
       "iso": "450"
     },
     {
+      "ef": 2.32,
+      "bc": 3.45,
+      "deficit": 1.13,
+      "ef_total": 80175514,
+      "bc_total": 119201297,
+      "population": 34576699.0,
+      "name": "Peru",
+      "iso": "604"
+    },
+    {
       "ef": 0.71,
       "bc": 1.92,
       "deficit": 1.21,
@@ -361,6 +1121,86 @@
       "population": 3607000.0,
       "name": "Eritrea",
       "iso": "232"
+    },
+    {
+      "ef": 1.85,
+      "bc": 3.08,
+      "deficit": 1.23,
+      "ef_total": 98665241,
+      "bc_total": 164361649,
+      "population": 53425602.0,
+      "name": "Colombia",
+      "iso": "170"
+    },
+    {
+      "ef": 4.41,
+      "bc": 6.4,
+      "deficit": 1.99,
+      "ef_total": 24776715,
+      "bc_total": 35966539,
+      "population": 5623070.0,
+      "name": "Norway",
+      "iso": "578"
+    },
+    {
+      "ef": 5.39,
+      "bc": 7.38,
+      "deficit": 1.99,
+      "ef_total": 776523748,
+      "bc_total": 1062137880,
+      "population": 143997000.0,
+      "name": "Russia",
+      "iso": "643"
+    },
+    {
+      "ef": 2.67,
+      "bc": 4.88,
+      "deficit": 2.21,
+      "ef_total": 122356367,
+      "bc_total": 223618023,
+      "population": 45851398.0,
+      "name": "Argentina",
+      "iso": "032"
+    },
+    {
+      "ef": 6.52,
+      "bc": 8.92,
+      "deficit": 2.4,
+      "ef_total": 12083003,
+      "bc_total": 16536727,
+      "population": 1853560.0,
+      "name": "Latvia",
+      "iso": "428"
+    },
+    {
+      "ef": 6.67,
+      "bc": 9.23,
+      "deficit": 2.56,
+      "ef_total": 8964055,
+      "bc_total": 12411140,
+      "population": 1344230.0,
+      "name": "Estonia",
+      "iso": "233"
+    },
+    {
+      "ef": 5.05,
+      "bc": 8.21,
+      "deficit": 3.16,
+      "ef_total": 53770711,
+      "bc_total": 87471540,
+      "population": 10656600.0,
+      "name": "Sweden",
+      "iso": "752"
+    },
+    {
+      "ef": 7.53,
+      "bc": 12.49,
+      "deficit": 4.96,
+      "ef_total": 26473201,
+      "bc_total": 43934912,
+      "population": 3517100.0,
+      "name": "Mongolia",
+      "iso": "496"
     },
     {
       "ef": 1.89,
@@ -373,6 +1213,16 @@
       "iso": "140"
     },
     {
+      "ef": 2.44,
+      "bc": 8.1,
+      "deficit": 5.66,
+      "ef_total": 520005429,
+      "bc_total": 1723360874,
+      "population": 212812000.0,
+      "name": "Brazil",
+      "iso": "076"
+    },
+    {
       "ef": 0.97,
       "bc": 7.16,
       "deficit": 6.19,
@@ -381,9 +1231,47 @@
       "population": 6484440.0,
       "name": "Congo",
       "iso": "178"
+    },
+    {
+      "ef": 2.37,
+      "bc": 8.78,
+      "deficit": 6.41,
+      "ef_total": 16652903,
+      "bc_total": 61589720,
+      "population": 7013080.0,
+      "name": "Paraguay",
+      "iso": "600"
+    },
+    {
+      "ef": 6.62,
+      "bc": 13.46,
+      "deficit": 6.84,
+      "ef_total": 265721720,
+      "bc_total": 540279487,
+      "population": 40126699.0,
+      "name": "Canada",
+      "iso": "124"
+    },
+    {
+      "ef": 2.57,
+      "bc": 12.88,
+      "deficit": 10.31,
+      "ef_total": 32389178,
+      "bc_total": 162046109,
+      "population": 12581800.0,
+      "name": "Bolivia",
+      "iso": "068"
     }
   ],
   "aggregates": {
+    "World": {
+      "ef": 2.51,
+      "bc": 1.48,
+      "deficit": -1.03,
+      "ef_total": 20668990408,
+      "bc_total": 12150641014,
+      "population": 8231610000.0
+    },
     "Africa": {
       "ef": 1.13,
       "bc": 0.92,
@@ -392,21 +1280,45 @@
       "bc_total": 1430924333,
       "population": null
     },
-    "Northern Africa": {
-      "ef": 1.58,
+    "Asia": {
+      "ef": 2.29,
       "bc": 0.67,
-      "deficit": -0.91,
-      "ef_total": 454748041,
-      "bc_total": 192048863,
+      "deficit": -1.62,
+      "ef_total": 11067837490,
+      "bc_total": 3241911259,
       "population": null
     },
-    "World": {
-      "ef": 2.51,
-      "bc": 1.48,
-      "deficit": -1.03,
-      "ef_total": 20668990408,
-      "bc_total": 12150641014,
-      "population": 8231610000.0
+    "Europe": {
+      "ef": 4.17,
+      "bc": 3.18,
+      "deficit": -0.99,
+      "ef_total": 3092766820,
+      "bc_total": 2363836874,
+      "population": null
+    },
+    "Latin America and the Caribbean": {
+      "ef": 2.36,
+      "bc": 4.58,
+      "deficit": 2.22,
+      "ef_total": 1577868644,
+      "bc_total": 3061212913,
+      "population": null
+    },
+    "North America": {
+      "ef": 7.01,
+      "bc": 4.72,
+      "deficit": -2.29,
+      "ef_total": 2716217921,
+      "bc_total": 1828168952,
+      "population": null
+    },
+    "Oceania": {
+      "ef": 5.03,
+      "bc": 8.72,
+      "deficit": 3.69,
+      "ef_total": 234621332,
+      "bc_total": 406255679,
+      "population": null
     }
   },
   "source": "Global Footprint Network National Footprint and Biocapacity Accounts"

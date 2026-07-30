@@ -1,0 +1,157 @@
+{{- $d := site.Data.sdg -}}
+{{- with $d -}}
+{{- $cs := .countries -}}
+{{- $top := index $cs 0 -}}
+{{- $last := index $cs (sub (len $cs) 1) -}}
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:1.5rem;width:70vw;max-width:1100px;position:relative;left:50%;transform:translateX(-50%);">
+  <div style="background:rgba(128,128,128,0.06);border-radius:8px;padding:1rem;">
+    <div style="font-size:0.75rem;opacity:0.7;margin-bottom:0.4rem;">Highest</div>
+    <div style="font-size:1.9rem;line-height:1;font-weight:600;font-variant-numeric:tabular-nums;">{{ $top.score }}</div>
+    <div style="font-size:0.68rem;opacity:0.55;margin-top:0.3rem;">{{ $top.name }}</div>
+  </div>
+  <div style="background:rgba(128,128,128,0.06);border-radius:8px;padding:1rem;">
+    <div style="font-size:0.75rem;opacity:0.7;margin-bottom:0.4rem;">Lowest</div>
+    <div style="font-size:1.9rem;line-height:1;font-weight:600;font-variant-numeric:tabular-nums;">{{ $last.score }}</div>
+    <div style="font-size:0.68rem;opacity:0.55;margin-top:0.3rem;">{{ $last.name }}</div>
+  </div>
+  <div style="background:rgba(128,128,128,0.06);border-radius:8px;padding:1rem;">
+    <div style="font-size:0.75rem;opacity:0.7;margin-bottom:0.4rem;">Countries</div>
+    <div style="font-size:1.9rem;line-height:1;font-weight:600;font-variant-numeric:tabular-nums;">{{ len $cs }}</div>
+    <div style="font-size:0.68rem;opacity:0.55;margin-top:0.3rem;">ranked</div>
+  </div>
+  <div style="background:rgba(128,128,128,0.06);border-radius:8px;padding:1rem;">
+    <div style="font-size:0.75rem;opacity:0.7;margin-bottom:0.4rem;">Edition</div>
+    <div style="font-size:1.9rem;line-height:1;font-weight:600;font-variant-numeric:tabular-nums;">{{ .edition }}</div>
+    <div style="font-size:0.68rem;opacity:0.55;margin-top:0.3rem;">SDG Index</div>
+  </div>
+</div>
+
+<div id="sdg-tabs" style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:1.25rem;align-items:center;width:70vw;max-width:1100px;position:relative;left:50%;transform:translateX(-50%);z-index:5;"></div>
+
+<div style="display:grid;grid-template-columns:1fr 190px;gap:24px;align-items:start;width:70vw;max-width:1100px;position:relative;left:50%;transform:translateX(-50%);" id="sdg-wrap">
+  <div id="sdg-map" style="width:100%;margin-top:-3.5rem;"></div>
+  <div>
+    <div id="sdg-legend-title" style="font-size:0.78rem;opacity:0.75;margin-bottom:0.7rem;line-height:1.45;"></div>
+    <div id="sdg-legend"></div>
+    <div id="sdg-readout" style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid rgba(128,128,128,0.2);min-height:84px;">
+      <div style="font-size:0.75rem;opacity:0.5;">Hover a country</div>
+    </div>
+  </div>
+</div>
+
+<p style="font-size:0.72rem;opacity:0.55;margin-top:1.25rem;line-height:1.6;">
+  SDG Index {{ .edition }}. Scores run 0–100, where 100 means every Goal has been
+  achieved. Countries in grey are not included in the Index.
+  Source: {{ .citation }} DOI: <a href="https://doi.org/{{ .doi }}">{{ .doi }}</a>
+</p>
+
+<style>@media(max-width:760px){#sdg-wrap{grid-template-columns:1fr!important}}</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+<script>
+(function(){
+var DATA = [
+{{- range $i, $c := $cs -}}
+{{- if $i }},{{ end }}{n:"{{ $c.name }}",i:"{{ $c.iso }}",s:{{ $c.score }},r:{{ if $c.rank }}{{ $c.rank }}{{ else }}null{{ end }},g:"{{ $c.region }}",G:{ {{- range $k, $v := $c.goals -}}"{{ $k }}":{{ $v }},{{- end -}} }}
+{{- end -}}
+];
+var dark = matchMedia('(prefers-color-scheme: dark)').matches;
+var byIso = {}; DATA.forEach(function(d){ byIso[String(+d.i)] = d; });
+var noData = dark ? '#2c2c2a' : '#eceae4';
+
+var GOALS = ['No Poverty','Zero Hunger','Good Health and Well-being','Quality Education',
+  'Gender Equality','Clean Water and Sanitation','Affordable and Clean Energy',
+  'Decent Work and Economic Growth','Industry, Innovation and Infrastructure',
+  'Reduced Inequalities','Sustainable Cities and Communities',
+  'Responsible Consumption and Production','Climate Action','Life Below Water',
+  'Life on Land','Peace, Justice and Strong Institutions','Partnerships for the Goals'];
+var GOALCOL = ['#e5243b','#dda63a','#4c9f38','#c5192d','#ff3a21','#26bde2','#fcc30b','#a21942',
+  '#fd6925','#dd1367','#fd9d24','#bf8b2e','#3f7e44','#0a97d9','#56c02b','#00689d','#19486a'];
+
+var BANDS = [[80,'80–100'],[75,'75–80'],[70,'70–75'],[65,'65–70'],[0,'Below 65']];
+var COLS  = ['#0d5c46','#2e9e74','#7fc9a4','#f0b775','#d8663a'];
+
+var cur = 0, paths = null;
+
+function valFor(rec){
+  if (!rec) return null;
+  if (cur === 0) return rec.s;
+  var v = rec.G[String(cur)];
+  return (v === undefined) ? null : v;
+}
+function colorFor(v){
+  if (v == null) return noData;
+  for (var j = 0; j < BANDS.length; j++) if (v >= BANDS[j][0]) return COLS[j];
+  return COLS[COLS.length - 1];
+}
+
+var svg = d3.select('#sdg-map').append('svg')
+  .attr('viewBox','0 0 960 440').attr('width','100%').style('min-height','700px').style('display','block')
+  .attr('role','img').attr('aria-label','World map coloured by SDG Index score');
+var path = d3.geoPath(d3.geoNaturalEarth1().scale(200).translate([460, 205]));
+
+function render(){
+  var title = cur === 0 ? 'Overall SDG Index score' : 'SDG ' + cur + ': ' + GOALS[cur-1];
+  var note = cur === 0
+    ? 'Total progress toward achieving all 17 Goals, as a percentage of full achievement.'
+    : 'Progress toward Goal ' + cur + ', scored on the same 0–100 scale.';
+  d3.select('#sdg-legend-title').html('<strong style="font-weight:600;opacity:1">' + title + '</strong><br>' + note);
+  d3.select('#sdg-legend').html(BANDS.map(function(b,j){
+    return '<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;font-size:0.72rem;opacity:0.75;">' +
+      '<span style="width:16px;height:11px;border-radius:2px;background:' + COLS[j] + ';flex-shrink:0;border:1px solid rgba(128,128,128,0.2);"></span>' + b[1] + '</div>';
+  }).join('') + '<div style="display:flex;align-items:center;gap:8px;margin-top:8px;font-size:0.72rem;opacity:0.5;">' +
+    '<span style="width:16px;height:11px;border-radius:2px;background:' + noData + ';flex-shrink:0;"></span>No data</div>');
+  d3.selectAll('#sdg-tabs button')
+    .style('outline', function(d,j){ return j === cur ? '2px solid currentColor' : 'none'; })
+    .style('outline-offset','1px')
+    .style('opacity', function(d,j){ return j === cur ? 1 : 0.72; });
+  if (paths) paths.attr('fill', function(f){ return colorFor(valFor(byIso[String(+f.id)])); });
+}
+
+var tabData = [{l:'Overall', c:null}];
+for (var g = 1; g <= 17; g++) tabData.push({l:String(g), c:GOALCOL[g-1], t:GOALS[g-1]});
+
+d3.select('#sdg-tabs').selectAll('button').data(tabData).join('button')
+  .attr('type','button')
+  .attr('title', function(d,j){ return j === 0 ? 'Overall SDG Index' : 'SDG ' + j + ': ' + d.t; })
+  .style('font-size','0.75rem').style('cursor','pointer').style('border','none')
+  .style('border-radius','5px').style('font-weight','600')
+  .style('padding', function(d,j){ return j === 0 ? '7px 14px' : '7px 0'; })
+  .style('min-width', function(d,j){ return j === 0 ? 'auto' : '30px'; })
+  .style('background', function(d,j){ return j === 0 ? 'rgba(128,128,128,0.16)' : d.c; })
+  .style('color', function(d,j){ return j === 0 ? 'inherit' : '#fff'; })
+  .text(function(d){ return d.l; })
+  .on('click', function(e,d){ cur = tabData.indexOf(d); render(); });
+
+d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(function(w){
+  var moroccoParts = w.objects.countries.geometries.filter(function(g){
+    var id = String(+g.id); return id === '504' || id === '732';
+  });
+  var feats = topojson.feature(w, w.objects.countries).features
+    .filter(function(f){ var id = String(+f.id); return id !== '504' && id !== '732' && id !== '010'; });
+  if (moroccoParts.length) {
+    feats.push({ type:'Feature', id:504, properties:{name:'Morocco'},
+                 geometry: topojson.merge(w, moroccoParts) });
+  }
+  paths = svg.selectAll('path').data(feats).join('path')
+    .attr('d', path)
+    .attr('stroke', dark ? 'rgba(255,255,255,.14)' : '#fff').attr('stroke-width', 0.4)
+    .style('cursor','pointer')
+    .on('mouseenter', function(e,f){
+      var r = byIso[String(+f.id)];
+      if (!r) { d3.select('#sdg-readout').html('<div style="font-size:0.75rem;opacity:0.5;">Not in the Index</div>'); return; }
+      var v = valFor(r);
+      d3.select('#sdg-readout').html(
+        '<div style="font-size:0.85rem;font-weight:600;margin-bottom:0.4rem;">' + r.n + '</div>' +
+        '<div style="font-size:0.75rem;opacity:0.75;line-height:1.75;">' +
+        (v == null ? 'No data for this Goal'
+                   : (cur === 0 ? 'Overall ' : 'SDG ' + cur + ' ') + v + ' / 100') +
+        (cur === 0 && r.r ? '<br>Rank ' + r.r + ' of ' + DATA.length : '') +
+        '<br>' + r.g + '</div>');
+    });
+  render();
+});
+})();
+</script>
+{{- end -}}

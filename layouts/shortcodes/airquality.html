@@ -1,0 +1,134 @@
+<div style="display:grid;grid-template-columns:1fr 190px;gap:20px;align-items:start;" id="aq-wrap">
+  <div id="aq-map" style="width:100%;"></div>
+  <div>
+    <div style="font-size:0.78rem;opacity:0.75;margin-bottom:0.7rem;line-height:1.45;">
+      <strong style="font-weight:600;opacity:1;">Air Quality Index</strong><br>
+      Circles are ground stations. Shaded cells are modelled estimates.
+    </div>
+    <div id="aq-legend"></div>
+    <div id="aq-readout" style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid rgba(128,128,128,0.2);min-height:90px;">
+      <div style="font-size:0.75rem;opacity:0.5;">Hover a station</div>
+    </div>
+    <div id="aq-count" style="margin-top:1rem;font-size:0.72rem;opacity:0.55;"></div>
+  </div>
+</div>
+
+<p style="font-size:0.72rem;opacity:0.55;margin-top:1.25rem;line-height:1.6;">
+  Live readings across North Africa. Station data from the
+  <a href="https://waqi.info">World Air Quality Index project</a>; the shaded background is
+  modelled from the Copernicus Atmosphere Monitoring Service via
+  <a href="https://open-meteo.com">Open-Meteo</a> (CC BY 4.0). Where stations exist and report,
+  they measure directly; elsewhere the model estimates. Sparse station coverage across the
+  region reflects monitoring infrastructure rather than air quality itself.
+</p>
+
+<style>@media(max-width:760px){#aq-wrap{grid-template-columns:1fr!important}}</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+<script>
+(function(){
+  var TOKEN = 'dc6ad272f691ae0998d466e17facbd6a20854c34';
+
+  var dark = matchMedia('(prefers-color-scheme: dark)').matches;
+  var land = dark ? '#2c2c2a' : '#eceae4';
+
+  var BANDS = [
+    [50,  '#009966', '0–50',    'Good',            'Air quality is satisfactory.'],
+    [100, '#ffde33', '51–100',  'Moderate',        'Acceptable, though sensitive people may be affected.'],
+    [150, '#ff9933', '101–150', 'Unhealthy for sensitive groups', 'Sensitive groups may experience effects.'],
+    [200, '#cc0033', '151–200', 'Unhealthy',       'Everyone may begin to experience health effects.'],
+    [300, '#660099', '201–300', 'Very unhealthy',  'Health alert: everyone may experience serious effects.'],
+    [9999,'#7e0023', '301+',    'Hazardous',       'Health warning of emergency conditions.']
+  ];
+  function band(v){
+    for (var i = 0; i < BANDS.length; i++) if (v <= BANDS[i][0]) return BANDS[i];
+    return BANDS[BANDS.length - 1];
+  }
+
+  d3.select('#aq-legend').html(BANDS.map(function(b){
+    return '<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;font-size:0.72rem;opacity:0.78;">' +
+      '<span style="width:16px;height:11px;border-radius:2px;background:' + b[1] +
+      ';flex-shrink:0;border:1px solid rgba(128,128,128,0.2);"></span>' + b[2] + '</div>';
+  }).join(''));
+
+  var svg = d3.select('#aq-map').append('svg')
+    .attr('viewBox','0 0 720 460').attr('width','100%')
+    .style('display','block')
+    .attr('role','img').attr('aria-label','Air quality index across North Africa');
+
+  var proj = d3.geoMercator().center([12, 27]).scale(760).translate([360, 230]);
+  var path = d3.geoPath(proj);
+
+  var gLand = svg.append('g'), gModel = svg.append('g'), gStat = svg.append('g');
+
+  d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(function(w){
+    var mor = w.objects.countries.geometries.filter(function(g){
+      var id = String(+g.id); return id === '504' || id === '732';
+    });
+    var feats = topojson.feature(w, w.objects.countries).features
+      .filter(function(f){ var id = String(+f.id); return id !== '504' && id !== '732'; });
+    if (mor.length) feats.push({ type:'Feature', id:504, geometry: topojson.merge(w, mor) });
+    gLand.selectAll('path').data(feats).join('path')
+      .attr('d', path).attr('fill', land)
+      .attr('stroke', dark ? 'rgba(255,255,255,.12)' : '#fff').attr('stroke-width', 0.6);
+  });
+
+  fetch('https://api.waqi.info/map/bounds/?latlng=15,-18,38,38&token=' + TOKEN)
+    .then(function(r){ return r.json(); })
+    .then(function(j){
+      if (j.status !== 'ok' || !j.data) { d3.select('#aq-count').text('Station data unavailable'); return; }
+      var pts = j.data.map(function(s){
+        var v = parseInt(s.aqi, 10);
+        if (isNaN(v)) return null;
+        var xy = proj([s.lon, s.lat]);
+        if (!xy) return null;
+        return { x:xy[0], y:xy[1], v:v, n:s.station.name, t:s.station.time };
+      }).filter(Boolean);
+
+      gStat.selectAll('circle').data(pts).join('circle')
+        .attr('cx', function(d){ return d.x; }).attr('cy', function(d){ return d.y; })
+        .attr('r', function(d){ return d.v > 150 ? 9 : d.v > 100 ? 8 : 7; })
+        .attr('fill', function(d){ return band(d.v)[1]; })
+        .attr('stroke', dark ? 'rgba(0,0,0,.45)' : 'rgba(255,255,255,.9)').attr('stroke-width', 1.4)
+        .style('cursor','pointer')
+        .on('mouseenter', function(e,d){
+          var b = band(d.v);
+          d3.select('#aq-readout').html(
+            '<div style="font-size:0.82rem;font-weight:600;margin-bottom:0.4rem;line-height:1.35;">' + d.n + '</div>' +
+            '<div style="display:flex;align-items:baseline;gap:6px;margin-bottom:0.4rem;">' +
+            '<span style="font-size:1.6rem;font-weight:600;font-variant-numeric:tabular-nums;color:' + b[1] + ';">' + d.v + '</span>' +
+            '<span style="font-size:0.75rem;opacity:0.7;">AQI</span></div>' +
+            '<div style="font-size:0.75rem;font-weight:600;margin-bottom:0.3rem;">' + b[3] + '</div>' +
+            '<div style="font-size:0.72rem;opacity:0.68;line-height:1.55;">' + b[4] + '</div>' +
+            (d.t ? '<div style="font-size:0.68rem;opacity:0.45;margin-top:0.5rem;">' +
+              d.t.slice(0,16).replace('T',' ') + '</div>' : ''));
+        });
+
+      d3.select('#aq-count').text(pts.length + ' reporting stations in the region');
+    })
+    .catch(function(){ d3.select('#aq-count').text('Station data unavailable'); });
+
+  var grid = [];
+  for (var la = 15; la <= 38; la += 1.6)
+    for (var lo = -17; lo <= 37; lo += 1.9)
+      grid.push([la, lo]);
+  fetch('https://air-quality-api.open-meteo.com/v1/air-quality?latitude=' +
+        grid.map(function(p){ return p[0]; }).join(',') + '&longitude=' +
+        grid.map(function(p){ return p[1]; }).join(',') + '&current=us_aqi&timezone=UTC')
+    .then(function(r){ return r.json(); })
+    .then(function(j){
+      var arr = Array.isArray(j) ? j : [j], cells = [];
+      arr.forEach(function(d, i){
+        var v = d.current && d.current.us_aqi;
+        if (v == null || !grid[i]) return;
+        var xy = proj([grid[i][1], grid[i][0]]);
+        if (xy) cells.push({ x:xy[0], y:xy[1], v:v });
+      });
+      gModel.selectAll('circle').data(cells).join('circle')
+        .attr('cx', function(d){ return d.x; }).attr('cy', function(d){ return d.y; })
+        .attr('r', 13).attr('fill', function(d){ return band(d.v)[1]; })
+        .attr('opacity', 0.30).style('pointer-events','none');
+    });
+})();
+</script>

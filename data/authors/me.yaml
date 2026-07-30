@@ -5,8 +5,8 @@ name:
   display: Dr. Muhammad Ikram
   given: Muhammad
   family: Ikram
-  alternate: ''  # Example: 王伟
-  pronunciation: ''  # Example: Wáng Wěi
+  alternate: ''
+  pronunciation: ''
   pronouns: he/him
 postnominals:
   - PhD
@@ -15,33 +15,30 @@ status:
   icon: "☕️"
 role: Professor of Strategy & Sustainability
 bio: |
-  Dr. Muhammad Ikram is a professor of strategy & sustainability at school of BusinessAdministration, Al Akhawayn 
-  University in Ifrane, Morocco. He has been recongnized among the world top 2% scientists by Stanford University 
-  and is a Ceritified Management & Business Educator (CMBE) by the Chartered Association  of Business Schools, UK. 
-  He holds a PhD in Management Science and Engineering and previously served as a postdoctoral researcher at Shenzhen 
-  UniversityDr. Ikram has published more than 70 research articles in leading journals and has reviewed over 500+ aritcles 
-  of 200+ journals. His research focuses on sustainability, corporate social responsibility,environmental management, circular
-  economy, sustainable development goals, decison support system, and green supply chain management.
-
+  Dr. Muhammad Ikram is a Professor of Strategy and Sustainability at the School of Business
+  Administration, Al Akhawayn University in Ifrane, Morocco. He has been recognized among the
+  world's top 2% of scientists by Stanford University and is a Certified Management and Business
+  Educator (CMBE) of the Chartered Association of Business Schools, UK. He holds a PhD in
+  Management Science and Engineering and previously served as a postdoctoral researcher at
+  Shenzhen University. Dr. Ikram has published more than 70+ research articles in leading journals
+  and has reviewed over 500 articles for more than 200 journals. His research focuses on
+  sustainability, corporate social responsibility, environmental management, circular economy,
+  sustainable development goals, decision support systems, and green supply chain management.
 affiliations:
   - name: Al Akhawayn University in Ifrane (AUI)
     url: https://aui.ma/
-
 links:
   - icon: at-symbol
     url: mailto:i.muhammad@aui.ma
     label: E-mail Me
   - icon: brands/x
     url: https://x.com/@drmuikram
-  - icon: brands/github
-    url: https://github.com/example
   - icon: brands/linkedin
     url: https://www.linkedin.com/in/muhammad-ikram-ph-d-352b9648/
   - icon: academicons/google-scholar
     url: https://scholar.google.com/citations?user=zD2p9JcAAAAJ&hl=en
   - icon: academicons/orcid
     url: https://orcid.org/0000-0003-2656-9302
-
 interests:
   - Sustainable Development Goals
   - Environmental Management Systems
@@ -49,7 +46,6 @@ interests:
   - Sustainable Production & Consumption
   - Net-Zero/Carbon Neutrality
   - ISO 14001
-
 education:
   - degree: PhD Management Science and Engineering
     institution: Nanjing University of Aeronautics and Astronautics
@@ -69,29 +65,25 @@ education:
     institution: University of Sargodha
     start: 2006-09-01
     end: 2010-07-29
-
 experience:
   - role: Assistant Professor
     org: Al Akhawayn University in Ifrane
-    start: 2020-01-01
+    start: 2020-08-01
     summary: |
-     Full time professor at school of business adminsitration, al akhawayn university.
+      Full-time professor at the School of Business Administration, Al Akhawayn University.
     button:
       text: View portfolio
       url: /
       icon: hero/arrow-down-tray
-  - role: Postdoc. Researcher
+  - role: Postdoctoral Researcher
     org: Shenzhen University
     start: 2019-12-23
     end: 2021-10-30
     summary: |
-      Collaborated with the Research Institute of Business Analytics and Supply Chain Management exposed 
-      me to interdisciplinary engagements in sustainability, sustainable supply chain management field. 
-      These interactions enriched my understanding of diverse perspectives and their contributions to the 
-      broader research landscape. 
-
-
-
+      Collaborated with the Research Institute of Business Analytics and Supply Chain Management,
+      working across sustainability and sustainable supply chain management. These interactions
+      enriched my understanding of diverse perspectives and their contributions to the broader
+      research landscape.
 skills:
   - name: Technical Skills
     items:
@@ -99,7 +91,7 @@ skills:
         level: 5
       - label: Python
         level: 5
-      - label: Stata/Smart pls/Origin Lab Pro/CiteSpace/MS Visio
+      - label: Stata/Smart PLS/OriginLab Pro/CiteSpace/MS Visio
         level: 5
   - name: Research & Communication
     items:
@@ -109,7 +101,6 @@ skills:
         level: 4
       - label: Grant Proposals
         level: 4
-
 languages:
   - name: English
     level: 4
@@ -117,10 +108,9 @@ languages:
   - name: Urdu
     level: 5
     label: Native
-
 awards:
-  - title: Top 2 % global scientist
-    awarder: top cited researcher
-    date: "2021-2022-2023-2024-2025"
-    summary: Ranked by Stanford University & Elsevier.
+  - title: Top 2% Global Scientist
+    awarder: Stanford University & Elsevier
+    date: "2021–2025"
+    summary: Ranked among the world's top 2% of most-cited researchers.
     icon: hero/trophy
