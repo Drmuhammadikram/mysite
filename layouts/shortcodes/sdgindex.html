@@ -3,7 +3,7 @@
 {{- $cs := .countries -}}
 {{- $top := index $cs 0 -}}
 {{- $last := index $cs (sub (len $cs) 1) -}}
-<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:1.5rem;">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:1.5rem;width:70vw;max-width:1100px;position:relative;left:50%;transform:translateX(-50%);">
   <div style="background:rgba(128,128,128,0.06);border-radius:8px;padding:1rem;">
     <div style="font-size:0.75rem;opacity:0.7;margin-bottom:0.4rem;">Highest</div>
     <div style="font-size:1.9rem;line-height:1;font-weight:600;font-variant-numeric:tabular-nums;">{{ $top.score }}</div>
@@ -26,10 +26,10 @@
   </div>
 </div>
 
-<div id="sdg-tabs" style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:1.25rem;align-items:center;"></div>
+<div id="sdg-tabs" style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:1.25rem;align-items:center;width:70vw;max-width:1100px;position:relative;left:50%;transform:translateX(-50%);z-index:5;"></div>
 
-<div style="display:grid;grid-template-columns:1fr 170px;gap:16px;align-items:start;" id="sdg-wrap">
-  <div id="sdg-map" style="width:100%;margin-top:-8.5rem;"></div>
+<div style="display:grid;grid-template-columns:1fr 190px;gap:24px;align-items:start;width:70vw;max-width:1100px;position:relative;left:50%;transform:translateX(-50%);" id="sdg-wrap">
+  <div id="sdg-map" style="width:100%;margin-top:0;"></div>
   <div>
     <div id="sdg-legend-title" style="font-size:0.78rem;opacity:0.75;margin-bottom:0.7rem;line-height:1.45;"></div>
     <div id="sdg-legend"></div>
@@ -45,7 +45,7 @@
   Source: {{ .citation }} DOI: <a href="https://doi.org/{{ .doi }}">{{ .doi }}</a>
 </p>
 
-<style>@media(max-width:760px){#sdg-wrap{grid-template-columns:1fr!important}#sdg-map{margin-top:0!important}}</style>
+<style>@media(max-width:760px){#sdg-wrap{grid-template-columns:1fr!important}}</style>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
@@ -89,7 +89,7 @@ function colorFor(v){
 var svg = d3.select('#sdg-map').append('svg')
   .attr('viewBox','0 0 960 440').attr('width','100%').style('min-height','700px').style('display','block')
   .attr('role','img').attr('aria-label','World map coloured by SDG Index score');
-var path = d3.geoPath(d3.geoNaturalEarth1().scale(200).translate([460, 210]));
+var path = d3.geoPath(d3.geoNaturalEarth1().scale(235).translate([460, 205]));
 
 function render(){
   var title = cur === 0 ? 'Overall SDG Index score' : 'SDG ' + cur + ': ' + GOALS[cur-1];
