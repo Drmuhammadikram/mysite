@@ -86,7 +86,7 @@ function colorFor(m, v){
 var svg = d3.select('#fp-map').append('svg')
   .attr('viewBox','0 0 960 440').attr('width','100%').style('min-height','700px').style('display','block')
   .attr('role','img').attr('aria-label','World map coloured by ecological footprint and biocapacity');
-var path = d3.geoPath(d3.geoNaturalEarth1().scale(195).translate([460, 210]));
+.attr('viewBox','0 0 1200 560').attr('width','100%').style('min-height','620px')
 
 function render(){
   var m = METRICS[cur];
