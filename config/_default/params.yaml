@@ -123,7 +123,7 @@ hugoblox:
     toc:
       enable: true
     reading_time:
-      enable: true
+      enable: false
     citations:
       style: apa
 
