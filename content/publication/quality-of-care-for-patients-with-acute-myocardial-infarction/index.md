@@ -26,5 +26,8 @@ tags:
   - Pakistan
 featured: false
 url_source: "https://doi.org/10.3390/ijerph16203890"
-url_pdf: "paper.pdf"   
+url_pdf: "paper.pdf"
+volume: "16"
+issue: "20"
+firstpage: "3890"
 ---

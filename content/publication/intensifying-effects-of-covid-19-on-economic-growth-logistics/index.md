@@ -28,5 +28,9 @@ tags:
   - Grey system
 featured: false
 url_source: "https://doi.org/10.1108/jabs-07-2021-0316"
-url_pdf: "paper.pdf"   
+url_pdf: "paper.pdf"
+volume: "16"
+issue: "3"
+firstpage: "448"
+lastpage: "471"
 ---

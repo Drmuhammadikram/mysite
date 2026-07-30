@@ -22,5 +22,11 @@ tags:
   - Environmental Sustainability
 featured: false
 url_source: "https://doi.org/10.1002/sd.70571"
-url_pdf: "paper.pdf"  
+url_pdf: "paper.pdf"
+volume: "34"
+issue: "3"
+firstpage: "4309"
+lastpage: "4333"
+issn: "1099-1719"
+publisher: "Wiley"
 ---

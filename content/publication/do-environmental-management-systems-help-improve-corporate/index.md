@@ -26,5 +26,10 @@ tags:
   - Korean Economic Justice Institute (KEJI) index
 featured: false
 url_source: "https://doi.org/10.1016/j.jclepro.2019.03.265"
-url_pdf: "paper.pdf"   
+url_pdf: "paper.pdf"
+volume: "226"
+firstpage: "628"
+lastpage: "641"
+issn: "0959-6526"
+publisher: "Elsevier"
 ---

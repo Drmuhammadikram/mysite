@@ -26,7 +26,10 @@ tags:
   
 featured: false
 url_source: "https://doi.org/10.1007/s12063-026-00597-w"
-url_pdf: "paper.pdf"   
+url_pdf: "paper.pdf"
+volume: "19"
+issue: "2"
+firstpage: "30"
 ---
 
 <!-- TODO: paste the abstract here. This is the text Google indexes. -->

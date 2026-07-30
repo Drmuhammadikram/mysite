@@ -21,5 +21,9 @@ tags:
   - Grey system theory
 featured: false
 url_source: "https://doi.org/10.52812/ijgs.8"
-url_pdf: "paper.pdf"   
+url_pdf: "paper.pdf"
+volume: "1"
+issue: "2"
+firstpage: "69"
+lastpage: "82"
 ---

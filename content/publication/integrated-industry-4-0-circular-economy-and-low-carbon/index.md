@@ -20,5 +20,10 @@ tags:
   - sustainable development 
 featured: false
 url_source: "https://doi.org/10.1002/bsd2.70291"
-url_pdf: "paper.pdf"   
+url_pdf: "paper.pdf"
+volume: "9"
+issue: "1"
+firstpage: "e70291"
+issn: "2572-3170"
+publisher: "Wiley"
 ---

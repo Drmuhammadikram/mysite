@@ -27,7 +27,13 @@ tags:
   - Pakistan
 featured: false
 url_source: "https://doi.org/10.1007/s11356-019-06172-0"
-url_pdf: "paper.pdf"   
+url_pdf: "paper.pdf"
+volume: "26"
+issue: "29"
+firstpage: "30286"
+lastpage: "30302"
+issn: "1614-7499"
+publisher: "Springer"
 ---
 
 <!-- TODO: paste the abstract here. This is the text Google indexes. -->

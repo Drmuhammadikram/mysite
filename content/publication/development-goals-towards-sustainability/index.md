@@ -29,5 +29,10 @@ tags:
   - Economic Sustainability
 featured: false
 url_source: "https://doi.org/10.3390/su152416647"
-url_pdf: "paper.pdf"   
+url_pdf: "paper.pdf"
+volume: "15"
+issue: "12"
+firstpage: "9443"
+issn: "2071-1050"
+publisher: "MDPI"
 ---

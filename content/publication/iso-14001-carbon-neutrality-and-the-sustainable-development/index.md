@@ -20,4 +20,6 @@ tags:
 featured: true
 url_source: "https://doi.org/10.1002/csr.70820"
 url_pdf: "paper.pdf"
+issn: "1535-3966"
+publisher: "Wiley"
 ---

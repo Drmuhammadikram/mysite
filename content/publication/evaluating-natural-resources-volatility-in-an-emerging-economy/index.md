@@ -24,5 +24,9 @@ tags:
   - Technological barriers
 featured: false
 url_source: "https://doi.org/10.1016/j.resourpol.2022.102858"
-url_pdf: "paper.pdf"   
+url_pdf: "paper.pdf"
+volume: "78"
+firstpage: "102858"
+issn: "0301-4207"
+publisher: "Elsevier"
 ---

@@ -24,5 +24,11 @@ tags:
   - Optimistic-Pessimistic Method
 featured: false
 url_source: "https://doi.org/10.1108/gs-12-2019-0064"
-url_pdf: "paper.pdf"   
+url_pdf: "paper.pdf"
+volume: "11"
+issue: "2"
+firstpage: "265"
+lastpage: "287"
+issn: "2043-9377"
+publisher: "Emerald"
 ---

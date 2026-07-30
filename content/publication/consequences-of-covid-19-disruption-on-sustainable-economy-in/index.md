@@ -23,5 +23,11 @@ tags:
   - Sustainable development goals
 featured: false
 url_source: "https://doi.org/10.1007/s40171-023-00338-z"
-url_pdf: "paper.pdf"   
+url_pdf: "paper.pdf"
+volume: "24"
+issue: "2"
+firstpage: "247"
+lastpage: "269"
+issn: "0974-0198"
+publisher: "Springer"
 ---

@@ -27,5 +27,10 @@ tags:
   - Environmental economics
 featured: false
 url_source: "https://doi.org/10.1016/j.spc.2020.10.006"
-url_pdf: "paper.pdf"   
+url_pdf: "paper.pdf"
+volume: "26"
+firstpage: "239"
+lastpage: "255"
+issn: "2352-5509"
+publisher: "Elsevier"
 ---

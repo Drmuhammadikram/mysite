@@ -24,7 +24,11 @@ tags:
   - Economic sustainability
 featured: false
 url_source: "https://doi.org/10.1016/j.ijpe.2021.108393"
-url_pdf: "paper.pdf"  
+url_pdf: "paper.pdf"
+volume: "245"
+firstpage: "108393"
+issn: "0925-5273"
+publisher: "Elsevier"
 ---
 
 <!-- TODO: paste the abstract here. This is the text Google indexes. -->

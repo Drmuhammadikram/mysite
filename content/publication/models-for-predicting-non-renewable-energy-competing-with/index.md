@@ -24,7 +24,13 @@ tags:
   - Non-homogeneous discrete grey model (NDGM)
 featured: false
 url_source: "https://doi.org/10.1007/s40171-021-00285-7"
-url_pdf: "paper.pdf"   
+url_pdf: "paper.pdf"
+volume: "22"
+issue: "Suppl 2"
+firstpage: "133"
+lastpage: "160"
+issn: "0974-0198"
+publisher: "Springer"
 ---
 
 <!-- TODO: paste the abstract here. This is the text Google indexes. -->

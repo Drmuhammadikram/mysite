@@ -26,5 +26,10 @@ tags:
   - SAARC
 featured: false
 url_source: "https://doi.org/10.1016/j.spc.2020.03.011"
-url_pdf: "paper.pdf"   
+url_pdf: "paper.pdf"
+volume: "22"
+firstpage: "218"
+lastpage: "230"
+issn: "2352-5509"
+publisher: "Elsevier"
 ---

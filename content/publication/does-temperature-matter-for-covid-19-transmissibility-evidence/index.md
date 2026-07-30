@@ -24,5 +24,11 @@ tags:
   - Pakistan
 featured: false
 url_source: "https://doi.org/10.1007/s11356-021-14875-6"
-url_pdf: "paper.pdf"   
+url_pdf: "paper.pdf"
+volume: "28"
+issue: "42"
+firstpage: "59705"
+lastpage: "59719"
+issn: "1614-7499"
+publisher: "Springer"
 ---

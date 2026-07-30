@@ -24,5 +24,9 @@ tags:
   - Grey TOPSIS
 featured: false
 url_source: "https://doi.org/10.1016/j.jclepro.2020.120121"
-url_pdf: "paper.pdf"   
+url_pdf: "paper.pdf"
+volume: "254"
+firstpage: "120121"
+issn: "0959-6526"
+publisher: "Elsevier"
 ---

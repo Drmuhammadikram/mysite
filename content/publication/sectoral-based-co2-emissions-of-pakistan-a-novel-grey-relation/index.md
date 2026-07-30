@@ -25,7 +25,9 @@ tags:
   - Environmental Sustainability
 featured: false
 url_source: "https://doi.org/10.1007/s11356-020-09237-7"
-url_pdf: "paper.pdf"   
+url_pdf: "paper.pdf"
+issn: "1614-7499"
+publisher: "Springer"
 ---
 
 <!-- TODO: paste the abstract here. This is the text Google indexes. -->

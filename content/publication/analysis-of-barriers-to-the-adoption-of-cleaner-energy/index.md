@@ -25,6 +25,11 @@ tags:
   - Waste-to-energy technology
 featured: false
 url_source: "https://doi.org/10.1016/j.jclepro.2019.07.020"
-url_pdf: "paper.pdf"   
+url_pdf: "paper.pdf"
+volume: "235"
+firstpage: "1037"
+lastpage: "1050"
+issn: "0959-6526"
+publisher: "Elsevier"
 ---
 

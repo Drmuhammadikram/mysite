@@ -22,5 +22,10 @@ tags:
   - Green furniture
 featured: false
 url_source: "https://doi.org/10.3390/su141710644"
-url_pdf: "paper.pdf"  
+url_pdf: "paper.pdf"
+volume: "14"
+issue: "17"
+firstpage: "10644"
+issn: "2071-1050"
+publisher: "MDPI"
 ---

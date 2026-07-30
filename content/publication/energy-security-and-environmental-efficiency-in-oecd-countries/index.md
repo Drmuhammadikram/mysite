@@ -23,7 +23,9 @@ tags:
   - Data Envelopment Analysis 
 featured: false
 url_source: "https://doi.org/10.1142/9789819812608_0003"
-url_pdf: "paper.pdf"   
+url_pdf: "paper.pdf"
+firstpage: "47"
+lastpage: "63"
 ---
 
 <!-- TODO: paste the abstract here. This is the text Google indexes. -->

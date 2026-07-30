@@ -23,5 +23,7 @@ tags:
   - Economic Sustainability
 featured: false
 url_source: "https://doi.org/10.1016/j.susoc.2025.07.005"
-url_pdf: "paper.pdf"   
+url_pdf: "paper.pdf"
+issn: "2666-4127"
+publisher: "Elsevier"
 ---

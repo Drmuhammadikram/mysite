@@ -21,5 +21,9 @@ tags:
   - Supply chain management
 featured: false
 url_source: "https://doi.org/10.24874/ijqr15.02-02"
-url_pdf: "paper.pdf"   
+url_pdf: "paper.pdf"
+volume: "15"
+issue: "2"
+firstpage: "387"
+lastpage: "402"
 ---

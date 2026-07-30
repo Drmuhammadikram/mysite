@@ -17,6 +17,11 @@ tags: []
 featured: false
 url_source: "https://doi.org/10.1016/j.spc.2021.05.019"
 # url_pdf: "paper.pdf"   # uncomment once you drop a PDF in this folder
+volume: "28"
+firstpage: "326"
+lastpage: "345"
+issn: "2352-5509"
+publisher: "Elsevier"
 ---
 
 <!-- TODO: paste the abstract here. This is the text Google indexes. -->

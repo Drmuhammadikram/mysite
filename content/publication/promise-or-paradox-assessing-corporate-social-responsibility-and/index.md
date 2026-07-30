@@ -22,5 +22,8 @@ tags:
   - Environmental Sustainability
 featured: false
 url_source: "https://doi.org/10.1186/s43093-026-00755-3"
-url_pdf: "paper.pdf"  
+url_pdf: "paper.pdf"
+volume: "12"
+issue: "1"
+firstpage: "51"
 ---

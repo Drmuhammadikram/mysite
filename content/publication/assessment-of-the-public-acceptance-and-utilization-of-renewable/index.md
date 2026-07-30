@@ -26,7 +26,12 @@ tags:
   - Environmental concern
 featured: false
 url_source: "https://doi.org/10.2139/ssrn.3811627"
-url_pdf: "paper.pdf"  
+url_pdf: "paper.pdf"
+volume: "27"
+firstpage: "312"
+lastpage: "324"
+issn: "2352-5509"
+publisher: "Elsevier"
 ---
 
 <!-- TODO: paste the abstract here. This is the text Google indexes. -->

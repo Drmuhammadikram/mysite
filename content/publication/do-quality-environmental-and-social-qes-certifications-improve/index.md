@@ -26,5 +26,7 @@ tags:
   - Developing countries vs. developed countries
 featured: false
 url_source: "https://doi.org/10.1016/j.physa.2019.123486"
-url_pdf: "paper.pdf"  
+url_pdf: "paper.pdf"
+volume: "545"
+firstpage: "123486"
 ---

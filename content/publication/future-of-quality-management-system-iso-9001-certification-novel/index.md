@@ -22,5 +22,9 @@ tags:
   - Grey System Theory
 featured: false
 url_source: "https://doi.org/10.1080/14783363.2020.1768062"
-url_pdf: "paper.pdf"   
+url_pdf: "paper.pdf"
+volume: "32"
+issue: "15-16"
+firstpage: "1666"
+lastpage: "1693"
 ---

@@ -26,5 +26,8 @@ tags:
   - Political stability
 featured: false
 url_source: "https://doi.org/10.1186/s40854-019-0152-2"
-url_pdf: "paper.pdf"   
+url_pdf: "paper.pdf"
+volume: "5"
+issue: "1"
+firstpage: "37"
 ---

@@ -22,5 +22,7 @@ tags:
   - Composite indicator
 featured: false
 url_source: "https://doi.org/10.3390/su17136017"
-url_pdf: "paper.pdf"  
+url_pdf: "paper.pdf"
+issn: "2071-1050"
+publisher: "MDPI"
 ---

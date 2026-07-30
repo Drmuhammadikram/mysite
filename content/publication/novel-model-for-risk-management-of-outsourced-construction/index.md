@@ -25,5 +25,11 @@ tags:
   - Financial loss
 featured: false
 url_source: "https://doi.org/10.1108/gs-09-2019-0038"
-url_pdf: "paper.pdf"   
+url_pdf: "paper.pdf"
+volume: "10"
+issue: "2"
+firstpage: "97"
+lastpage: "123"
+issn: "2043-9377"
+publisher: "Emerald"
 ---

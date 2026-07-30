@@ -25,5 +25,9 @@ tags:
   - sustainable development goals
 featured: false
 url_source: "https://doi.org/10.1002/sd.3448"
-url_pdf: "paper.pdf"   
+url_pdf: "paper.pdf"
+volume: "102"
+firstpage: "105490"
+issn: "0301-4207"
+publisher: "Elsevier"
 ---

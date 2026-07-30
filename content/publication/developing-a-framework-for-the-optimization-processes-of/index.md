@@ -23,5 +23,8 @@ tags:
   - Risk assessment
 featured: false
 url_source: "https://doi.org/10.1177/21582440211054499"
-url_pdf: "paper.pdf"   
+url_pdf: "paper.pdf"
+volume: "11"
+issue: "4"
+firstpage: "21582440211054499"
 ---

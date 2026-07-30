@@ -24,5 +24,9 @@ tags:
   - Gross domestic product (GDP)
 featured: false
 url_source: "https://doi.org/10.52812/ijgs.56"
-url_pdf: "paper.pdf"   
+url_pdf: "paper.pdf"
+volume: "2"
+issue: "2"
+firstpage: "18"
+lastpage: "33"
 ---

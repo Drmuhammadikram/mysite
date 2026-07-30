@@ -25,7 +25,9 @@ tags:
   - Green business model
 featured: false
 url_source: "https://doi.org/10.1016/j.cogsc.2022.100657"
-url_pdf: "paper.pdf"   
+url_pdf: "paper.pdf"
+volume: "37"
+firstpage: "100657"
 ---
 
 <!-- TODO: paste the abstract here. This is the text Google indexes. -->

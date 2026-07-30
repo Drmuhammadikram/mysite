@@ -23,7 +23,11 @@ tags:
   - Integrated effect
 featured: false
 url_source: "https://doi.org/10.1007/s11356-019-06372-8"
-url_pdf: "paper.pdf"   
+url_pdf: "paper.pdf"
+firstpage: "1"
+lastpage: "12"
+issn: "1614-7499"
+publisher: "Springer"
 ---
 
 <!-- TODO: paste the abstract here. This is the text Google indexes. -->

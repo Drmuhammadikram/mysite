@@ -27,5 +27,10 @@ tags:
   - Green technologies
 featured: false
 url_source: "https://doi.org/10.3390/pr7020118"
-url_pdf: "paper.pdf"   
+url_pdf: "paper.pdf"
+volume: "7"
+issue: "2"
+firstpage: "118"
+issn: "2227-9717"
+publisher: "MDPI"
 ---

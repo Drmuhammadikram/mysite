@@ -24,5 +24,9 @@ tags:
   - Gross domestic product
 featured: false
 url_source: "https://doi.org/10.1142/s0217590819430033"
-url_pdf: "paper.pdf"  
+url_pdf: "paper.pdf"
+volume: "66"
+issue: "02"
+firstpage: "489"
+lastpage: "506"
 ---

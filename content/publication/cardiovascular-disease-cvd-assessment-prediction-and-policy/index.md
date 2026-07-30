@@ -25,6 +25,9 @@ tags:
   - Prevalence of cardiovascular complications
 featured: false
 url_source: "https://doi.org/10.1186/s12889-021-11334-2"
-url_pdf: "paper.pdf"   
+url_pdf: "paper.pdf"
+volume: "21"
+issue: "1"
+firstpage: "1299"
 ---
 

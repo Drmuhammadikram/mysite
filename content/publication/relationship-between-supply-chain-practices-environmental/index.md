@@ -24,5 +24,10 @@ tags:
   - Supply chain management (SCM)
 featured: false
 url_source: "https://doi.org/10.3390/su13042152"
-url_pdf: "paper.pdf"   
+url_pdf: "paper.pdf"
+volume: "13"
+issue: "4"
+firstpage: "2152"
+issn: "2071-1050"
+publisher: "MDPI"
 ---

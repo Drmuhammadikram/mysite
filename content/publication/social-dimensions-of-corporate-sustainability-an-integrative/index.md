@@ -24,5 +24,10 @@ tags:
   - Ranking & assessment
 featured: false
 url_source: "https://doi.org/10.3390/su12208747"
-url_pdf: "paper.pdf"  
+url_pdf: "paper.pdf"
+volume: "12"
+issue: "20"
+firstpage: "8747"
+issn: "2071-1050"
+publisher: "MDPI"
 ---

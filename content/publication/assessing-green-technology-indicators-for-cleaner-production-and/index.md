@@ -26,7 +26,11 @@ tags:
   - Pakistan
 featured: false
 url_source: "https://doi.org/10.1016/j.jclepro.2021.129090"
-url_pdf: "paper.pdf"  
+url_pdf: "paper.pdf"
+volume: "322"
+firstpage: "129090"
+issn: "0959-6526"
+publisher: "Elsevier"
 ---
 
 <!-- TODO: paste the abstract here. This is the text Google indexes. -->

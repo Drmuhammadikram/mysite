@@ -25,5 +25,7 @@ tags:
   - Literature review
 featured: false
 url_source: "https://doi.org/10.1016/j.clrc.2023.100149"
-url_pdf: "paper.pdf"   
+url_pdf: "paper.pdf"
+volume: "11"
+firstpage: "100149"
 ---

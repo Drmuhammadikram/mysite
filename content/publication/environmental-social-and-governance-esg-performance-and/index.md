@@ -21,5 +21,10 @@ tags:
   - sustainable development 
 featured: false
 url_source: "https://doi.org/10.3390/su18083719"
-url_pdf: "paper.pdf"   
+url_pdf: "paper.pdf"
+volume: "18"
+issue: "8"
+firstpage: "3719"
+issn: "2071-1050"
+publisher: "MDPI"
 ---

@@ -25,5 +25,8 @@ tags:
   - Sustainable development
 featured: false
 url_source: "https://doi.org/10.1177/2158244019901250"
-url_pdf: "paper.pdf"   
+url_pdf: "paper.pdf"
+volume: "10"
+issue: "1"
+firstpage: "2158244019901250"
 ---

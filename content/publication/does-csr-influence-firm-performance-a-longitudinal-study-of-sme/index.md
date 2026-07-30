@@ -27,5 +27,9 @@ tags:
   - Global responsibility
 featured: false
 url_source: "https://doi.org/10.1108/jgr-12-2018-0088"
-url_pdf: "paper.pdf"   
+url_pdf: "paper.pdf"
+volume: "11"
+issue: "1"
+firstpage: "27"
+lastpage: "53"
 ---

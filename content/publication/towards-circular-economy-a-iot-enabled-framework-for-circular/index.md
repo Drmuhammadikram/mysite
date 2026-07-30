@@ -23,7 +23,11 @@ tags:
   - Sustainable development
 featured: false
 url_source: "https://doi.org/10.1016/j.cie.2024.110194"
-url_pdf: "paper.pdf"   
+url_pdf: "paper.pdf"
+volume: "192"
+firstpage: "110194"
+issn: "0360-8352"
+publisher: "Elsevier"
 ---
 
 <!-- TODO: paste the abstract here. This is the text Google indexes. -->

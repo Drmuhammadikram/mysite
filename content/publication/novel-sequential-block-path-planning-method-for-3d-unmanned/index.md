@@ -22,5 +22,7 @@ tags:
   - Modified D* lite algorithm
 featured: false
 url_source: "https://doi.org/10.1016/j.sca.2024.100094"
-url_pdf: "paper.pdf"   
+url_pdf: "paper.pdf"
+volume: "9"
+firstpage: "100094"
 ---

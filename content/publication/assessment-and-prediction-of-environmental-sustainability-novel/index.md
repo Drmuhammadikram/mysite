@@ -26,7 +26,11 @@ tags:
   - Implications
 featured: false
 url_source: "https://doi.org/10.1007/s11356-020-11418-3"
-url_pdf: "paper.pdf"   
+url_pdf: "paper.pdf"
+firstpage: "1"
+lastpage: "22"
+issn: "1614-7499"
+publisher: "Springer"
 ---
 
 <!-- TODO: paste the abstract here. This is the text Google indexes. -->

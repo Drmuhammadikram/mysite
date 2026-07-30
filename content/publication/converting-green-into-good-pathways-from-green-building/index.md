@@ -22,5 +22,9 @@ tags:
   - Environmental Sustainability
 featured: false
 url_source: "https://doi.org/10.1016/j.jenvman.2026.128621"
-url_pdf: "paper.pdf"  
+url_pdf: "paper.pdf"
+volume: "399"
+firstpage: "128621"
+issn: "0301-4797"
+publisher: "Elsevier"
 ---

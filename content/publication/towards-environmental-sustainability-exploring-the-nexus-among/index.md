@@ -25,5 +25,10 @@ tags:
   - Sustainable development goals
 featured: false
 url_source: "https://doi.org/10.1016/j.spc.2021.01.024"
-url_pdf: "paper.pdf"   
+url_pdf: "paper.pdf"
+volume: "27"
+firstpage: "653"
+lastpage: "666"
+issn: "2352-5509"
+publisher: "Elsevier"
 ---

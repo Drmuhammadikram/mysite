@@ -26,5 +26,8 @@ tags:
   - Forecasting
 featured: false
 url_source: "https://doi.org/10.1016/j.matcom.2019.12.020"
-url_pdf: "paper.pdf"   
+url_pdf: "paper.pdf"
+volume: "172"
+firstpage: "45"
+lastpage: "70"
 ---

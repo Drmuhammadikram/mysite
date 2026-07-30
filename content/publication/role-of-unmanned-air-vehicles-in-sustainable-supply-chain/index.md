@@ -23,7 +23,10 @@ tags:
   - Security & privacy
 featured: false
 url_source: "https://doi.org/10.1016/b978-0-443-18464-2.00013-3"
-url_pdf: "paper.pdf"   
+url_pdf: "paper.pdf"
+volume: "2024"
+firstpage: "57"
+lastpage: "86"
 ---
 
 <!-- TODO: paste the abstract here. This is the text Google indexes. -->

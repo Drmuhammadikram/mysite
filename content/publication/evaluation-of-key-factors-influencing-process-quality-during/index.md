@@ -24,5 +24,11 @@ tags:
   - Sustainable cities and society
 featured: false
 url_source: "https://doi.org/10.1108/gs-01-2019-0002"
-url_pdf: "paper.pdf"   
+url_pdf: "paper.pdf"
+volume: "9"
+issue: "3"
+firstpage: "321"
+lastpage: "335"
+issn: "2043-9377"
+publisher: "Emerald"
 ---

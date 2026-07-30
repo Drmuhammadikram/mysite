@@ -23,5 +23,10 @@ tags:
   - Financial performance
 featured: false
 url_source: "https://doi.org/10.1016/j.spc.2021.11.008"
-url_pdf: "paper.pdf"  
+url_pdf: "paper.pdf"
+volume: "29"
+firstpage: "588"
+lastpage: "599"
+issn: "2352-5509"
+publisher: "Elsevier"
 ---

@@ -22,5 +22,10 @@ tags:
   - Green marketing
 featured: false
 url_source: "https://doi.org/10.3390/su141811578"
-url_pdf: "paper.pdf"   
+url_pdf: "paper.pdf"
+volume: "14"
+issue: "18"
+firstpage: "11578"
+issn: "2071-1050"
+publisher: "MDPI"
 ---

@@ -26,7 +26,13 @@ tags:
   - Relative growth rate
 featured: false
 url_source: "https://doi.org/10.1007/s11356-019-04534-2"
-url_pdf: "paper.pdf"   
+url_pdf: "paper.pdf"
+volume: "26"
+issue: "12"
+firstpage: "12505"
+lastpage: "12521"
+issn: "1614-7499"
+publisher: "Springer"
 ---
 
 <!-- TODO: paste the abstract here. This is the text Google indexes. -->

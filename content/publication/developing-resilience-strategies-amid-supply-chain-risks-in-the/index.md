@@ -25,5 +25,7 @@ tags:
   - Manufacturing
 featured: false
 url_source: "https://doi.org/10.1002/bse.3977"
-url_pdf: "paper.pdf"   
+url_pdf: "paper.pdf"
+issn: "1099-0836"
+publisher: "Wiley"
 ---

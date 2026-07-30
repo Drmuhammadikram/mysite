@@ -23,6 +23,12 @@ tags:
   - Perceived risk
 featured: false
 url_source: "https://doi.org/10.1007/s40171-022-00313-0"
-url_pdf: "paper.pdf"   
+url_pdf: "paper.pdf"
+volume: "23"
+issue: "4"
+firstpage: "479"
+lastpage: "494"
+issn: "0974-0198"
+publisher: "Springer"
 ---
 <!-- TODO: paste the abstract here. This is the text Google indexes. -->

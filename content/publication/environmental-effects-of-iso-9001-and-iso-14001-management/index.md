@@ -27,5 +27,9 @@ tags:
   - Operations management
 featured: false
 url_source: "https://doi.org/10.1108/tqm-01-2021-0025"
-url_pdf: "paper.pdf"   
+url_pdf: "paper.pdf"
+volume: "34"
+issue: "3"
+firstpage: "418"
+lastpage: "447"
 ---

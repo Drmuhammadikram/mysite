@@ -23,7 +23,11 @@ tags:
   - Carbon
 featured: false
 url_source: "https://doi.org/10.1007/s10668-020-01163-5"
-url_pdf: "paper.pdf"   
+url_pdf: "paper.pdf"
+firstpage: "1"
+lastpage: "23"
+issn: "1573-2975"
+publisher: "Springer"
 ---
 
 <!-- TODO: paste the abstract here. This is the text Google indexes. -->

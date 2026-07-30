@@ -24,5 +24,7 @@ tags:
   - Morocco
 featured: false
 url_source: "https://doi.org/10.1016/j.sftr.2024.100327"
-url_pdf: "paper.pdf"  
+url_pdf: "paper.pdf"
+volume: "8"
+firstpage: "100327"
 ---
