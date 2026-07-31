@@ -5,8 +5,8 @@ authors:
   - "Muhammad Ikram"
   - "Ma Tie Feng"
   - "Shazia Rehman"
-date: "2020-01-01T00:00:00Z"
-publishDate: "2020-01-01T00:00:00Z"
+date: "2020-05-19T00:00:00Z"
+publishDate: "2020-05-19T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*Environmental Science and Pollution Research*"
 publication_short: "Environmental Science and Pollution Research"

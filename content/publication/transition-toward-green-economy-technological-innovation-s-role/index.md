@@ -2,8 +2,8 @@
 title: "Transition toward green economy: Technological Innovation's role in the fashion industry"
 authors:
   - "Muhammad Ikram"
-date: "2022-01-01T00:00:00Z"
-publishDate: "2022-01-01T00:00:00Z"
+date: "2022-07-08T00:00:00Z"
+publishDate: "2022-07-08T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*Current Opinion in Green and Sustainable Chemistry*, 37, 100657"
 publication_short: "Current Opinion in Green and Sustainable Chemistry"

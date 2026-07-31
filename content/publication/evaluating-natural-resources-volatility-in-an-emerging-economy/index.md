@@ -5,8 +5,8 @@ authors:
   - "Muhammad Irfan"
   - "Muhammad Ikram"
   - "Dominik Zimon"
-date: "2022-01-01T00:00:00Z"
-publishDate: "2022-01-01T00:00:00Z"
+date: "2022-06-28T00:00:00Z"
+publishDate: "2022-06-28T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*Resources Policy*, 78, 102858"
 publication_short: "Resources Policy"

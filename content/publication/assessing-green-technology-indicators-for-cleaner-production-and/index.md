@@ -5,8 +5,8 @@ authors:
   - "Marcos Ferasso"
   - "Robert Sroufe"
   - "Qingyu Zhang"
-date: "2021-01-01T00:00:00Z"
-publishDate: "2021-01-01T00:00:00Z"
+date: "2021-09-21T00:00:00Z"
+publishDate: "2021-09-21T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*Journal of Cleaner Production*, 322, 129090"
 publication_short: "Journal of Cleaner Production"

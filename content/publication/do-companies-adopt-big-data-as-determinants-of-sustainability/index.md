@@ -5,8 +5,8 @@ authors:
   - "Muhammad Ikram"
   - "Ziad Alkalha"
   - "Maher Alaraj"
-date: "2022-01-01T00:00:00Z"
-publishDate: "2022-01-01T00:00:00Z"
+date: "2022-08-24T00:00:00Z"
+publishDate: "2022-08-24T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*Global Journal of Flexible Systems Management*, 23(4), 479–494"
 publication_short: "Global Journal of Flexible Systems Management"

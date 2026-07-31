@@ -7,8 +7,8 @@ authors:
   - "Muhammad Ikram"
   - "Razaullah Khan"
   - "Catalin I Pruncu"
-date: "2020-01-01T00:00:00Z"
-publishDate: "2020-01-01T00:00:00Z"
+date: "2020-12-15T00:00:00Z"
+publishDate: "2020-12-15T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*Energies*, 13(24), 6612"
 publication_short: "Energies"

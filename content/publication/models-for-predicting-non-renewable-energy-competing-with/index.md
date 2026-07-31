@@ -2,8 +2,8 @@
 title: "Models for predicting non-renewable energy competing with renewable source for sustainable energy development: case of Asia and Oceania Region"
 authors:
   - "Muhammad Ikram"
-date: "2021-01-01T00:00:00Z"
-publishDate: "2021-01-01T00:00:00Z"
+date: "2021-08-14T00:00:00Z"
+publishDate: "2021-08-14T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*Global Journal of Flexible Systems Management*, 22(Suppl 2), 133–160"
 publication_short: "Global Journal of Flexible Systems Management"

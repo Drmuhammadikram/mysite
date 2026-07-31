@@ -3,8 +3,8 @@ title: "A promise or paradox? Assessing corporate social responsibility and gree
 authors:
   - "Muhammad Ikram"
   - "Ahmed Meliani"
-date: "2026-01-01T00:00:00Z"
-publishDate: "2026-01-01T00:00:00Z"
+date: "2026-02-16T00:00:00Z"
+publishDate: "2026-02-16T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*Future Business Journal*, 12(1), 51"
 publication_short: "Future Business Journal"

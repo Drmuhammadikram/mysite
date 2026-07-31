@@ -5,8 +5,8 @@ authors:
   - "Yichen Shen"
   - "Marcos Ferasso"
   - "Idiano D’Adamo"
-date: "2022-01-01T00:00:00Z"
-publishDate: "2022-01-01T00:00:00Z"
+date: "2021-09-15T00:00:00Z"
+publishDate: "2021-09-15T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*Journal of Asia Business Studies*, 16(3), 448–471"
 publication_short: "Journal of Asia Business Studies"

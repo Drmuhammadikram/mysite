@@ -4,8 +4,8 @@ authors:
   - "Nabila Abid"
   - "Federica Ceci"
   - "Muhammad Ikram"
-date: "2022-01-01T00:00:00Z"
-publishDate: "2022-01-01T00:00:00Z"
+date: "2021-11-29T00:00:00Z"
+publishDate: "2021-11-29T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*Environmental Science and Pollution Research*, 29(17), 25428–25447"
 publication_short: "Environmental Science and Pollution Research"

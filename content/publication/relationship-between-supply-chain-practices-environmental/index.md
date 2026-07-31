@@ -4,8 +4,8 @@ authors:
   - "Luay Jum’a"
   - "Dominik Zimon"
   - "Muhammad Ikram"
-date: "2021-01-01T00:00:00Z"
-publishDate: "2021-01-01T00:00:00Z"
+date: "2021-02-17T00:00:00Z"
+publishDate: "2021-02-17T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*Sustainability*, 13(4), 2152"
 publication_short: "Sustainability"

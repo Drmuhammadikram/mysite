@@ -5,8 +5,8 @@ authors:
   - "Muhammad Ikram"
   - "Ziad Alkalha"
   - "Maher Alaraj"
-date: "2022-01-01T00:00:00Z"
-publishDate: "2022-01-01T00:00:00Z"
+date: "2021-08-23T00:00:00Z"
+publishDate: "2021-08-23T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*Environmental Science and Pollution Research*, 29(4), 5605–5621"
 publication_short: "Environmental Science and Pollution Research"

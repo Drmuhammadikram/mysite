@@ -2,8 +2,8 @@
 title: "Integrated effect of energy consumption, economic development, and population growth on CO2 based environmental degradation: a case of transport sector"
 authors:
   - "Qaiser Abbas, Jijian Zhang, Muhammad Ikram, Nadeem Iqbal Muhammad Mohsin"
-date: "2019-01-01T00:00:00Z"
-publishDate: "2019-01-01T00:00:00Z"
+date: "2019-09-09T00:00:00Z"
+publishDate: "2019-09-09T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*Environmental Science and Pollution Research*, 1–12"
 publication_short: "Environmental Science and Pollution Research"

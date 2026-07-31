@@ -3,8 +3,8 @@ title: "Toward Green Growth in Morocco: An Integrated Strategic Decision-Making 
 authors:
   - "Muhammad Ikram"
   - "Fatima Zahra Abahmaoui"
-date: "2025-01-01T00:00:00Z"
-publishDate: "2025-01-01T00:00:00Z"
+date: "2025-04-03T00:00:00Z"
+publishDate: "2025-04-03T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*Sustainable Development*, 33(4), 6168–6188"
 publication_short: "Sustainable Development"

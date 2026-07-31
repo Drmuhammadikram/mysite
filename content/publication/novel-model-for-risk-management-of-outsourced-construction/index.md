@@ -6,8 +6,8 @@ authors:
   - "Xiaopeng Deng"
   - "Muhammad Ikram"
   - "Salman Yeganeh"
-date: "2020-01-01T00:00:00Z"
-publishDate: "2020-01-01T00:00:00Z"
+date: "2020-04-06T00:00:00Z"
+publishDate: "2020-04-06T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*Grey Systems: Theory and Application*, 10(2), 97–123"
 publication_short: "Grey Systems: Theory and Application"

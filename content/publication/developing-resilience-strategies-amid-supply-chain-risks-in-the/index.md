@@ -4,8 +4,8 @@ authors:
   - "Luay Jum'a"
   - "Salam Qamardin"
   - "Muhammad Ikram"
-date: "2024-01-01T00:00:00Z"
-publishDate: "2024-01-01T00:00:00Z"
+date: "2024-09-23T00:00:00Z"
+publishDate: "2024-09-23T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*Business Strategy and the Environment*"
 publication_short: "Business Strategy and the Environment"

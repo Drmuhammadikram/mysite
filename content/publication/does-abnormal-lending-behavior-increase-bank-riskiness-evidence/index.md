@@ -6,8 +6,8 @@ authors:
   - "Bushra Zulfiqar"
   - "Umme Habiba"
   - "Muhammad Ikram"
-date: "2019-01-01T00:00:00Z"
-publishDate: "2019-01-01T00:00:00Z"
+date: "2019-10-30T00:00:00Z"
+publishDate: "2019-10-30T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*Financial Innovation*, 5(1), 37"
 publication_short: "Financial Innovation"

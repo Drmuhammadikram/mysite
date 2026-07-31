@@ -3,8 +3,8 @@ title: "Do sustainability innovation and firm competitiveness help improve firm 
 authors:
   - "Thanh Tiep Le"
   - "Muhammad Ikram"
-date: "2022-01-01T00:00:00Z"
-publishDate: "2022-01-01T00:00:00Z"
+date: "2021-11-08T00:00:00Z"
+publishDate: "2021-11-08T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*Sustainable Production and Consumption*, 29, 588–599"
 publication_short: "Sustainable Production and Consumption"

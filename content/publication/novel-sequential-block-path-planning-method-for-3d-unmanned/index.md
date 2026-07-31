@@ -3,8 +3,8 @@ title: "A novel sequential block path planning method for 3D unmanned aerial veh
 authors:
   - "Muhammad Ikram"
   - "Robert Sroufe"
-date: "2025-01-01T00:00:00Z"
-publishDate: "2025-01-01T00:00:00Z"
+date: "2024-11-29T00:00:00Z"
+publishDate: "2024-11-29T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*Supply Chain Analytics*, 9, 100094"
 publication_short: "Supply Chain Analytics"

@@ -4,8 +4,8 @@ authors:
   - "Zulkaif Ahmed Saqib"
   - "Muhammad Ikram"
   - "Daniel Berg"
-date: "2026-01-01T00:00:00Z"
-publishDate: "2026-01-01T00:00:00Z"
+date: "2026-01-15T00:00:00Z"
+publishDate: "2026-01-15T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*Journal of Environmental Management*, 399, 128621"
 publication_short: "Journal of Environmental Management"

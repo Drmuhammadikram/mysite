@@ -3,8 +3,8 @@ title: "Toward sustainable development: Unfolding the nexus among exports, forei
 authors:
   - "Muhammad Ikram"
   - "Rabie Nahdi"
-date: "2025-01-01T00:00:00Z"
-publishDate: "2025-01-01T00:00:00Z"
+date: "2025-04-03T00:00:00Z"
+publishDate: "2025-04-03T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*Resources Policy*, 102, 105490"
 publication_short: "Resources Policy"

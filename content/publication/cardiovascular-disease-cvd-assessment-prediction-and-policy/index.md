@@ -5,8 +5,8 @@ authors:
   - "Erum Rehman"
   - "Muhammad Ikram"
   - "Zhang Jianglin"
-date: "2021-01-01T00:00:00Z"
-publishDate: "2021-01-01T00:00:00Z"
+date: "2021-07-02T00:00:00Z"
+publishDate: "2021-07-02T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*BMC public health*, 21(1), 1299"
 publication_short: "BMC public health"

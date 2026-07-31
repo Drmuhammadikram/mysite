@@ -4,8 +4,8 @@ authors:
   - "Muhammad Ikram"
   - "Qingyu Zhang"
   - "Robert Sroufe"
-date: "2020-01-01T00:00:00Z"
-publishDate: "2020-01-01T00:00:00Z"
+date: "2020-04-22T00:00:00Z"
+publishDate: "2020-04-22T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*Business Strategy and the Environment*"
 publication_short: "Business Strategy and the Environment"

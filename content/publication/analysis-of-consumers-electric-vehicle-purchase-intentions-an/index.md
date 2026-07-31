@@ -3,8 +3,8 @@ title: "Analysis of consumers’ electric vehicle purchase intentions: An expans
 authors:
   - "Tugba Yegin"
   - "Muhammad Ikram"
-date: "2022-01-01T00:00:00Z"
-publishDate: "2022-01-01T00:00:00Z"
+date: "2022-09-24T00:00:00Z"
+publishDate: "2022-09-24T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*Sustainability*, 14(19), 12091"
 publication_short: "Sustainability"

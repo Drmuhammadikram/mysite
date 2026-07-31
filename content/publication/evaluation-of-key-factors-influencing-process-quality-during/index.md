@@ -6,8 +6,8 @@ authors:
   - "Rana Mamoon Ahmad"
   - "Hamza Qadeer"
   - "Muhammad Nawaz"
-date: "2019-01-01T00:00:00Z"
-publishDate: "2019-01-01T00:00:00Z"
+date: "2019-06-14T00:00:00Z"
+publishDate: "2019-06-14T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*Grey Systems: Theory and Application*, 9(3), 321–335"
 publication_short: "Grey Systems: Theory and Application"

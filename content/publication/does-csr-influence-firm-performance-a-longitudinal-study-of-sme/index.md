@@ -7,8 +7,8 @@ authors:
   - "Yasir Ahmed Solangi"
   - "Syed Zulfiqar Ali Shah"
   - "Farrukh Shahzad"
-date: "2020-01-01T00:00:00Z"
-publishDate: "2020-01-01T00:00:00Z"
+date: "2019-11-11T00:00:00Z"
+publishDate: "2019-11-11T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*Journal of Global Responsibility*, 11(1), 27–53"
 publication_short: "Journal of Global Responsibility"

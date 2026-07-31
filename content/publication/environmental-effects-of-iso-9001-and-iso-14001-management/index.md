@@ -7,8 +7,8 @@ authors:
   - "Robert Sroufe"
   - "Muhammad Ikram"
   - "Kateryna Lysenko-Ryba"
-date: "2022-01-01T00:00:00Z"
-publishDate: "2022-01-01T00:00:00Z"
+date: "2021-06-03T00:00:00Z"
+publishDate: "2021-06-03T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*The TQM Journal*, 34(3), 418–447"
 publication_short: "The TQM Journal"

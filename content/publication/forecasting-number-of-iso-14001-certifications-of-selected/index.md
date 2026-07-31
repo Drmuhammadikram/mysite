@@ -5,8 +5,8 @@ authors:
   - "Amin Mahmoudi"
   - "Syed Zulfiqar Ali Shah"
   - "Muhammad Mohsin"
-date: "2019-01-01T00:00:00Z"
-publishDate: "2019-01-01T00:00:00Z"
+date: "2019-03-08T00:00:00Z"
+publishDate: "2019-03-08T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*Environmental Science and Pollution Research*, 26(12), 12505–12521"
 publication_short: "Environmental Science and Pollution Research"

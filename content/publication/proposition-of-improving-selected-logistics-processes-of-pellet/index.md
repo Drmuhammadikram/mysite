@@ -3,8 +3,8 @@ title: "PROPOSITION OF IMPROVING SELECTED LOGISTICS PROCESSES OF PELLET PRODUCTI
 authors:
   - "Muhammad Ikram"
   - "Hubert Ku{\\'s}"
-date: "2021-01-01T00:00:00Z"
-publishDate: "2021-01-01T00:00:00Z"
+date: "2021-05-19T00:00:00Z"
+publishDate: "2021-05-19T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*International Journal for Quality Research*, 15(2), 387–402"
 publication_short: "International Journal for Quality Research"

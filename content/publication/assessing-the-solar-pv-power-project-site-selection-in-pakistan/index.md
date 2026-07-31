@@ -6,8 +6,8 @@ authors:
   - "Hashim Zameer"
   - "Muhammad Ikram"
   - "Burak Omer Saracoglu"
-date: "2019-01-01T00:00:00Z"
-publishDate: "2019-01-01T00:00:00Z"
+date: "2019-08-20T00:00:00Z"
+publishDate: "2019-08-20T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*Environmental Science and Pollution Research*, 26(29), 30286–30302"
 publication_short: "Environmental Science and Pollution Research"

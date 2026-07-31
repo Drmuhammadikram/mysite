@@ -3,8 +3,8 @@ title: "Developing a sustainable omnichannel strategic framework toward circular
 authors:
   - "Tugba Yegin"
   - "Muhammad Ikram"
-date: "2022-01-01T00:00:00Z"
-publishDate: "2022-01-01T00:00:00Z"
+date: "2022-09-15T00:00:00Z"
+publishDate: "2022-09-15T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*Sustainability*, 14(18), 11578"
 publication_short: "Sustainability"

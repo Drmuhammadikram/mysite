@@ -3,8 +3,8 @@ title: "Performance evaluation of green furniture brands in the marketing 4.0 pe
 authors:
   - "Tugba Yegin"
   - "Muhammad Ikram"
-date: "2022-01-01T00:00:00Z"
-publishDate: "2022-01-01T00:00:00Z"
+date: "2022-08-26T00:00:00Z"
+publishDate: "2022-08-26T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*Sustainability*, 14(17), 10644"
 publication_short: "Sustainability"

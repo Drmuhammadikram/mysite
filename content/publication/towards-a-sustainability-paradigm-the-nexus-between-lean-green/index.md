@@ -5,8 +5,8 @@ authors:
   - "Dominik Zimon"
   - "Muhammad Ikram"
   - "Peter Madzik"
-date: "2022-01-01T00:00:00Z"
-publishDate: "2022-01-01T00:00:00Z"
+date: "2021-12-13T00:00:00Z"
+publishDate: "2021-12-13T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*International Journal of Production Economics*, 245, 108393"
 publication_short: "International Journal of Production Economics"

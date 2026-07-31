@@ -7,8 +7,8 @@ authors:
   - "Gordhan Das Valasai"
   - "Muhammad Waris Ali Khan"
   - "Muhammad Ikram"
-date: "2019-01-01T00:00:00Z"
-publishDate: "2019-01-01T00:00:00Z"
+date: "2019-02-25T00:00:00Z"
+publishDate: "2019-02-25T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*Processes*, 7(2), 118"
 publication_short: "Processes"

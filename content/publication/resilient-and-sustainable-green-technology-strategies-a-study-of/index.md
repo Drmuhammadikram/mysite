@@ -3,8 +3,8 @@ title: "Resilient and sustainable green technology strategies: A study of Morocc
 authors:
   - "Muhammad Ikram"
   - "Jinane Es Sadki"
-date: "2024-01-01T00:00:00Z"
-publishDate: "2024-01-01T00:00:00Z"
+date: "2024-10-12T00:00:00Z"
+publishDate: "2024-10-12T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*Sustainable Futures*, 8, 100327"
 publication_short: "Sustainable Futures"

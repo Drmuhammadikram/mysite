@@ -3,8 +3,8 @@ title: "ISO 14001, Carbon Neutrality, and the Sustainable Development Goals: A B
 authors:
   - "Muhammad Ikram"
   - "Jinane Es-sadki"
-date: "2026-01-01T00:00:00Z"
-publishDate: "2026-01-01T00:00:00Z"
+date: "2026-06-30T00:00:00Z"
+publishDate: "2026-06-30T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*Corporate Social Responsibility and Environmental Management*"
 publication_short: "Corporate Social Responsibility and Environmental Management"

@@ -5,8 +5,8 @@ authors:
   - "Muhammad Ikram"
   - "Charbel Jabbour"
   - "Jose Chiappetta"
-date: "2024-01-01T00:00:00Z"
-publishDate: "2024-01-01T00:00:00Z"
+date: "2024-05-05T00:00:00Z"
+publishDate: "2024-05-05T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*Computers \\& Industrial Engineering*, 192, 110194"
 publication_short: "Computers \\& Industrial Engineering"

@@ -8,8 +8,8 @@ authors:
   - "Abdul Rehman"
   - "Abbas Ali Chandio"
   - "Gul Jabeen"
-date: "2021-01-01T00:00:00Z"
-publishDate: "2021-01-01T00:00:00Z"
+date: "2020-10-08T00:00:00Z"
+publishDate: "2020-10-08T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*Sustainable Production and Consumption*, 26, 239–255"
 publication_short: "Sustainable Production and Consumption"

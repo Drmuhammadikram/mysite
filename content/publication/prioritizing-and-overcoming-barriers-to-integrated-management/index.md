@@ -4,8 +4,8 @@ authors:
   - "Muhammad Ikram"
   - "Robert Sroufe"
   - "Qingyu Zhang"
-date: "2020-01-01T00:00:00Z"
-publishDate: "2020-01-01T00:00:00Z"
+date: "2020-01-16T00:00:00Z"
+publishDate: "2020-01-16T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*Journal of cleaner production*, 254, 120121"
 publication_short: "Journal of cleaner production"

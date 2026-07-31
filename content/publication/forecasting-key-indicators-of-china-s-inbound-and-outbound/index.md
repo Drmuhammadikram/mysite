@@ -5,8 +5,8 @@ authors:
   - "Muhammad Ikram"
   - "Liangyan Tao"
   - "Sifeng Liu"
-date: "2021-01-01T00:00:00Z"
-publishDate: "2021-01-01T00:00:00Z"
+date: "2020-07-21T00:00:00Z"
+publishDate: "2020-07-21T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*Grey Systems: Theory and Application*, 11(2), 265–287"
 publication_short: "Grey Systems: Theory and Application"

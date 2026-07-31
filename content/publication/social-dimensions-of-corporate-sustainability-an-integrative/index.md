@@ -5,8 +5,8 @@ authors:
   - "Qingyu Zhang"
   - "Robert Sroufe"
   - "Marcos Ferasso"
-date: "2020-01-01T00:00:00Z"
-publishDate: "2020-01-01T00:00:00Z"
+date: "2020-10-21T00:00:00Z"
+publishDate: "2020-10-21T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*Sustainability*, 12(20), 8747"
 publication_short: "Sustainability"

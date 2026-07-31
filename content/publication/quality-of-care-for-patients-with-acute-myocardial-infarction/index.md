@@ -7,8 +7,8 @@ authors:
   - "Muhammad Ikram"
   - "Erum Rehman"
   - "Meina Liu"
-date: "2019-01-01T00:00:00Z"
-publishDate: "2019-01-01T00:00:00Z"
+date: "2019-10-14T00:00:00Z"
+publishDate: "2019-10-14T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*International journal of environmental research and public health*, 16(20), 3890"
 publication_short: "International journal of environmental research and public health"

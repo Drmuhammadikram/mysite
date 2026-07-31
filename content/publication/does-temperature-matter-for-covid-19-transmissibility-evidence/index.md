@@ -6,8 +6,8 @@ authors:
   - "Munir Ahmad"
   - "Haitao Wu"
   - "Yu Hao"
-date: "2021-01-01T00:00:00Z"
-publishDate: "2021-01-01T00:00:00Z"
+date: "2021-06-18T00:00:00Z"
+publishDate: "2021-06-18T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*Environmental Science and Pollution Research*, 28(42), 59705–59719"
 publication_short: "Environmental Science and Pollution Research"

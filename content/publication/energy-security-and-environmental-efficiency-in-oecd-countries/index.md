@@ -5,8 +5,8 @@ authors:
   - "Muhammad Ikram"
   - "Muhammad Mohsin"
   - "Qaiser Abbas"
-date: "2025-01-01T00:00:00Z"
-publishDate: "2025-01-01T00:00:00Z"
+date: "2025-06-26T00:00:00Z"
+publishDate: "2025-06-26T00:00:00Z"
 publication_types: ['chapter']
 publication: "*ENERGY SECURITY, TRANSITION, AND ECONOMIC GROWTH*, 47–63"
 publication_short: "ENERGY SECURITY, TRANSITION, AND ECONOMIC GROWTH"

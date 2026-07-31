@@ -4,8 +4,8 @@ authors:
   - "Marcos Ferasso"
   - "Ubirat{\\~a} Tortato"
   - "Muhammad Ikram"
-date: "2023-01-01T00:00:00Z"
-publishDate: "2023-01-01T00:00:00Z"
+date: "2023-11-03T00:00:00Z"
+publishDate: "2023-11-03T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*Cleaner and Responsible Consumption*, 11, 100149"
 publication_short: "Cleaner and Responsible Consumption"

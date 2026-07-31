@@ -2,8 +2,8 @@
 title: "Assessing Food Security and Environmental Sustainability in North Africa: A Composite Indicator Approach Using Data Envelopment Analysis"
 authors:
   - "Muhammad Ikram"
-date: "2025-01-01T00:00:00Z"
-publishDate: "2025-01-01T00:00:00Z"
+date: "2025-06-30T00:00:00Z"
+publishDate: "2025-06-30T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*Sustainability*"
 publication_short: "Sustainability"

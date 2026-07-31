@@ -5,8 +5,8 @@ authors:
   - "Qingyu Zhang"
   - "Robert Sroufe"
   - "Marcos Ferasso"
-date: "2021-01-01T00:00:00Z"
-publishDate: "2021-01-01T00:00:00Z"
+date: "2021-05-31T00:00:00Z"
+publishDate: "2021-05-31T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*Sustainable Production and Consumption*, 28, 326–345"
 publication_short: "Sustainable Production and Consumption"

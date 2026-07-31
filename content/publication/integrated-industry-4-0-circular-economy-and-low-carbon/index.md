@@ -5,8 +5,8 @@ authors:
   - "Issa Hazaimeh"
   - "Muhammad Ikram"
   - "Zulkaif Ahmed Saqib"
-date: "2026-01-01T00:00:00Z"
-publishDate: "2026-01-01T00:00:00Z"
+date: "2026-02-23T00:00:00Z"
+publishDate: "2026-02-23T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*Business Strategy \\& Development*, 9(1), e70291"
 publication_short: "Business Strategy \\& Development"

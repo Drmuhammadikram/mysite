@@ -5,8 +5,8 @@ authors:
   - "Muhammad Ikram"
   - "Jianzu Wu"
   - "Marcos Ferasso"
-date: "2021-01-01T00:00:00Z"
-publishDate: "2021-01-01T00:00:00Z"
+date: "2021-01-22T00:00:00Z"
+publishDate: "2021-01-22T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*Sustainable Production and Consumption*, 27, 653–666"
 publication_short: "Sustainable Production and Consumption"

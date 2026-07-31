@@ -5,8 +5,8 @@ authors:
   - "Robert Sroufe"
   - "Qingyu Zhang"
   - "Marcos Ferasso"
-date: "2021-01-01T00:00:00Z"
-publishDate: "2021-01-01T00:00:00Z"
+date: "2021-01-06T00:00:00Z"
+publishDate: "2021-01-06T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*Environmental Science and Pollution Research*, 1–22"
 publication_short: "Environmental Science and Pollution Research"

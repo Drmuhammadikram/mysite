@@ -6,8 +6,8 @@ authors:
   - "Robert Sroufe"
   - "Syed Shah"
   - "Zulfiqar Ali"
-date: "2020-01-01T00:00:00Z"
-publishDate: "2020-01-01T00:00:00Z"
+date: "2020-04-01T00:00:00Z"
+publishDate: "2020-04-01T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*Sustainable Production and Consumption*, 22, 218–230"
 publication_short: "Sustainable Production and Consumption"

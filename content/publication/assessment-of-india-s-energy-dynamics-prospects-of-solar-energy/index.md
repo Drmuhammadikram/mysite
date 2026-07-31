@@ -7,8 +7,8 @@ authors:
   - "Naeem Gul Gilal"
   - "Heng Li"
   - "Abdul Rehman"
-date: "2020-01-01T00:00:00Z"
-publishDate: "2020-01-01T00:00:00Z"
+date: "2020-09-01T00:00:00Z"
+publishDate: "2020-09-01T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*Journal of Renewable and Sustainable Energy*, 12(5)"
 publication_short: "Journal of Renewable and Sustainable Energy"

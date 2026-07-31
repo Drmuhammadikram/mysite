@@ -12,8 +12,8 @@ authors:
   - "Nallapaneni Manoj Kumar"
   - "Michael Alan Martin"
   - "others"
-date: "2023-01-01T00:00:00Z"
-publishDate: "2023-01-01T00:00:00Z"
+date: "2023-12-07T00:00:00Z"
+publishDate: "2023-12-07T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*Sustainability*, 15(12), 9443"
 publication_short: "Sustainability"

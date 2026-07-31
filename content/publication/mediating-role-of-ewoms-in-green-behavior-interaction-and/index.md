@@ -4,8 +4,8 @@ authors:
   - "Zulkaif Ahmed Saqib"
   - "Muhammad Ikram"
   - "Luo Qin"
-date: "2025-01-01T00:00:00Z"
-publishDate: "2025-01-01T00:00:00Z"
+date: "2025-02-05T00:00:00Z"
+publishDate: "2025-02-05T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*International Journal of Ethics and Systems*"
 publication_short: "International Journal of Ethics and Systems"

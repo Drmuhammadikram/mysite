@@ -5,8 +5,8 @@ authors:
   - "Shakhrukh Madjidov"
   - "Habiba Halepoto"
   - "Muhammad Ikram"
-date: "2021-01-01T00:00:00Z"
-publishDate: "2021-01-01T00:00:00Z"
+date: "2021-10-01T00:00:00Z"
+publishDate: "2021-10-01T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*SAGE Open*, 11(4), 21582440211054499"
 publication_short: "SAGE Open"

@@ -5,8 +5,8 @@ authors:
   - "Yanzi Miao"
   - "Guangyu Li"
   - "Muhammad Ikram"
-date: "2020-01-01T00:00:00Z"
-publishDate: "2020-01-01T00:00:00Z"
+date: "2020-01-09T00:00:00Z"
+publishDate: "2020-01-09T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*Mathematics and Computers in Simulation*, 172, 45–70"
 publication_short: "Mathematics and Computers in Simulation"

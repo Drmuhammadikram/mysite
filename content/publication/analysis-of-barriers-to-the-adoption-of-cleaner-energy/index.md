@@ -4,8 +4,8 @@ authors:
   - "SAA Shah"
   - "YA Solangi"
   - "M Ikram"
-date: "2019-01-01T00:00:00Z"
-publishDate: "2019-01-01T00:00:00Z"
+date: "2019-07-03T00:00:00Z"
+publishDate: "2019-07-03T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*Journal of Cleaner Production*, 235, 1037–1050"
 publication_short: "Journal of Cleaner Production"

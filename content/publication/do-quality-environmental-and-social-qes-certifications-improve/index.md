@@ -6,8 +6,8 @@ authors:
   - "Erum Rehman"
   - "Syed Zulfiqar Ali Shah"
   - "Amin Mahmoudi"
-date: "2020-01-01T00:00:00Z"
-publishDate: "2020-01-01T00:00:00Z"
+date: "2019-11-12T00:00:00Z"
+publishDate: "2019-11-12T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*Physica A: Statistical Mechanics and its Applications*, 545, 123486"
 publication_short: "Physica A: Statistical Mechanics and its Applications"

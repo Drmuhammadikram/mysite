@@ -3,8 +3,8 @@ title: "The consequences of COVID-19 disruption on sustainable economy in the to
 authors:
   - "Muhammad Ikram"
   - "Youssef Sayagh"
-date: "2023-01-01T00:00:00Z"
-publishDate: "2023-01-01T00:00:00Z"
+date: "2023-04-03T00:00:00Z"
+publishDate: "2023-04-03T00:00:00Z"
 publication_types: ['article-journal']
 publication: "*Global Journal of Flexible Systems Management*, 24(2), 247–269"
 publication_short: "Global Journal of Flexible Systems Management"
