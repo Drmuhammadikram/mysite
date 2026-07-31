@@ -11,11 +11,31 @@
 {{- range .Params.authors }}
 <meta name="citation_author" content="{{ . }}">
 {{- end }}
+<meta name="citation_author_institution" content="School of Business Administration, Al Akhawayn University in Ifrane, Morocco">
 {{- with .Date }}
 <meta name="citation_publication_date" content="{{ .Format "2006/01/02" }}">
+<meta name="citation_date" content="{{ .Format "2006/01/02" }}">
 {{- end }}
 {{- with .Params.publication_short }}
 <meta name="citation_journal_title" content="{{ . | plainify }}">
+{{- end }}
+{{- with .Params.publisher }}
+<meta name="citation_publisher" content="{{ . }}">
+{{- end }}
+{{- with .Params.issn }}
+<meta name="citation_issn" content="{{ . }}">
+{{- end }}
+{{- with .Params.volume }}
+<meta name="citation_volume" content="{{ . }}">
+{{- end }}
+{{- with .Params.issue }}
+<meta name="citation_issue" content="{{ . }}">
+{{- end }}
+{{- with .Params.firstpage }}
+<meta name="citation_firstpage" content="{{ . }}">
+{{- end }}
+{{- with .Params.lastpage }}
+<meta name="citation_lastpage" content="{{ . }}">
 {{- end }}
 {{- with .Params.doi }}
 <meta name="citation_doi" content="{{ . }}">
@@ -28,4 +48,35 @@
 {{- with .Params.tags }}
 <meta name="citation_keywords" content="{{ delimit . "; " }}">
 {{- end }}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ScholarlyArticle",
+  "headline": {{ .Title | plainify | jsonify }},
+  "name": {{ .Title | plainify | jsonify }},
+  {{ with .Params.abstract }}"abstract": {{ . | plainify | jsonify }},{{ end }}
+  "author": [
+    {{- range $i, $a := .Params.authors -}}
+    {{- if $i }},{{ end }}
+    { "@type": "Person", "name": {{ $a | jsonify }} }
+    {{- end }}
+  ],
+  {{ with .Date }}"datePublished": "{{ .Format "2006-01-02" }}",{{ end }}
+  "inLanguage": "en",
+  {{ with .Params.publication_short }}"isPartOf": {
+    "@type": "Periodical",
+    "name": {{ . | plainify | jsonify }}{{ with $.Params.issn }},
+    "issn": {{ . | jsonify }}{{ end }}
+  },{{ end }}
+  {{ with .Params.firstpage }}"pageStart": {{ . | jsonify }},{{ end }}
+  {{ with .Params.lastpage }}"pageEnd": {{ . | jsonify }},{{ end }}
+  {{ with .Params.doi }}"identifier": {
+    "@type": "PropertyValue",
+    "propertyID": "DOI",
+    "value": {{ . | jsonify }}
+  },
+  "sameAs": {{ printf "https://doi.org/%s" . | jsonify }},{{ end }}
+  "url": {{ .Permalink | jsonify }}
+}
+</script>
 {{- end -}}
