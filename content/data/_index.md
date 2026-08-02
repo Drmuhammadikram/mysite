@@ -1,6 +1,6 @@
 ---
 title: Sustainability Data
-summary: Interactive datasets on ecological footprint, biocapacity, ISO management system certifications, and progress toward the Sustainable Development Goals.
+summary: Interactive datasets on ecological footprint, biocapacity, ISO management system certifications, water stress, and progress toward the Sustainable Development Goals.
 type: landing
 sections:
   - block: markdown
@@ -31,6 +31,16 @@ sections:
         The number of valid certificates to ISO management system standards, reported by country. Switch between quality, environmental, occupational health and safety, food safety, and energy management standards.
 
         {{< isosurvey >}}
+    design:
+      columns: '1'
+  - block: markdown
+    content:
+      title: 'Water stress worldwide'
+      subtitle: ''
+      text: |-
+        Freshwater withdrawal as a share of available renewable resources, from 2000 to 2023. Values above 100% mean a country withdraws more than its renewable supply, drawing down aquifers or relying on desalination.
+
+        {{< waterstress >}}
     design:
       columns: '1'
   - block: markdown
