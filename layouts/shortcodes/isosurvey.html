@@ -28,7 +28,7 @@
 <div id="iso-tabs" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1.25rem;margin-top:-1rem;width:70vw;max-width:1100px;position:relative;left:50%;transform:translateX(-50%);z-index:6;"></div>
 
 <div style="display:grid;grid-template-columns:1fr 190px;gap:24px;align-items:start;width:70vw;max-width:1100px;position:relative;left:50%;transform:translateX(-50%);" id="iso-wrap">
-  <div id="iso-map" style="width:100%;margin-top:0;"></div>
+  <div id="iso-map" style="width:100%;margin-top:-3.5rem;"></div>
   <div>
     <div id="iso-legend-title" style="font-size:0.78rem;opacity:0.75;margin-bottom:0.7rem;line-height:1.45;"></div>
     <div id="iso-legend"></div>
@@ -75,7 +75,7 @@ function fmt(n){ return n.toLocaleString('en-GB'); }
 var svg=d3.select('#iso-map').append('svg')
   .attr('viewBox','0 0 960 440').attr('width','100%').style('min-height','700px').style('display','block')
   .attr('role','img').attr('aria-label','World map of ISO management system certificates');
-var path=d3.geoPath(d3.geoNaturalEarth1().scale(235).translate([460,205]));
+var path=d3.geoPath(d3.geoNaturalEarth1().scale(200).translate([460,205]));
 
 function render(){
   var s=STD[cur];
