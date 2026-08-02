@@ -52,7 +52,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
 <script>
 (function(){
-var DATA=JSON.parse(document.getElementById('iso-data').textContent);
+var RAW=document.getElementById('iso-data').textContent; var DATA=JSON.parse(RAW); if(typeof DATA==='string'){ DATA=JSON.parse(DATA); }
 var STD=['ISO 9001','ISO 14001','ISO 45001','ISO 22000','ISO 50001'];
 var DESC={'ISO 9001':'Quality management systems.','ISO 14001':'Environmental management systems.',
 'ISO 45001':'Occupational health and safety management systems.',
