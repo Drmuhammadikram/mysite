@@ -107,6 +107,11 @@ d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(f
   if(mor.length) feats.push({type:'Feature',id:504,geometry:topojson.merge(w,mor)});
   paths=svg.selectAll('path').data(feats).join('path')
     .attr('d',path)
+    .attr('fill',function(f){
+      var k=('00'+String(f.id)).slice(-3);
+      var r=DATA[STD[cur]][k];
+      return colorFor(r?r.v:null);
+    })
     .attr('stroke',dark?'rgba(255,255,255,.14)':'#fff').attr('stroke-width',0.4)
     .style('cursor','pointer')
     .on('mouseenter',function(e,f){
