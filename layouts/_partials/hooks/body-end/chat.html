@@ -1,0 +1,97 @@
+<div id="cw-root"></div>
+<style>
+#cw-btn{position:fixed;bottom:22px;right:22px;z-index:9998;display:flex;align-items:center;gap:8px;
+ background:var(--hb-color-background,#fff);border:1px solid rgba(128,128,128,0.32);border-radius:24px;
+ padding:10px 17px;font-size:0.84rem;font-family:inherit;color:inherit;cursor:pointer;
+ box-shadow:0 3px 14px rgba(0,0,0,0.10);transition:box-shadow .18s,transform .18s;}
+#cw-btn:hover{box-shadow:0 5px 20px rgba(0,0,0,0.15);transform:translateY(-1px);}
+#cw-panel{position:fixed;bottom:22px;right:22px;z-index:9999;width:390px;max-width:calc(100vw - 32px);
+ background:var(--hb-color-background,#fff);border:1px solid rgba(128,128,128,0.28);border-radius:14px;
+ box-shadow:0 12px 44px rgba(0,0,0,0.20);display:none;flex-direction:column;overflow:hidden;}
+#cw-panel.open{display:flex;}
+#cw-head{display:flex;align-items:center;gap:9px;padding:13px 15px;border-bottom:1px solid rgba(128,128,128,0.18);}
+#cw-log{padding:15px;overflow-y:auto;max-height:52vh;min-height:150px;}
+#cw-foot{display:flex;gap:8px;padding:12px 14px;border-top:1px solid rgba(128,128,128,0.18);}
+#cw-in{flex:1;padding:9px 12px;font-size:0.85rem;font-family:inherit;color:inherit;background:transparent;
+ border:1px solid rgba(128,128,128,0.3);border-radius:7px;outline:none;}
+#cw-in:focus{border-color:rgba(27,175,122,0.6);}
+#cw-send{width:36px;border:1px solid rgba(128,128,128,0.3);border-radius:7px;background:transparent;
+ color:inherit;cursor:pointer;font-size:1rem;}
+.cw-s{display:block;width:100%;text-align:left;font-size:0.82rem;padding:9px 12px;margin-bottom:6px;
+ border:1px solid rgba(128,128,128,0.22);border-radius:7px;background:transparent;color:inherit;
+ font-family:inherit;cursor:pointer;opacity:0.82;}
+.cw-s:hover{opacity:1;border-color:rgba(27,175,122,0.5);}
+.cw-m{margin-bottom:14px;font-size:0.85rem;line-height:1.65;}
+.cw-u{opacity:0.7;}
+.cw-m a{color:#1baf7a;}
+@media(max-width:520px){#cw-panel{width:calc(100vw - 24px);bottom:12px;right:12px;}#cw-log{max-height:46vh;}}
+</style>
+<script>
+(function(){
+  var API='https://ikram-chat.mikram-nuaa.workers.dev';
+  var Q=['What research is there on ISO 14001?','Which papers cover North Africa?',"What's on the data page?"];
+  var hist=[],busy=false;
+  var r=document.getElementById('cw-root');
+  r.innerHTML='<button id="cw-btn" aria-label="Open research assistant">'+
+    '<span style="color:#1baf7a;font-size:1.05rem;">&#9679;</span> Ask about this research</button>'+
+    '<div id="cw-panel" role="dialog" aria-label="Research assistant">'+
+    '<div id="cw-head"><span style="color:#1baf7a;">&#9679;</span>'+
+    '<span style="font-size:0.87rem;font-weight:600;">Research assistant</span>'+
+    '<button id="cw-x" aria-label="Close" style="margin-left:auto;background:none;border:none;'+
+    'color:inherit;cursor:pointer;font-size:1.1rem;opacity:0.6;">&times;</button></div>'+
+    '<div id="cw-log"></div>'+
+    '<div id="cw-foot"><input id="cw-in" placeholder="Ask a question" autocomplete="off" maxlength="500">'+
+    '<button id="cw-send" aria-label="Send">&#8593;</button></div></div>';
+
+  var btn=document.getElementById('cw-btn'),pan=document.getElementById('cw-panel'),
+      log=document.getElementById('cw-log'),inp=document.getElementById('cw-in');
+
+  function md(s){
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;')
+      .replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2">$1</a>')
+      .replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>')
+      .replace(/\*([^*]+)\*/g,'<em>$1</em>')
+      .replace(/\n/g,'<br>');
+  }
+  function add(role,text){
+    var d=document.createElement('div');
+    d.className='cw-m'+(role==='user'?' cw-u':'');
+    d.innerHTML=role==='user'?('<strong>You:</strong> '+md(text)):md(text);
+    log.appendChild(d); log.scrollTop=log.scrollHeight; return d;
+  }
+  function intro(){
+    log.innerHTML='<div class="cw-m" style="opacity:0.75;">Ask about the publications, '+
+      'datasets, or background on this site.</div>';
+    Q.forEach(function(q){
+      var b=document.createElement('button'); b.className='cw-s'; b.textContent=q;
+      b.onclick=function(){ send(q); };
+      log.appendChild(b);
+    });
+  }
+  function send(text){
+    if(busy||!text.trim())return;
+    if(hist.length===0)log.innerHTML='';
+    busy=true; inp.value='';
+    add('user',text);
+    hist.push({role:'user',content:text});
+    var w=add('assistant','…');
+    fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({messages:hist.slice(-8)})})
+      .then(function(x){return x.json();})
+      .then(function(d){
+        var t=d.reply||'Sorry, something went wrong. Try again in a moment.';
+        w.innerHTML=md(t); hist.push({role:'assistant',content:t});
+        log.scrollTop=log.scrollHeight; busy=false;
+      })
+      .catch(function(){
+        w.textContent='Sorry, the assistant is unavailable right now.'; busy=false;
+      });
+  }
+  btn.onclick=function(){ pan.classList.add('open'); btn.style.display='none';
+    if(!log.innerHTML)intro(); inp.focus(); };
+  document.getElementById('cw-x').onclick=function(){
+    pan.classList.remove('open'); btn.style.display='flex'; };
+  document.getElementById('cw-send').onclick=function(){ send(inp.value); };
+  inp.addEventListener('keydown',function(e){ if(e.key==='Enter')send(inp.value); });
+})();
+</script>
