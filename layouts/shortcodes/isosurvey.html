@@ -87,7 +87,8 @@ function render(){
     .style('font-weight',function(d,j){return j===cur?'600':'400';})
     .style('opacity',function(d,j){return j===cur?1:0.7;});
   if(paths) paths.attr('fill',function(f){
-    var r=DATA[STD[cur]][String(+f.id).padStart(3,'0')];
+    var k=('00'+String(f.id)).slice(-3);
+    var r=DATA[STD[cur]][k];
     return colorFor(r?r.v:null); });
 }
 
