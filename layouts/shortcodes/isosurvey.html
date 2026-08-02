@@ -1,0 +1,131 @@
+{{- $d := site.Data.iso -}}
+{{- with $d -}}
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:1.5rem;width:70vw;max-width:1100px;position:relative;left:50%;transform:translateX(-50%);">
+  <div style="background:rgba(128,128,128,0.06);border-radius:8px;padding:1rem;">
+    <div style="font-size:0.75rem;opacity:0.7;margin-bottom:0.4rem;">ISO 9001</div>
+    <div style="font-size:1.6rem;line-height:1;font-weight:600;font-variant-numeric:tabular-nums;">{{ lang.FormatNumber 0 (index .totals "ISO 9001") }}</div>
+    <div style="font-size:0.68rem;opacity:0.55;margin-top:0.3rem;">certificates</div>
+  </div>
+  <div style="background:rgba(128,128,128,0.06);border-radius:8px;padding:1rem;">
+    <div style="font-size:0.75rem;opacity:0.7;margin-bottom:0.4rem;">ISO 14001</div>
+    <div style="font-size:1.6rem;line-height:1;font-weight:600;font-variant-numeric:tabular-nums;">{{ lang.FormatNumber 0 (index .totals "ISO 14001") }}</div>
+    <div style="font-size:0.68rem;opacity:0.55;margin-top:0.3rem;">certificates</div>
+  </div>
+  <div style="background:rgba(128,128,128,0.06);border-radius:8px;padding:1rem;">
+    <div style="font-size:0.75rem;opacity:0.7;margin-bottom:0.4rem;">ISO 45001</div>
+    <div style="font-size:1.6rem;line-height:1;font-weight:600;font-variant-numeric:tabular-nums;">{{ lang.FormatNumber 0 (index .totals "ISO 45001") }}</div>
+    <div style="font-size:0.68rem;opacity:0.55;margin-top:0.3rem;">certificates</div>
+  </div>
+  <div style="background:rgba(128,128,128,0.06);border-radius:8px;padding:1rem;">
+    <div style="font-size:0.75rem;opacity:0.7;margin-bottom:0.4rem;">Countries</div>
+    <div style="font-size:1.6rem;line-height:1;font-weight:600;font-variant-numeric:tabular-nums;">171</div>
+    <div style="font-size:0.68rem;opacity:0.55;margin-top:0.3rem;">reporting</div>
+  </div>
+</div>
+
+<div id="iso-tabs" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1.25rem;margin-top:-1rem;width:70vw;max-width:1100px;position:relative;left:50%;transform:translateX(-50%);z-index:6;"></div>
+
+<div style="display:grid;grid-template-columns:1fr 190px;gap:24px;align-items:start;width:70vw;max-width:1100px;position:relative;left:50%;transform:translateX(-50%);" id="iso-wrap">
+  <div id="iso-map" style="width:100%;margin-top:0;"></div>
+  <div>
+    <div id="iso-legend-title" style="font-size:0.78rem;opacity:0.75;margin-bottom:0.7rem;line-height:1.45;"></div>
+    <div id="iso-legend"></div>
+    <div id="iso-readout" style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid rgba(128,128,128,0.2);min-height:84px;">
+      <div style="font-size:0.75rem;opacity:0.5;">Hover a country</div>
+    </div>
+  </div>
+</div>
+
+<p style="font-size:0.72rem;opacity:0.55;margin-top:1.25rem;line-height:1.6;">
+  Valid certificates as at 31 December {{ .year }}. Source: The ISO Survey of Management
+  System Standard Certifications, ISO and the International Accreditation Forum.
+  Participation by certification bodies is voluntary and varies between years, so
+  country-level changes may reflect reporting coverage rather than genuine shifts in
+  certification. The survey is not a register of certificates.
+</p>
+
+<style>@media(max-width:760px){#iso-wrap{grid-template-columns:1fr!important}}</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+<script>
+(function(){
+var DATA={{ .standards | jsonify }};
+var STD=['ISO 9001','ISO 14001','ISO 45001','ISO 22000','ISO 50001'];
+var DESC={'ISO 9001':'Quality management systems.','ISO 14001':'Environmental management systems.',
+'ISO 45001':'Occupational health and safety management systems.',
+'ISO 22000':'Food safety management systems.','ISO 50001':'Energy management systems.'};
+var dark=matchMedia('(prefers-color-scheme: dark)').matches;
+var noData=dark?'#2c2c2a':'#eceae4';
+var BANDS=[[10000,'> 10,000'],[2000,'2,000–10,000'],[500,'500–2,000'],[100,'100–500'],[1,'1–100'],[0,'None reported']];
+var COLS=['#0d3b2e','#166b52','#2e9e74','#7fc9a4','#c8e6d7','#eef6f2'];
+var cur=0,paths=null;
+
+function colorFor(v){
+  if(v==null) return noData;
+  for(var j=0;j<BANDS.length;j++) if(v>=BANDS[j][0]) return COLS[j];
+  return COLS[COLS.length-1];
+}
+function fmt(n){ return n.toLocaleString('en-GB'); }
+
+var svg=d3.select('#iso-map').append('svg')
+  .attr('viewBox','0 0 960 440').attr('width','100%').style('min-height','700px').style('display','block')
+  .attr('role','img').attr('aria-label','World map of ISO management system certificates');
+var path=d3.geoPath(d3.geoNaturalEarth1().scale(235).translate([460,205]));
+
+function render(){
+  var s=STD[cur];
+  d3.select('#iso-legend-title').html('<strong style="font-weight:600;opacity:1">'+s+'</strong><br>'+DESC[s]);
+  d3.select('#iso-legend').html(BANDS.map(function(b,j){
+    return '<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;font-size:0.72rem;opacity:0.75;">'+
+      '<span style="width:16px;height:11px;border-radius:2px;background:'+COLS[j]+';flex-shrink:0;border:1px solid rgba(128,128,128,0.2);"></span>'+b[1]+'</div>';
+  }).join('')+'<div style="display:flex;align-items:center;gap:8px;margin-top:8px;font-size:0.72rem;opacity:0.5;">'+
+    '<span style="width:16px;height:11px;border-radius:2px;background:'+noData+';flex-shrink:0;"></span>Not reported</div>');
+  d3.selectAll('#iso-tabs button')
+    .style('background',function(d,j){return j===cur?'rgba(22,107,82,0.16)':'transparent';})
+    .style('border-color',function(d,j){return j===cur?'rgba(22,107,82,0.55)':'rgba(128,128,128,0.3)';})
+    .style('font-weight',function(d,j){return j===cur?'600':'400';})
+    .style('opacity',function(d,j){return j===cur?1:0.7;});
+  if(paths) paths.attr('fill',function(f){
+    var r=DATA[STD[cur]][String(+f.id).padStart(3,'0')];
+    return colorFor(r?r.v:null); });
+}
+
+d3.select('#iso-tabs').selectAll('button').data(STD).join('button')
+  .attr('type','button')
+  .style('font-size','0.75rem').style('padding','6px 13px').style('cursor','pointer')
+  .style('border','1px solid rgba(128,128,128,0.3)').style('border-radius','6px')
+  .style('color','inherit')
+  .text(function(d){return d;})
+  .on('click',function(e,d){ cur=STD.indexOf(d); render(); });
+
+d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(function(w){
+  var mor=w.objects.countries.geometries.filter(function(g){
+    var id=String(+g.id); return id==='504'||id==='732'; });
+  var feats=topojson.feature(w,w.objects.countries).features
+    .filter(function(f){var id=String(+f.id); return id!=='504'&&id!=='732'&&id!=='010';});
+  if(mor.length) feats.push({type:'Feature',id:504,geometry:topojson.merge(w,mor)});
+  paths=svg.selectAll('path').data(feats).join('path')
+    .attr('d',path)
+    .attr('stroke',dark?'rgba(255,255,255,.14)':'#fff').attr('stroke-width',0.4)
+    .style('cursor','pointer')
+    .on('mouseenter',function(e,f){
+      var k=String(+f.id).padStart(3,'0');
+      var r=DATA[STD[cur]][k];
+      if(!r){ d3.select('#iso-readout').html('<div style="font-size:0.75rem;opacity:0.5;">Not reported</div>'); return; }
+      var lines='';
+      STD.forEach(function(s){
+        var x=DATA[s][k];
+        lines+='<div style="display:flex;justify-content:space-between;gap:12px;'+
+          (s===STD[cur]?'font-weight:600;':'opacity:0.65;')+'"><span>'+s+'</span>'+
+          '<span style="font-variant-numeric:tabular-nums;">'+(x?fmt(x.v):'—')+'</span></div>';
+      });
+      d3.select('#iso-readout').html(
+        '<div style="font-size:0.85rem;font-weight:600;margin-bottom:0.5rem;">'+r.n+'</div>'+
+        '<div style="font-size:0.72rem;line-height:1.7;">'+lines+'</div>');
+    });
+  render();
+});
+})();
+</script>
+{{- end -}}
