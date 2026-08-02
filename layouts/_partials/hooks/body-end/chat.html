@@ -1,47 +1,62 @@
 <div id="cw-root"></div>
 <style>
-#cw-btn{position:fixed;bottom:22px;right:22px;z-index:9998;display:flex;align-items:center;gap:8px;
- background:var(--hb-color-background,#fff);border:1px solid rgba(128,128,128,0.32);border-radius:24px;
- padding:10px 17px;font-size:0.84rem;font-family:inherit;color:inherit;cursor:pointer;
- box-shadow:0 3px 14px rgba(0,0,0,0.10);transition:box-shadow .18s,transform .18s;}
-#cw-btn:hover{box-shadow:0 5px 20px rgba(0,0,0,0.15);transform:translateY(-1px);}
-#cw-panel{position:fixed;bottom:22px;right:22px;z-index:9999;width:390px;max-width:calc(100vw - 32px);
- background:var(--hb-color-background,#fff);border:1px solid rgba(128,128,128,0.28);border-radius:14px;
- box-shadow:0 12px 44px rgba(0,0,0,0.20);display:none;flex-direction:column;overflow:hidden;}
-#cw-panel.open{display:flex;}
-#cw-head{display:flex;align-items:center;gap:9px;padding:13px 15px;border-bottom:1px solid rgba(128,128,128,0.18);}
-#cw-log{padding:15px;overflow-y:auto;max-height:52vh;min-height:150px;}
-#cw-foot{display:flex;gap:8px;padding:12px 14px;border-top:1px solid rgba(128,128,128,0.18);}
-#cw-in{flex:1;padding:9px 12px;font-size:0.85rem;font-family:inherit;color:inherit;background:transparent;
- border:1px solid rgba(128,128,128,0.3);border-radius:7px;outline:none;}
-#cw-in:focus{border-color:rgba(27,175,122,0.6);}
-#cw-send{width:36px;border:1px solid rgba(128,128,128,0.3);border-radius:7px;background:transparent;
- color:inherit;cursor:pointer;font-size:1rem;}
-.cw-s{display:block;width:100%;text-align:left;font-size:0.82rem;padding:9px 12px;margin-bottom:6px;
- border:1px solid rgba(128,128,128,0.22);border-radius:7px;background:transparent;color:inherit;
- font-family:inherit;cursor:pointer;opacity:0.82;}
-.cw-s:hover{opacity:1;border-color:rgba(27,175,122,0.5);}
-.cw-m{margin-bottom:14px;font-size:0.85rem;line-height:1.65;}
-.cw-u{opacity:0.7;}
-.cw-m a{color:#1baf7a;}
-@media(max-width:520px){#cw-panel{width:calc(100vw - 24px);bottom:12px;right:12px;}#cw-log{max-height:46vh;}}
+#cw-btn{position:fixed;bottom:24px;right:24px;z-index:9998;display:flex;align-items:center;gap:9px;
+ background:var(--hb-color-background,#fff);border:1px solid rgba(128,128,128,0.24);border-radius:9px;
+ padding:11px 16px;font-size:0.83rem;font-family:inherit;color:inherit;cursor:pointer;opacity:0.92;
+ box-shadow:0 2px 10px rgba(0,0,0,0.07),0 8px 28px rgba(0,0,0,0.06);
+ transition:opacity .2s,box-shadow .2s,transform .2s;}
+#cw-btn:hover{opacity:1;transform:translateY(-1px);box-shadow:0 3px 14px rgba(0,0,0,0.10),0 10px 34px rgba(0,0,0,0.08);}
+#cw-panel{position:fixed;bottom:24px;right:24px;z-index:9999;width:400px;max-width:calc(100vw - 32px);
+ background:var(--hb-color-background,#fff);border:1px solid rgba(128,128,128,0.2);border-radius:13px;
+ box-shadow:0 4px 16px rgba(0,0,0,0.08),0 18px 56px rgba(0,0,0,0.14);
+ display:none;flex-direction:column;overflow:hidden;}
+#cw-panel.open{display:flex;animation:cwin .18s ease-out;}
+@keyframes cwin{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+#cw-head{padding:16px 18px 14px;border-bottom:1px solid rgba(128,128,128,0.14);}
+#cw-log{padding:18px;overflow-y:auto;max-height:50vh;min-height:130px;}
+#cw-foot{display:flex;align-items:center;gap:10px;padding:11px 18px;
+ border-top:1px solid rgba(128,128,128,0.14);background:rgba(128,128,128,0.035);}
+#cw-in{flex:1;padding:6px 0;font-size:0.85rem;font-family:inherit;color:inherit;
+ background:transparent;border:none;outline:none;}
+#cw-in::placeholder{opacity:0.45;}
+#cw-send{background:none;border:none;color:inherit;cursor:pointer;font-size:1rem;opacity:0.45;
+ padding:4px;transition:opacity .15s;}
+#cw-send:hover{opacity:0.9;}
+.cw-s{display:flex;align-items:center;gap:10px;width:100%;text-align:left;font-size:0.845rem;
+ padding:11px 0;border:none;border-bottom:1px solid rgba(128,128,128,0.13);background:none;
+ color:inherit;font-family:inherit;cursor:pointer;line-height:1.45;transition:opacity .15s;}
+.cw-s:last-of-type{border-bottom:none;}
+.cw-s:hover{opacity:0.62;}
+.cw-s span{flex:1;}
+.cw-s em{font-style:normal;opacity:0.3;font-size:0.9rem;}
+.cw-lbl{font-size:0.66rem;letter-spacing:0.08em;text-transform:uppercase;opacity:0.42;margin-bottom:2px;}
+.cw-m{margin-bottom:15px;font-size:0.855rem;line-height:1.68;}
+.cw-m:last-child{margin-bottom:0;}
+.cw-q{opacity:0.55;font-size:0.8rem;margin-bottom:7px;}
+.cw-m a{color:#1baf7a;text-decoration:none;border-bottom:1px solid rgba(27,175,122,0.3);}
+.cw-m a:hover{border-bottom-color:#1baf7a;}
+@media(max-width:520px){#cw-panel{width:calc(100vw - 20px);bottom:10px;right:10px;}
+ #cw-btn{bottom:14px;right:14px;}#cw-log{max-height:44vh;}}
 </style>
 <script>
 (function(){
   var API='https://ikram-chat.mikram-nuaa.workers.dev';
-  var Q=['What research is there on ISO 14001?','Which papers cover North Africa?',"What's on the data page?"];
-  var hist=[],busy=false;
+  var Q=['What research is there on ISO 14001?','Which papers cover North Africa?','What datasets are available?'];
+  var hist=[],busy=false,started=false;
   var r=document.getElementById('cw-root');
-  r.innerHTML='<button id="cw-btn" aria-label="Open research assistant">'+
-    '<span style="color:#1baf7a;font-size:1.05rem;">&#9679;</span> Ask about this research</button>'+
-    '<div id="cw-panel" role="dialog" aria-label="Research assistant">'+
-    '<div id="cw-head"><span style="color:#1baf7a;">&#9679;</span>'+
-    '<span style="font-size:0.87rem;font-weight:600;">Research assistant</span>'+
-    '<button id="cw-x" aria-label="Close" style="margin-left:auto;background:none;border:none;'+
-    'color:inherit;cursor:pointer;font-size:1.1rem;opacity:0.6;">&times;</button></div>'+
-    '<div id="cw-log"></div>'+
-    '<div id="cw-foot"><input id="cw-in" placeholder="Ask a question" autocomplete="off" maxlength="500">'+
-    '<button id="cw-send" aria-label="Send">&#8593;</button></div></div>';
+  r.innerHTML=
+   '<button id="cw-btn" aria-label="Open research assistant">'+
+   '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="opacity:.5" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/></svg>'+
+   '<span style="opacity:.72">Ask about this research</span></button>'+
+   '<div id="cw-panel" role="dialog" aria-label="Research assistant">'+
+   '<div id="cw-head"><div style="display:flex;align-items:baseline;gap:8px;">'+
+   '<span style="font-size:0.93rem;font-weight:600;">Research assistant</span>'+
+   '<button id="cw-x" aria-label="Close" style="margin-left:auto;background:none;border:none;'+
+   'color:inherit;cursor:pointer;font-size:1.15rem;opacity:0.35;line-height:1;">&times;</button></div>'+
+   '<div style="font-size:0.72rem;opacity:0.45;margin-top:3px;">74 publications · datasets · background</div>'+
+   '</div><div id="cw-log"></div>'+
+   '<div id="cw-foot"><input id="cw-in" placeholder="Ask a question" autocomplete="off" maxlength="500">'+
+   '<button id="cw-send" aria-label="Send">&#8593;</button></div></div>';
 
   var btn=document.getElementById('cw-btn'),pan=document.getElementById('cw-panel'),
       log=document.getElementById('cw-log'),inp=document.getElementById('cw-in');
@@ -50,48 +65,50 @@
     return s.replace(/&/g,'&amp;').replace(/</g,'&lt;')
       .replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2">$1</a>')
       .replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>')
-      .replace(/\*([^*]+)\*/g,'<em>$1</em>')
-      .replace(/\n/g,'<br>');
+      .replace(/\n\n/g,'<br><br>').replace(/\n/g,'<br>');
   }
   function add(role,text){
     var d=document.createElement('div');
-    d.className='cw-m'+(role==='user'?' cw-u':'');
-    d.innerHTML=role==='user'?('<strong>You:</strong> '+md(text)):md(text);
+    d.className='cw-m'+(role==='user'?' cw-q':'');
+    d.innerHTML=md(text);
     log.appendChild(d); log.scrollTop=log.scrollHeight; return d;
   }
   function intro(){
-    log.innerHTML='<div class="cw-m" style="opacity:0.75;">Ask about the publications, '+
-      'datasets, or background on this site.</div>';
+    log.innerHTML='<div class="cw-lbl">Try asking</div>';
     Q.forEach(function(q){
-      var b=document.createElement('button'); b.className='cw-s'; b.textContent=q;
+      var b=document.createElement('button'); b.className='cw-s';
+      b.innerHTML='<span>'+q+'</span><em>&#8594;</em>';
       b.onclick=function(){ send(q); };
       log.appendChild(b);
     });
   }
   function send(text){
     if(busy||!text.trim())return;
-    if(hist.length===0)log.innerHTML='';
+    if(!started){ log.innerHTML=''; started=true; }
     busy=true; inp.value='';
     add('user',text);
     hist.push({role:'user',content:text});
-    var w=add('assistant','…');
+    var w=add('assistant','<span style="opacity:.4">Thinking…</span>');
     fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({messages:hist.slice(-8)})})
       .then(function(x){return x.json();})
       .then(function(d){
-        var t=d.reply||'Sorry, something went wrong. Try again in a moment.';
+        var t=d.reply||'Something went wrong. Try again in a moment.';
         w.innerHTML=md(t); hist.push({role:'assistant',content:t});
-        log.scrollTop=log.scrollHeight; busy=false;
+        log.scrollTop=log.scrollHeight; busy=false; inp.focus();
       })
       .catch(function(){
-        w.textContent='Sorry, the assistant is unavailable right now.'; busy=false;
+        w.textContent='The assistant is unavailable right now.'; busy=false;
       });
   }
   btn.onclick=function(){ pan.classList.add('open'); btn.style.display='none';
-    if(!log.innerHTML)intro(); inp.focus(); };
+    if(!started)intro(); setTimeout(function(){inp.focus();},120); };
   document.getElementById('cw-x').onclick=function(){
     pan.classList.remove('open'); btn.style.display='flex'; };
   document.getElementById('cw-send').onclick=function(){ send(inp.value); };
   inp.addEventListener('keydown',function(e){ if(e.key==='Enter')send(inp.value); });
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape'&&pan.classList.contains('open')){
+      pan.classList.remove('open'); btn.style.display='flex'; } });
 })();
 </script>
