@@ -1,8 +1,18 @@
 ---
 title: Sustainability Data
-summary: Interactive datasets on ecological footprint, biocapacity, ISO certifications, water stress, natural disasters, life satisfaction, and progress toward the Sustainable Development Goals.
+summary: Interactive datasets on planetary boundaries, ecological footprint, biocapacity, ISO certifications, water stress, natural disasters, life satisfaction, and progress toward the Sustainable Development Goals.
 type: landing
 sections:
+  - block: markdown
+    content:
+      title: 'Planetary boundaries: the state of the Earth system'
+      subtitle: ''
+      text: |-
+        Nine processes regulate the stability, resilience, and life-support functions of the Earth system. Seven have now been breached, ocean acidification for the first time in 2025. This is the framework within which the datasets below sit.
+
+        {{< planetary >}}
+    design:
+      columns: '1'
   - block: markdown
     content:
       title: 'Ecological footprint and biocapacity worldwide'
