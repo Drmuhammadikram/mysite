@@ -1,16 +1,40 @@
 {
-  "citations": 6956,
+  "citations": 6797,
   "h_index": 41,
-  "i10_index": 60,
-  "updated": "2026-07-27",
+  "i10_index": 59,
+  "updated": "2026-08-03",
   "by_year": [
-    { "year": 2019, "citations": 37 },
-    { "year": 2020, "citations": 253 },
-    { "year": 2021, "citations": 682 },
-    { "year": 2022, "citations": 1150 },
-    { "year": 2023, "citations": 1448 },
-    { "year": 2024, "citations": 1341 },
-    { "year": 2025, "citations": 1320 },
-    { "year": 2026, "citations": 657 }
+    {
+      "year": 2019,
+      "citations": 34
+    },
+    {
+      "year": 2020,
+      "citations": 245
+    },
+    {
+      "year": 2021,
+      "citations": 663
+    },
+    {
+      "year": 2022,
+      "citations": 1120
+    },
+    {
+      "year": 2023,
+      "citations": 1404
+    },
+    {
+      "year": 2024,
+      "citations": 1306
+    },
+    {
+      "year": 2025,
+      "citations": 1266
+    },
+    {
+      "year": 2026,
+      "citations": 678
+    }
   ]
 }
