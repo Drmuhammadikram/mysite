@@ -22,15 +22,17 @@
 </div>
 
 <div style="width:70vw;max-width:1100px;position:relative;left:50%;transform:translateX(-50%);">
-  <div id="pb-wrap" style="max-width:860px;margin:0 auto;"></div>
-  <div id="pb-read" style="margin-top:0.1rem;min-height:3rem;font-size:0.82rem;text-align:center;line-height:1.65;"></div>
-  <div id="pb-legend" style="max-width:720px;margin:0.6rem auto 0;"></div>
+  <div id="pb-stage" style="max-width:880px;margin:0 auto;background:#ffffff;border-radius:18px;padding:0.5rem 0 0.2rem;box-shadow:0 1px 2px rgba(0,0,0,0.05),0 12px 40px rgba(0,0,0,0.07);">
+    <div id="pb-wrap"></div>
+  </div>
+  <div id="pb-read" style="margin-top:0.7rem;min-height:3rem;font-size:0.82rem;text-align:center;line-height:1.65;"></div>
+  <div id="pb-legend" style="max-width:700px;margin:0.4rem auto 0;"></div>
 </div>
 
 <p style="font-size:0.72rem;opacity:0.55;margin-top:1.4rem;line-height:1.6;">
   Nine Earth system processes regulate planetary stability, resilience, and life-support
   functions, each tracked by one or two control variables. Wedge length shows how far each has
-  moved beyond the safe operating space; blurred edges mark variables whose current value or
+  moved beyond the safe operating space; softened edges mark variables whose current value or
   risk zone is not precisely quantified. Values from the Planetary Health Check 2025, Potsdam
   Institute for Climate Impact Research.
   <a href="https://doi.org/10.48485/pik.2025.017">DOI 10.48485/pik.2025.017</a>, CC BY 4.0.
@@ -39,15 +41,15 @@
 <script>
 (function(){
 var I={
-climate:'<path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/><circle cx="12" cy="12" r="4"/>',
-bio:'<path d="M12 21c0-7 3-12 8-14-1 8-4 11-8 14z"/><path d="M12 21c0-5-2-9-6-11 1 6 3 8 6 11z"/><path d="M12 21v-4"/>',
-land:'<path d="M3 20l5-7 4 5 3-4 6 6z"/><circle cx="8" cy="6" r="2"/><path d="M14 9l2-3 2 3"/>',
-water:'<path d="M12 3c3.5 4.5 6 7.5 6 10.5A6 6 0 0 1 6 13.5C6 10.5 8.5 7.5 12 3z"/>',
-bio2:'<circle cx="7" cy="8" r="2.5"/><circle cx="17" cy="8" r="2.5"/><circle cx="12" cy="16" r="2.5"/><path d="M9 9.5l2 5M15 9.5l-2 5M9.5 8h5"/>',
-ocean:'<path d="M2 15c2-1.5 3.5-1.5 5 0s3 1.5 5 0 3.5-1.5 5 0 3 1.5 5 0"/><path d="M2 19c2-1.5 3.5-1.5 5 0s3 1.5 5 0 3.5-1.5 5 0 3 1.5 5 0"/><circle cx="12" cy="7" r="3.5"/>',
-aero:'<path d="M4 8h11a3 3 0 1 0-3-3"/><path d="M3 13h14a3 3 0 1 1-3 3"/><path d="M5 18h7"/>',
-ozone:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M22 12h-2M4 12H2M18.4 5.6l-1.4 1.4M7 17l-1.4 1.4M18.4 18.4L17 17M7 7L5.6 5.6"/>',
-novel:'<path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.8 3h10.4a2 2 0 0 0 1.8-3l-5-9V3"/><path d="M7 15h10"/>'
+climate:'<circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.6M12 18.9v2.6M4.3 4.3l1.9 1.9M17.8 17.8l1.9 1.9M2.5 12h2.6M18.9 12h2.6M4.3 19.7l1.9-1.9M17.8 6.2l1.9-1.9"/>',
+bio:'<path d="M12 21c0-7.5 3.2-12.5 8.5-14.5C19.4 15 16 18.4 12 21z"/><path d="M12 21c0-5.2-2.1-9.3-6.3-11.4C6.8 15.8 8.9 18 12 21z"/><path d="M12 21v-4.5"/>',
+land:'<path d="M2.5 20.5l5.5-7.5 4 5 3-4 6.5 6.5z"/><circle cx="7.5" cy="5.5" r="2"/>',
+water:'<path d="M12 2.8c3.6 4.7 6.2 7.8 6.2 10.9A6.2 6.2 0 0 1 5.8 13.7C5.8 10.6 8.4 7.5 12 2.8z"/>',
+bio2:'<circle cx="6.8" cy="8" r="2.4"/><circle cx="17.2" cy="8" r="2.4"/><circle cx="12" cy="16.5" r="2.4"/><path d="M9.2 8h5.6M8.5 9.9l2.3 4.5M15.5 9.9l-2.3 4.5"/>',
+ocean:'<circle cx="12" cy="6.8" r="3.4"/><path d="M2.5 14.8c2-1.6 3.6-1.6 5.2 0s3.1 1.6 4.7 0 3.6-1.6 5.2 0 3.1 1.6 4.4 0"/><path d="M2.5 19.2c2-1.6 3.6-1.6 5.2 0s3.1 1.6 4.7 0 3.6-1.6 5.2 0 3.1 1.6 4.4 0"/>',
+aero:'<path d="M3.5 8h11.2a3 3 0 1 0-3-3"/><path d="M2.5 13h14.4a3 3 0 1 1-3 3"/><path d="M5 18h7.5"/>',
+ozone:'<circle cx="12" cy="12" r="3.8"/><path d="M12 2.2v2.4M12 19.4v2.4M21.8 12h-2.4M4.6 12H2.2M18.9 5.1l-1.7 1.7M6.8 17.2l-1.7 1.7M18.9 18.9l-1.7-1.7M6.8 6.8L5.1 5.1"/>',
+novel:'<path d="M9 2.8h6M10 2.8v6.4l-5 8.8a2 2 0 0 0 1.8 3h10.4a2 2 0 0 0 1.8-3l-5-8.8V2.8"/><path d="M7.2 15.2h9.6"/>'
 };
 var PB=[
  {n:'Climate change',k:'climate',c:[{l:'CO\u2082 concentration',f:0.73,z:1,v:'423 ppm',b:'350 ppm',u:0},{l:'Radiative forcing',f:1,z:2,v:'+2.97 W/m\u00b2',b:'+1.0 W/m\u00b2',u:0}]},
@@ -60,10 +62,9 @@ var PB=[
  {n:'Stratospheric\nozone depletion',k:'ozone',c:[{l:'Ozone concentration',f:0.33,z:0,v:'285.7 DU',b:'277 DU',u:0}]},
  {n:'Introduction of\nnovel entities',k:'novel',c:[{l:'Untested chemicals released',f:1,z:2,v:'transgressed',b:'zero',u:1}]}
 ];
-var R0=52,RPB=134,RHR=178,RMAX=234,RIC=262,CX=430,CY=396;
-var dark=matchMedia('(prefers-color-scheme: dark)').matches;
-var ink=dark?'#e8e6e1':'#1a1a19';
-var G=[[R0,'#0d5c40'],[95,'#3f9c63'],[RPB,'#8fbb4e'],[146,'#e3b23c'],[RHR,'#dd7f2e'],[202,'#b4331d'],[RMAX,'#6d1a4a']];
+var R0=54,RPB=136,RHR=180,RMAX=236,RIC=266,CX=430,CY=398;
+var ink='#15302a';
+var G=[[R0,'#0b6b48'],[96,'#3ea567'],[RPB,'#93c04b'],[148,'#e8b53a'],[RHR,'#e07f2b'],[204,'#bd3418'],[RMAX,'#711a4c']];
 function frac(r){ return (r-R0)/(RMAX-R0); }
 function pt(r,a){return [(CX+r*Math.sin(a)).toFixed(1),(CY-r*Math.cos(a)).toFixed(1)];}
 function arc(r0,r1,a0,a1){
@@ -80,65 +81,72 @@ s+='<defs>';
 s+='<radialGradient id="pbg" gradientUnits="userSpaceOnUse" cx="'+CX+'" cy="'+CY+'" r="'+RMAX+'">';
 G.forEach(function(x){ s+='<stop offset="'+(x[0]/RMAX).toFixed(3)+'" stop-color="'+x[1]+'"/>'; });
 s+='</radialGradient>';
-s+='<radialGradient id="pbsheen" gradientUnits="userSpaceOnUse" cx="'+(CX-70)+'" cy="'+(CY-90)+'" r="'+(RMAX*1.5)+'">'+
-   '<stop offset="0" stop-color="#fff" stop-opacity="'+(dark?0.16:0.34)+'"/>'+
-   '<stop offset="0.45" stop-color="#fff" stop-opacity="0.05"/>'+
-   '<stop offset="1" stop-color="#000" stop-opacity="'+(dark?0.30:0.16)+'"/></radialGradient>';
-s+='<filter id="pbdrop" x="-25%" y="-25%" width="150%" height="150%">'+
-   '<feDropShadow dx="0" dy="7" stdDeviation="11" flood-color="#000" flood-opacity="'+(dark?0.5:0.22)+'"/></filter>';
-s+='<filter id="pbblur" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="4.5"/></filter>';
-s+='<filter id="pbin" x="-25%" y="-25%" width="150%" height="150%">'+
-   '<feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.28"/></filter>';
+s+='<radialGradient id="pbdisc" gradientUnits="userSpaceOnUse" cx="'+(CX-60)+'" cy="'+(CY-80)+'" r="'+(RMAX*1.7)+'">'+
+   '<stop offset="0" stop-color="#ffffff"/><stop offset="0.6" stop-color="#fbfaf8"/>'+
+   '<stop offset="1" stop-color="#eceae5"/></radialGradient>';
+s+='<linearGradient id="pbsheen" x1="0.18" y1="0" x2="0.75" y2="1">'+
+   '<stop offset="0" stop-color="#fff" stop-opacity="0.42"/>'+
+   '<stop offset="0.42" stop-color="#fff" stop-opacity="0.06"/>'+
+   '<stop offset="1" stop-color="#0a1a16" stop-opacity="0.10"/></linearGradient>';
+s+='<filter id="pbdrop" x="-30%" y="-30%" width="160%" height="160%">'+
+   '<feDropShadow dx="0" dy="10" stdDeviation="16" flood-color="#1d3b33" flood-opacity="0.20"/></filter>';
+s+='<filter id="pbsoft" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="5"/></filter>';
+s+='<filter id="pblift" x="-25%" y="-25%" width="150%" height="150%">'+
+   '<feDropShadow dx="0" dy="2.5" stdDeviation="3.5" flood-color="#12241f" flood-opacity="0.26"/></filter>';
 s+='</defs>';
-s+='<ellipse cx="'+CX+'" cy="'+(CY+RMAX+14)+'" rx="'+(RMAX*0.82)+'" ry="13" fill="#000" opacity="'+(dark?0.30:0.12)+'"/>';
-s+='<circle cx="'+CX+'" cy="'+CY+'" r="'+RMAX+'" fill="url(#pbg)" opacity="'+(dark?0.10:0.11)+'" filter="url(#pbdrop)"/>';
-var seg=2*Math.PI/9, gap=0.026;
+s+='<ellipse cx="'+CX+'" cy="'+(CY+RMAX+18)+'" rx="'+(RMAX*0.78)+'" ry="12" fill="#1d3b33" opacity="0.10"/>';
+s+='<circle cx="'+CX+'" cy="'+CY+'" r="'+RMAX+'" fill="url(#pbdisc)" filter="url(#pbdrop)"/>';
+s+='<circle cx="'+CX+'" cy="'+CY+'" r="'+RHR+'" fill="#f7f5f1"/>';
+s+='<circle cx="'+CX+'" cy="'+CY+'" r="'+RPB+'" fill="#ffffff"/>';
+var seg=2*Math.PI/9, gap=0.03;
 PB.forEach(function(p,i){
   var a0=i*seg+gap/2, a1=(i+1)*seg-gap/2, w=(a1-a0)/p.c.length;
   p.c.forEach(function(cv,j){
-    var b0=a0+j*w+(p.c.length>1&&j>0?0.008:0), b1=b0+w-(p.c.length>1&&j===0?0.008:0);
+    var b0=a0+j*w+(p.c.length>1&&j>0?0.009:0), b1=b0+w-(p.c.length>1&&j===0?0.009:0);
     s+='<path d="'+arc(R0,rad(cv.z,cv.f),b0,b1)+'" fill="url(#pbg)"'+
-       (cv.u?' filter="url(#pbblur)"':' filter="url(#pbin)"')+
-       ' data-i="'+i+'" data-j="'+j+'" class="pw" style="cursor:pointer;transition:opacity .15s"/>';
+       (cv.u?' filter="url(#pbsoft)"':' filter="url(#pblift)"')+
+       ' data-i="'+i+'" data-j="'+j+'" class="pw" style="cursor:pointer;transition:opacity .16s"/>';
   });
 });
 s+='<circle cx="'+CX+'" cy="'+CY+'" r="'+RMAX+'" fill="url(#pbsheen)" style="pointer-events:none"/>';
-s+='<circle cx="'+CX+'" cy="'+CY+'" r="'+RPB+'" fill="none" stroke="'+ink+'" stroke-width="1.6" opacity="0.55" style="pointer-events:none"/>';
-s+='<circle cx="'+CX+'" cy="'+CY+'" r="'+RHR+'" fill="none" stroke="'+ink+'" stroke-width="0.9" stroke-dasharray="3 5" opacity="0.42" style="pointer-events:none"/>';
+s+='<circle cx="'+CX+'" cy="'+CY+'" r="'+RMAX+'" fill="none" stroke="#ffffff" stroke-width="1.2" opacity="0.85" style="pointer-events:none"/>';
+s+='<circle cx="'+CX+'" cy="'+CY+'" r="'+RPB+'" fill="none" stroke="'+ink+'" stroke-width="1.5" opacity="0.5" style="pointer-events:none"/>';
+s+='<circle cx="'+CX+'" cy="'+CY+'" r="'+RHR+'" fill="none" stroke="'+ink+'" stroke-width="0.9" stroke-dasharray="3 5" opacity="0.35" style="pointer-events:none"/>';
 PB.forEach(function(p,i){
   var mid=i*seg+seg/2, ip=pt(RIC,mid);
-  s+='<g transform="translate('+(ip[0]-11)+','+(ip[1]-11)+')" opacity="0.72" style="pointer-events:none">'+
-     '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" '+
-     'stroke-linecap="round" stroke-linejoin="round">'+I[p.k]+'</svg></g>';
-  var lp=pt(RIC+26,mid), sn=Math.sin(mid);
+  s+='<circle cx="'+ip[0]+'" cy="'+ip[1]+'" r="16.5" fill="#f4f2ee" style="pointer-events:none"/>';
+  s+='<g transform="translate('+(+ip[0]-10)+','+(+ip[1]-10)+')" style="pointer-events:none">'+
+     '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="'+ink+'" stroke-width="1.5" '+
+     'stroke-linecap="round" stroke-linejoin="round" opacity="0.8">'+I[p.k]+'</svg></g>';
+  var lp=pt(RIC+24,mid), sn=Math.sin(mid);
   var anc=Math.abs(sn)<0.3?'middle':(sn>0?'start':'end');
   p.n.split('\n').forEach(function(ln,k,ar){
     s+='<text x="'+lp[0]+'" y="'+(+lp[1]+k*13.5-(ar.length-1)*6.5+4)+'" text-anchor="'+anc+
-       '" font-size="11.5" font-weight="500" fill="currentColor" opacity="0.82" style="pointer-events:none">'+ln+'</text>';
+       '" font-size="11.5" font-weight="500" fill="'+ink+'" opacity="0.85" style="pointer-events:none">'+ln+'</text>';
   });
 });
-s+='<circle cx="'+CX+'" cy="'+CY+'" r="'+R0+'" fill="'+(dark?'#1f1f1e':'#ffffff')+'" filter="url(#pbin)"/>';
-s+='<circle cx="'+CX+'" cy="'+CY+'" r="'+R0+'" fill="none" stroke="'+ink+'" stroke-width="0.8" opacity="0.18"/>';
-s+='<text x="'+CX+'" y="'+(CY-6)+'" text-anchor="middle" font-size="11" letter-spacing="0.5" fill="currentColor" opacity="0.7">SAFE</text>';
-s+='<text x="'+CX+'" y="'+(CY+7)+'" text-anchor="middle" font-size="11" letter-spacing="0.5" fill="currentColor" opacity="0.7">OPERATING</text>';
-s+='<text x="'+CX+'" y="'+(CY+20)+'" text-anchor="middle" font-size="11" letter-spacing="0.5" fill="currentColor" opacity="0.7">SPACE</text>';
+s+='<circle cx="'+CX+'" cy="'+CY+'" r="'+R0+'" fill="#ffffff" filter="url(#pblift)"/>';
+s+='<circle cx="'+CX+'" cy="'+CY+'" r="'+R0+'" fill="none" stroke="'+ink+'" stroke-width="0.8" opacity="0.14"/>';
+s+='<text x="'+CX+'" y="'+(CY-6)+'" text-anchor="middle" font-size="10.5" letter-spacing="0.8" fill="'+ink+'" opacity="0.62">SAFE</text>';
+s+='<text x="'+CX+'" y="'+(CY+7)+'" text-anchor="middle" font-size="10.5" letter-spacing="0.8" fill="'+ink+'" opacity="0.62">OPERATING</text>';
+s+='<text x="'+CX+'" y="'+(CY+20)+'" text-anchor="middle" font-size="10.5" letter-spacing="0.8" fill="'+ink+'" opacity="0.62">SPACE</text>';
 s+='</svg>';
 document.getElementById('pb-wrap').innerHTML=s;
 
-var LW=720, BX0=6, BX1=LW-6, BW=BX1-BX0;
+var LW=700, BX0=6, BX1=LW-6, BW=BX1-BX0;
 function lx(r){ return BX0+frac(r)*BW; }
-var g='<svg viewBox="0 0 '+LW+' 76" width="100%" style="display:block" role="img" aria-label="Legend">';
+var g='<svg viewBox="0 0 '+LW+' 74" width="100%" style="display:block" role="img" aria-label="Legend">';
 g+='<defs><linearGradient id="pblg" x1="0" x2="1">';
 G.forEach(function(x){ g+='<stop offset="'+frac(x[0]).toFixed(3)+'" stop-color="'+x[1]+'"/>'; });
 g+='</linearGradient></defs>';
-g+='<line x1="'+lx(RPB)+'" y1="4" x2="'+lx(RPB)+'" y2="30" stroke="'+ink+'" stroke-width="1.4" opacity="0.6"/>';
-g+='<line x1="'+lx(RHR)+'" y1="4" x2="'+lx(RHR)+'" y2="30" stroke="'+ink+'" stroke-width="1" stroke-dasharray="3 4" opacity="0.5"/>';
-g+='<text x="'+(lx(RPB)-6)+'" y="13" text-anchor="end" font-size="10.5" fill="currentColor" opacity="0.7">Planetary boundary</text>';
-g+='<text x="'+(lx(RHR)+6)+'" y="13" font-size="10.5" fill="currentColor" opacity="0.6">High-risk line</text>';
-g+='<rect x="'+BX0+'" y="30" width="'+BW+'" height="16" rx="3" fill="url(#pblg)"/>';
-g+='<text x="'+(BX0+(lx(RPB)-BX0)/2)+'" y="63" text-anchor="middle" font-size="11" font-weight="500" fill="currentColor" opacity="0.78">Safe operating space</text>';
-g+='<text x="'+((lx(RPB)+lx(RHR))/2)+'" y="63" text-anchor="middle" font-size="11" font-weight="500" fill="currentColor" opacity="0.78">Increasing risk</text>';
-g+='<text x="'+((lx(RHR)+BX1)/2)+'" y="63" text-anchor="middle" font-size="11" font-weight="500" fill="currentColor" opacity="0.78">High-risk zone</text>';
+g+='<line x1="'+lx(RPB)+'" y1="3" x2="'+lx(RPB)+'" y2="29" stroke="currentColor" stroke-width="1.4" opacity="0.6"/>';
+g+='<line x1="'+lx(RHR)+'" y1="3" x2="'+lx(RHR)+'" y2="29" stroke="currentColor" stroke-width="1" stroke-dasharray="3 4" opacity="0.48"/>';
+g+='<text x="'+(lx(RPB)-6)+'" y="12" text-anchor="end" font-size="10.5" fill="currentColor" opacity="0.7">Planetary boundary</text>';
+g+='<text x="'+(lx(RHR)+6)+'" y="12" font-size="10.5" fill="currentColor" opacity="0.6">High-risk line</text>';
+g+='<rect x="'+BX0+'" y="29" width="'+BW+'" height="15" rx="7.5" fill="url(#pblg)"/>';
+g+='<text x="'+(BX0+(lx(RPB)-BX0)/2)+'" y="61" text-anchor="middle" font-size="11" font-weight="500" fill="currentColor" opacity="0.78">Safe operating space</text>';
+g+='<text x="'+((lx(RPB)+lx(RHR))/2)+'" y="61" text-anchor="middle" font-size="11" font-weight="500" fill="currentColor" opacity="0.78">Increasing risk</text>';
+g+='<text x="'+((lx(RHR)+BX1)/2)+'" y="61" text-anchor="middle" font-size="11" font-weight="500" fill="currentColor" opacity="0.78">High-risk zone</text>';
 g+='</svg>';
 document.getElementById('pb-legend').innerHTML=g;
 
@@ -147,7 +155,7 @@ function reset(){ out.innerHTML='<span style="opacity:.7">Seven of the nine boun
 reset();
 Array.prototype.forEach.call(document.querySelectorAll('.pw'),function(el){
   el.addEventListener('mouseenter',function(){
-    Array.prototype.forEach.call(document.querySelectorAll('.pw'),function(o){o.style.opacity=o===el?1:0.3;});
+    Array.prototype.forEach.call(document.querySelectorAll('.pw'),function(o){o.style.opacity=o===el?1:0.28;});
     var p=PB[+el.getAttribute('data-i')], cv=p.c[+el.getAttribute('data-j')];
     out.innerHTML='<strong>'+p.n.replace('\n',' ')+'</strong><br><span style="opacity:.75;">'+
       cv.l+' &middot; <strong>'+cv.v+'</strong> &middot; boundary '+cv.b+(cv.u?' &middot; value uncertain':'')+'</span>';
