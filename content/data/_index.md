@@ -1,6 +1,6 @@
 ---
 title: Sustainability Data
-summary: Interactive datasets on ecological footprint, biocapacity, ISO management system certifications, water stress, and progress toward the Sustainable Development Goals.
+summary: Interactive datasets on ecological footprint, biocapacity, ISO certifications, water stress, life satisfaction, and progress toward the Sustainable Development Goals.
 type: landing
 sections:
   - block: markdown
@@ -41,6 +41,16 @@ sections:
         Freshwater withdrawal as a share of available renewable resources, from 2000 to 2023. Values above 100% mean a country withdraws more than its renewable supply, drawing down aquifers or relying on desalination.
 
         {{< waterstress >}}
+    design:
+      columns: '1'
+  - block: markdown
+    content:
+      title: 'Life satisfaction worldwide'
+      subtitle: ''
+      text: |-
+        How people rate their own lives on a scale from 0 to 10, across 162 countries from 2011 to 2025. Drawn from the Gallup World Poll and published annually in the World Happiness Report.
+
+        {{< happiness >}}
     design:
       columns: '1'
   - block: markdown
