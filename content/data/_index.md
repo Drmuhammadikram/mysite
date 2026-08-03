@@ -1,6 +1,6 @@
 ---
 title: Sustainability Data
-summary: Interactive datasets on ecological footprint, biocapacity, ISO certifications, water stress, life satisfaction, and progress toward the Sustainable Development Goals.
+summary: Interactive datasets on ecological footprint, biocapacity, ISO certifications, water stress, natural disasters, life satisfaction, and progress toward the Sustainable Development Goals.
 type: landing
 sections:
   - block: markdown
@@ -41,6 +41,16 @@ sections:
         Freshwater withdrawal as a share of available renewable resources, from 2000 to 2023. Values above 100% mean a country withdraws more than its renewable supply, drawing down aquifers or relying on desalination.
 
         {{< waterstress >}}
+    design:
+      columns: '1'
+  - block: markdown
+    content:
+      title: 'Natural disasters worldwide'
+      subtitle: ''
+      text: |-
+        Recorded natural hazard events from 2000 to 2025 across 180 countries, from the EM-DAT international disaster database. Switch between hazard types and between events, deaths, and people affected.
+
+        {{< disasters >}}
     design:
       columns: '1'
   - block: markdown
