@@ -1,6 +1,6 @@
 ---
 title: Sustainability Data
-summary: Interactive datasets on planetary boundaries, ecological footprint, biocapacity, ISO certifications, water stress, natural disasters, life satisfaction, and progress toward the Sustainable Development Goals.
+summary: Interactive datasets on planetary boundaries, ecological footprint, biocapacity, ISO certifications, coal consumption, water stress, natural disasters, life satisfaction, and progress toward the Sustainable Development Goals.
 type: landing
 sections:
   - block: markdown
@@ -51,7 +51,7 @@ sections:
         [Full page: what the ISO Survey measures, and its limits →](/data/iso-certifications/)
     design:
       columns: '1'
-    - block: markdown
+  - block: markdown
     content:
       title: 'Coal consumption worldwide'
       subtitle: ''
