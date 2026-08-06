@@ -39,6 +39,18 @@ sections:
         [Full page: methodology, how to read the Index, and related research →](/data/sdg-index/)
     design:
       columns: '1'
+    - block: markdown
+    content:
+      title: 'Human Development Index worldwide'
+      subtitle: ''
+      text: |-
+        Health, education, and income combined into a single value between 0 and 1, across 193 countries from 1990 to 2023. Read alongside the ecological footprint map, it shows what each country's development has cost in resource terms.
+
+        {{< hdi >}}
+
+        [Full page: what the Index combines, and what it leaves out →](/data/human-development-index/)
+    design:
+      columns: '1'
   - block: markdown
     content:
       title: 'ISO management system certifications worldwide'
