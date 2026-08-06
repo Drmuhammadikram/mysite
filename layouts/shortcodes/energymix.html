@@ -1,0 +1,168 @@
+{{- $d := site.Data.energy -}}
+{{- with $d -}}
+<script type="application/json" id="en-data">{{ .countries | jsonify }}</script>
+<script type="application/json" id="en-years">{{ .years | jsonify }}</script>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:1.5rem;width:70vw;max-width:1100px;position:relative;left:50%;transform:translateX(-50%);" id="en-cards"></div>
+
+<div id="en-src" style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:0.7rem;align-items:center;width:70vw;max-width:1100px;position:relative;left:50%;transform:translateX(-50%);z-index:6;"></div>
+<div id="en-tabs" style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:1.25rem;align-items:center;width:70vw;max-width:1100px;position:relative;left:50%;transform:translateX(-50%);z-index:6;"></div>
+
+<div style="display:grid;grid-template-columns:1fr 190px;gap:24px;align-items:start;width:70vw;max-width:1100px;position:relative;left:50%;transform:translateX(-50%);" id="en-wrap">
+  <div id="en-map" style="width:100%;margin-top:-3.5rem;"></div>
+  <div>
+    <div id="en-legend-title" style="font-size:0.78rem;opacity:0.75;margin-bottom:0.7rem;line-height:1.45;"></div>
+    <div id="en-legend"></div>
+    <div id="en-readout" style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid rgba(128,128,128,0.2);min-height:84px;">
+      <div style="font-size:0.75rem;opacity:0.5;">Hover a country</div>
+    </div>
+  </div>
+</div>
+
+<p style="font-size:0.72rem;opacity:0.55;margin-top:1.25rem;line-height:1.6;">
+  Each source as a percentage of primary energy consumption, covering all energy use including
+  transport, heating and industry rather than electricity alone. Source: {{ .source }}.
+  Nuclear is derived as low-carbon energy minus renewables. Traditional biomass is excluded,
+  which understates energy use in lower-income countries. Coverage is limited to the countries
+  the Energy Institute surveys.
+</p>
+
+<style>@media(max-width:760px){#en-wrap{grid-template-columns:1fr!important}}</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+<script>
+(function(){
+var DATA=JSON.parse(document.getElementById('en-data').textContent);
+if(typeof DATA==='string'){ DATA=JSON.parse(DATA); }
+var YEARS=JSON.parse(document.getElementById('en-years').textContent);
+if(typeof YEARS==='string'){ YEARS=JSON.parse(YEARS); }
+var dark=matchMedia('(prefers-color-scheme: dark)').matches;
+var noData=dark?'#2c2c2a':'#eceae4';
+var SRC=[
+ {k:'fossil',l:'All fossil',c:['#1a1a1f','#4a3730','#8a4a2c','#c98341','#ecd5b3'],inv:0},
+ {k:'lowc',l:'Low-carbon',c:['#0d4f3c','#1d7a5f','#5dab8a','#a8cfbc','#dfeee7'],inv:1},
+ {k:'coal',l:'Coal',c:['#1a1a1f','#4a3730','#8a4a2c','#c98341','#ecd5b3'],inv:0},
+ {k:'oil',l:'Oil',c:['#231a12','#4d3520','#8a5c33','#c29257','#e8d3b6'],inv:0},
+ {k:'gas',l:'Gas',c:['#26303f','#3f5570','#6b87a5','#a3b8cc','#dde5ee'],inv:0},
+ {k:'nuclear',l:'Nuclear',c:['#3d2a52','#5c4079','#8a6ba8','#b8a3cd','#e2d8ec'],inv:1},
+ {k:'hydro',l:'Hydro',c:['#123f63','#2a7fa8','#6fb3c9','#aed6e2','#e0f0f5'],inv:1},
+ {k:'wind',l:'Wind',c:['#1c4f4a','#2d7f75','#63b0a4','#a6d4cc','#e0f1ee'],inv:1},
+ {k:'solar',l:'Solar',c:['#7a4a10','#b8791f','#dda845','#eccb8c','#f8ecd4'],inv:1},
+ {k:'renew',l:'All renewables',c:['#0d4f3c','#1d7a5f','#5dab8a','#a8cfbc','#dfeee7'],inv:1}
+];
+var BIG=[[60,'over 60%'],[35,'35 - 60%'],[15,'15 - 35%'],[5,'5 - 15%'],[0,'under 5%']];
+var SML=[[20,'over 20%'],[10,'10 - 20%'],[4,'4 - 10%'],[1,'1 - 4%'],[0,'under 1%']];
+function bandsFor(k){ return (k==='solar'||k==='wind'||k==='nuclear'||k==='hydro')?SML:BIG; }
+var si=0, year=YEARS[YEARS.length-1], paths=null;
+
+function colorFor(v){
+  var S=SRC[si], B=bandsFor(S.k);
+  if(v===null||v===undefined) return noData;
+  for(var j=0;j<B.length;j++){ if(v>=B[j][0]) return S.c[j]; }
+  return S.c[S.c.length-1];
+}
+function key(f){ return ('00'+String(f.id)).slice(-3); }
+function val(k,src,y){ var c=DATA[k]; if(!c) return null; var g=c.d[src]; if(!g) return null;
+  var v=g[y]; return (v===undefined)?null:v; }
+
+var svg=d3.select('#en-map').append('svg')
+  .attr('viewBox','0 0 960 440').attr('width','100%').style('min-height','700px').style('display','block')
+  .attr('role','img').attr('aria-label','World map of energy mix by source');
+var path=d3.geoPath(d3.geoNaturalEarth1().scale(200).translate([460,205]));
+
+function cards(){
+  var S=SRC[si], vals=[], n=0, sum=0;
+  for(var k in DATA){ var v=val(k,S.k,year); if(v!==null){ vals.push([DATA[k].n,v]); n++; sum+=v; } }
+  vals.sort(function(a,b){ return b[1]-a[1]; });
+  var top=vals[0]||['-',0], bot=vals[vals.length-1]||['-',0];
+  function card(l,big,sub){
+    return '<div style="background:rgba(128,128,128,0.06);border-radius:8px;padding:1rem;">'+
+     '<div style="font-size:0.75rem;opacity:0.7;margin-bottom:0.4rem;">'+l+'</div>'+
+     '<div style="font-size:1.7rem;line-height:1;font-weight:600;font-variant-numeric:tabular-nums;">'+big+'</div>'+
+     '<div style="font-size:0.68rem;opacity:0.55;margin-top:0.3rem;">'+sub+'</div></div>';
+  }
+  d3.select('#en-cards').html(
+    card('Year',year,'reporting year')+
+    card('Highest',top[1].toFixed(1)+'%',top[0])+
+    card('Lowest',bot[1].toFixed(1)+'%',bot[0])+
+    card('Average',n?(sum/n).toFixed(1)+'%':'-',n+' countries'));
+}
+
+function render(){
+  var S=SRC[si], B=bandsFor(S.k);
+  d3.select('#en-legend-title').html('<strong style="font-weight:600;opacity:1">'+S.l+', '+year+
+    '</strong><br>Share of primary energy consumption.');
+  d3.select('#en-legend').html(B.map(function(b,j){
+    return '<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;font-size:0.72rem;opacity:0.75;">'+
+      '<span style="width:16px;height:11px;border-radius:2px;background:'+S.c[j]+';flex-shrink:0;border:1px solid rgba(128,128,128,0.2);"></span>'+b[1]+'</div>';
+  }).join('')+'<div style="display:flex;align-items:center;gap:8px;margin-top:8px;font-size:0.72rem;opacity:0.5;">'+
+    '<span style="width:16px;height:11px;border-radius:2px;background:'+noData+';flex-shrink:0;"></span>Not surveyed</div>');
+  d3.selectAll('#en-src button')
+    .style('background',function(d,j){return j===si?'rgba(90,90,90,0.20)':'transparent';})
+    .style('border-color',function(d,j){return j===si?'rgba(90,90,90,0.65)':'rgba(128,128,128,0.3)';})
+    .style('font-weight',function(d,j){return j===si?'600':'400';})
+    .style('opacity',function(d,j){return j===si?1:0.65;});
+  d3.selectAll('#en-tabs button')
+    .style('background',function(d){return d===year?'rgba(90,90,90,0.20)':'transparent';})
+    .style('border-color',function(d){return d===year?'rgba(90,90,90,0.65)':'rgba(128,128,128,0.3)';})
+    .style('font-weight',function(d){return d===year?'600':'400';})
+    .style('opacity',function(d){return d===year?1:0.65;});
+  if(paths) paths.attr('fill',function(f){ return colorFor(val(key(f),SRC[si].k,year)); });
+  cards();
+}
+
+d3.select('#en-src').selectAll('button').data(SRC).join('button')
+  .attr('type','button')
+  .style('font-size','0.75rem').style('padding','6px 11px').style('cursor','pointer')
+  .style('border','1px solid rgba(128,128,128,0.3)').style('border-radius','6px')
+  .style('color','inherit')
+  .text(function(d){return d.l;})
+  .on('click',function(e,d){ si=SRC.indexOf(d); render(); });
+
+var SHOW=YEARS.filter(function(y,i){ return i%5===0 || i===YEARS.length-1; });
+d3.select('#en-tabs').selectAll('button').data(SHOW).join('button')
+  .attr('type','button')
+  .style('font-size','0.75rem').style('padding','6px 11px').style('cursor','pointer')
+  .style('border','1px solid rgba(128,128,128,0.3)').style('border-radius','6px')
+  .style('color','inherit')
+  .text(function(d){return d;})
+  .on('click',function(e,d){ year=d; render(); });
+
+d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(function(w){
+  var mor=w.objects.countries.geometries.filter(function(g){
+    var id=String(+g.id); return id==='504'||id==='732'; });
+  var feats=topojson.feature(w,w.objects.countries).features
+    .filter(function(f){var id=String(+f.id); return id!=='504'&&id!=='732'&&id!=='010';});
+  if(mor.length) feats.push({type:'Feature',id:504,geometry:topojson.merge(w,mor)});
+  paths=svg.selectAll('path').data(feats).join('path')
+    .attr('d',path)
+    .attr('fill',function(f){ return colorFor(val(key(f),SRC[si].k,year)); })
+    .attr('stroke',dark?'rgba(255,255,255,.14)':'#fff').attr('stroke-width',0.4)
+    .style('cursor','pointer')
+    .on('mouseenter',function(e,f){
+      var k=key(f), c=DATA[k];
+      if(!c){ d3.select('#en-readout').html('<div style="font-size:0.75rem;opacity:0.5;">Not surveyed</div>'); return; }
+      function row(lab,src,strong){
+        var v=val(k,src,year);
+        return '<div style="display:flex;justify-content:space-between;gap:12px;'+
+          (strong?'font-weight:600;':'opacity:0.7;')+'"><span>'+lab+'</span>'+
+          '<span style="font-variant-numeric:tabular-nums;">'+(v===null?'-':v.toFixed(1)+'%')+'</span></div>';
+      }
+      var cur=SRC[si].k;
+      d3.select('#en-readout').html(
+        '<div style="font-size:0.85rem;font-weight:600;margin-bottom:0.5rem;">'+c.n+'</div>'+
+        '<div style="font-size:0.72rem;line-height:1.75;">'+
+        row('Coal','coal',cur==='coal')+row('Oil','oil',cur==='oil')+row('Gas','gas',cur==='gas')+
+        '<div style="height:5px;"></div>'+
+        row('Nuclear','nuclear',cur==='nuclear')+row('Hydro','hydro',cur==='hydro')+
+        row('Wind','wind',cur==='wind')+row('Solar','solar',cur==='solar')+
+        '<div style="height:5px;border-top:1px solid rgba(128,128,128,0.2);margin-top:5px;"></div>'+
+        row('Low-carbon total','lowc',cur==='lowc'||cur==='renew')+
+        '</div>');
+    });
+  render();
+});
+})();
+</script>
+{{- end -}}
