@@ -39,7 +39,7 @@ sections:
         [Full page: methodology, how to read the Index, and related research →](/data/sdg-index/)
     design:
       columns: '1'
-    - block: markdown
+  - block: markdown
     content:
       title: 'Human Development Index worldwide'
       subtitle: ''
