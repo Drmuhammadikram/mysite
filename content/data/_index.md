@@ -51,6 +51,18 @@ sections:
         [Full page: what the ISO Survey measures, and its limits →](/data/iso-certifications/)
     design:
       columns: '1'
+    - block: markdown
+    content:
+      title: 'Coal consumption worldwide'
+      subtitle: ''
+      text: |-
+        Coal consumption across 79 countries from 1990 to 2024. Switch between total consumption, consumption per person, and coal's share of primary energy — each answers a different question about dependence and responsibility.
+
+        {{< coal >}}
+
+        [Full page: why three metrics, and how to read them →](/data/coal-consumption/)
+    design:
+      columns: '1'
   - block: markdown
     content:
       title: 'Water stress worldwide'
