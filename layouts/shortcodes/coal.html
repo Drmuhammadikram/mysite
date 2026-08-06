@@ -1,0 +1,163 @@
+{{- $d := site.Data.coal -}}
+{{- with $d -}}
+<script type="application/json" id="cl-data">{{ .countries | jsonify }}</script>
+<script type="application/json" id="cl-years">{{ .years | jsonify }}</script>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:1.5rem;width:70vw;max-width:1100px;position:relative;left:50%;transform:translateX(-50%);" id="cl-cards"></div>
+
+<div id="cl-metric" style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:0.7rem;align-items:center;width:70vw;max-width:1100px;position:relative;left:50%;transform:translateX(-50%);z-index:6;"></div>
+<div id="cl-tabs" style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:1.25rem;align-items:center;width:70vw;max-width:1100px;position:relative;left:50%;transform:translateX(-50%);z-index:6;"></div>
+
+<div style="display:grid;grid-template-columns:1fr 190px;gap:24px;align-items:start;width:70vw;max-width:1100px;position:relative;left:50%;transform:translateX(-50%);" id="cl-wrap">
+  <div id="cl-map" style="width:100%;margin-top:-3.5rem;"></div>
+  <div>
+    <div id="cl-legend-title" style="font-size:0.78rem;opacity:0.75;margin-bottom:0.7rem;line-height:1.45;"></div>
+    <div id="cl-legend"></div>
+    <div id="cl-readout" style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid rgba(128,128,128,0.2);min-height:84px;">
+      <div style="font-size:0.75rem;opacity:0.5;">Hover a country</div>
+    </div>
+  </div>
+</div>
+
+<p style="font-size:0.72rem;opacity:0.55;margin-top:1.25rem;line-height:1.6;">
+  Coal consumption covers commercial solid fuels only: hard coal, lignite, and other solid
+  fuels. It excludes coal converted to liquid or gaseous fuels but includes coal consumed in
+  transformation processes such as electricity generation. Source: {{ .source }}. Coverage is
+  limited to the countries surveyed by the Energy Institute, so many smaller economies are
+  absent rather than at zero.
+</p>
+
+<style>@media(max-width:760px){#cl-wrap{grid-template-columns:1fr!important}}</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+<script>
+(function(){
+var DATA=JSON.parse(document.getElementById('cl-data').textContent);
+if(typeof DATA==='string'){ DATA=JSON.parse(DATA); }
+var YEARS=JSON.parse(document.getElementById('cl-years').textContent);
+if(typeof YEARS==='string'){ YEARS=JSON.parse(YEARS); }
+var dark=matchMedia('(prefers-color-scheme: dark)').matches;
+var noData=dark?'#2c2c2a':'#eceae4';
+var METRICS=[
+ {k:'t',l:'Total consumption',u:'TWh',
+  b:[[5000,'over 5,000'],[1000,'1,000 - 5,000'],[300,'300 - 1,000'],[50,'50 - 300'],[0,'under 50']]},
+ {k:'p',l:'Per person',u:'kWh',
+  b:[[15000,'over 15,000'],[8000,'8,000 - 15,000'],[3000,'3,000 - 8,000'],[1000,'1,000 - 3,000'],[0,'under 1,000']]},
+ {k:'s',l:'Share of primary energy',u:'%',
+  b:[[50,'over 50%'],[30,'30 - 50%'],[15,'15 - 30%'],[5,'5 - 15%'],[0,'under 5%']]}];
+var COLS=['#1a1a1f','#4a3730','#8a4a2c','#c98341','#ecd5b3'];
+var mi=0, year=YEARS[YEARS.length-1], paths=null;
+
+function bands(){ return METRICS[mi].b; }
+function colorFor(v){
+  if(v===null||v===undefined) return noData;
+  var B=bands();
+  for(var j=0;j<B.length;j++){ if(v>=B[j][0]) return COLS[j]; }
+  return COLS[COLS.length-1];
+}
+function key(f){ return ('00'+String(f.id)).slice(-3); }
+function val(k,m,y){ var c=DATA[k]; if(!c) return null; var v=c[m][y]; return (v===undefined)?null:v; }
+function fmt(n){
+  if(n>=1000) return n.toLocaleString('en-GB',{maximumFractionDigits:0});
+  return n.toLocaleString('en-GB',{maximumFractionDigits:1});
+}
+
+var svg=d3.select('#cl-map').append('svg')
+  .attr('viewBox','0 0 960 440').attr('width','100%').style('min-height','700px').style('display','block')
+  .attr('role','img').attr('aria-label','World map of coal consumption by country');
+var path=d3.geoPath(d3.geoNaturalEarth1().scale(200).translate([460,205]));
+
+function cards(){
+  var m=METRICS[mi].k, vals=[], tot=0, n=0;
+  for(var k in DATA){ var v=val(k,m,year); if(v!==null){ vals.push([DATA[k].n,v]); n++; tot+=v; } }
+  vals.sort(function(a,b){ return b[1]-a[1]; });
+  var top=vals[0]||['-',0];
+  var first=null, chg='';
+  var tv=val('156','t',year), t90=val('156','t',YEARS[0]);
+  function card(l,big,sub){
+    return '<div style="background:rgba(128,128,128,0.06);border-radius:8px;padding:1rem;">'+
+     '<div style="font-size:0.75rem;opacity:0.7;margin-bottom:0.4rem;">'+l+'</div>'+
+     '<div style="font-size:1.7rem;line-height:1;font-weight:600;font-variant-numeric:tabular-nums;">'+big+'</div>'+
+     '<div style="font-size:0.68rem;opacity:0.55;margin-top:0.3rem;">'+sub+'</div></div>';
+  }
+  d3.select('#cl-cards').html(
+    card('Year',year,'reporting year')+
+    card('Highest',fmt(top[1]),top[0])+
+    card(mi===0?'World total':'Average',mi===0?fmt(tot):fmt(tot/n),METRICS[mi].u)+
+    card('Reporting',n,'countries'));
+}
+
+function render(){
+  var B=bands(), M=METRICS[mi];
+  d3.select('#cl-legend-title').html('<strong style="font-weight:600;opacity:1">'+M.l+', '+year+
+    '</strong><br>Coal consumption in '+M.u+'.');
+  d3.select('#cl-legend').html(B.map(function(b,j){
+    return '<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;font-size:0.72rem;opacity:0.75;">'+
+      '<span style="width:16px;height:11px;border-radius:2px;background:'+COLS[j]+';flex-shrink:0;border:1px solid rgba(128,128,128,0.2);"></span>'+b[1]+'</div>';
+  }).join('')+'<div style="display:flex;align-items:center;gap:8px;margin-top:8px;font-size:0.72rem;opacity:0.5;">'+
+    '<span style="width:16px;height:11px;border-radius:2px;background:'+noData+';flex-shrink:0;"></span>Not surveyed</div>');
+  d3.selectAll('#cl-metric button')
+    .style('background',function(d,j){return j===mi?'rgba(138,74,44,0.18)':'transparent';})
+    .style('border-color',function(d,j){return j===mi?'rgba(138,74,44,0.6)':'rgba(128,128,128,0.3)';})
+    .style('font-weight',function(d,j){return j===mi?'600':'400';})
+    .style('opacity',function(d,j){return j===mi?1:0.65;});
+  d3.selectAll('#cl-tabs button')
+    .style('background',function(d){return d===year?'rgba(138,74,44,0.18)':'transparent';})
+    .style('border-color',function(d){return d===year?'rgba(138,74,44,0.6)':'rgba(128,128,128,0.3)';})
+    .style('font-weight',function(d){return d===year?'600':'400';})
+    .style('opacity',function(d){return d===year?1:0.65;});
+  if(paths) paths.attr('fill',function(f){ return colorFor(val(key(f),METRICS[mi].k,year)); });
+  cards();
+}
+
+d3.select('#cl-metric').selectAll('button').data(METRICS).join('button')
+  .attr('type','button')
+  .style('font-size','0.75rem').style('padding','6px 11px').style('cursor','pointer')
+  .style('border','1px solid rgba(128,128,128,0.3)').style('border-radius','6px')
+  .style('color','inherit')
+  .text(function(d){return d.l;})
+  .on('click',function(e,d){ mi=METRICS.indexOf(d); render(); });
+
+var SHOW=YEARS.filter(function(y,i){ return i%5===0 || i===YEARS.length-1; });
+d3.select('#cl-tabs').selectAll('button').data(SHOW).join('button')
+  .attr('type','button')
+  .style('font-size','0.75rem').style('padding','6px 11px').style('cursor','pointer')
+  .style('border','1px solid rgba(128,128,128,0.3)').style('border-radius','6px')
+  .style('color','inherit')
+  .text(function(d){return d;})
+  .on('click',function(e,d){ year=d; render(); });
+
+d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(function(w){
+  var mor=w.objects.countries.geometries.filter(function(g){
+    var id=String(+g.id); return id==='504'||id==='732'; });
+  var feats=topojson.feature(w,w.objects.countries).features
+    .filter(function(f){var id=String(+f.id); return id!=='504'&&id!=='732'&&id!=='010';});
+  if(mor.length) feats.push({type:'Feature',id:504,geometry:topojson.merge(w,mor)});
+  paths=svg.selectAll('path').data(feats).join('path')
+    .attr('d',path)
+    .attr('fill',function(f){ return colorFor(val(key(f),METRICS[mi].k,year)); })
+    .attr('stroke',dark?'rgba(255,255,255,.14)':'#fff').attr('stroke-width',0.4)
+    .style('cursor','pointer')
+    .on('mouseenter',function(e,f){
+      var k=key(f), c=DATA[k];
+      if(!c){ d3.select('#cl-readout').html('<div style="font-size:0.75rem;opacity:0.5;">Not surveyed</div>'); return; }
+      var t=val(k,'t',year), p=val(k,'p',year), sh=val(k,'s',year);
+      var t0=val(k,'t',YEARS[0]), trend='';
+      if(t!==null&&t0!==null&&t0>0){
+        var pc=((t-t0)/t0*100);
+        trend='<div style="margin-top:0.4rem;opacity:0.6;">'+(pc>0?'+':'')+pc.toFixed(0)+'% since '+YEARS[0]+'</div>';
+      }
+      d3.select('#cl-readout').html(
+        '<div style="font-size:0.85rem;font-weight:600;margin-bottom:0.5rem;">'+c.n+'</div>'+
+        '<div style="font-size:0.75rem;line-height:1.8;">'+
+        '<div style="display:flex;justify-content:space-between;gap:12px;"><span style="opacity:0.7;">Total</span><span style="font-variant-numeric:tabular-nums;font-weight:600;">'+(t===null?'-':fmt(t)+' TWh')+'</span></div>'+
+        '<div style="display:flex;justify-content:space-between;gap:12px;"><span style="opacity:0.7;">Per person</span><span style="font-variant-numeric:tabular-nums;font-weight:600;">'+(p===null?'-':fmt(p)+' kWh')+'</span></div>'+
+        '<div style="display:flex;justify-content:space-between;gap:12px;"><span style="opacity:0.7;">Energy share</span><span style="font-variant-numeric:tabular-nums;font-weight:600;">'+(sh===null?'-':sh.toFixed(1)+'%')+'</span></div>'+
+        trend+'</div>');
+    });
+  render();
+});
+})();
+</script>
+{{- end -}}
