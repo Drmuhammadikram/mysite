@@ -1,6 +1,6 @@
 ---
 title: Sustainability Data
-summary: Interactive datasets on planetary boundaries, ecological footprint, biocapacity, ISO certifications, coal consumption, water stress, natural disasters, life satisfaction, and progress toward the Sustainable Development Goals.
+summary: Interactive datasets on planetary boundaries, ecological footprint, biocapacity, human development, ISO certifications, coal consumption, energy mix, water stress, natural disasters, life satisfaction, and progress toward the Sustainable Development Goals.
 type: landing
 sections:
   - block: markdown
@@ -73,6 +73,18 @@ sections:
         {{< coal >}}
 
         [Full page: why three metrics, and how to read them →](/data/coal-consumption/)
+    design:
+      columns: '1'
+  - block: markdown
+    content:
+      title: 'Energy mix by source'
+      subtitle: ''
+      text: |-
+        Each source as a share of primary energy consumption — coal, oil, gas, nuclear, hydro, wind and solar — across 79 countries from 1990 to 2024. Primary energy covers transport and heating as well as electricity, which is why renewable shares look smaller here than in the headlines.
+
+        {{< energymix >}}
+
+        [Full page: why primary energy rather than electricity →](/data/energy-mix/)
     design:
       columns: '1'
   - block: markdown
