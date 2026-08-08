@@ -72,7 +72,7 @@ var M=[
   b:[[1.09,'over 1.09'],[1.07,'1.07 - 1.09'],[1.05,'1.05 - 1.07'],[1.03,'1.03 - 1.05'],[0,'under 1.03']],
   c:['#5c1a10','#a83b1c','#c9a86a','#8aa8c4','#3d6f96']}
 ];
-var mi=0, year=YEARS[YEARS.length-1], paths=null; if(YEARS.indexOf('2025')>-1) year='2025';
+var mi=0, year=YEARS[YEARS.length-1], paths=null;
 
 function colorFor(v){
   var S=M[mi];
@@ -148,7 +148,7 @@ d3.select('#pp-metric').selectAll('button').data(M).join('button')
   .style('border','1px solid rgba(128,128,128,0.3)').style('border-radius','6px')
   .style('color','inherit')
   .text(function(d){return d.l;})
-  .on('click',function(e,d){ mi=M.indexOf(d); mi=0; year=(YEARS.indexOf('2025')>-1)?'2025':YEARS[YEARS.length-1];   render(); });
+  .on('click',function(e,d){ mi=M.indexOf(d); render(); });
 
 d3.select('#pp-tabs').selectAll('button').data(YEARS).join('button')
   .attr('type','button')
