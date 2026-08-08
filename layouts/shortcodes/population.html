@@ -22,7 +22,8 @@
 <p style="font-size:0.72rem;opacity:0.55;margin-top:1.25rem;line-height:1.6;">
   Source: {{ .source }}. Values shown at five-year intervals from 1960, with annual data for
   2020 onward. Figures from 2024 include UN projections where observed data is not yet
-  available.
+  available. Sex ratio at birth is biologically about 1.05; values meaningfully above that
+  indicate sex-selective practices.
 </p>
 
 <style>@media(max-width:760px){#pp-wrap{grid-template-columns:1fr!important}}</style>
@@ -62,15 +63,15 @@ var M=[
  {k:'pop',l:'Total population',u:'people',dp:0,
   b:[[1e8,'over 100M'],[3e7,'30 - 100M'],[1e7,'10 - 30M'],[2e6,'2 - 10M'],[0,'under 2M']],
   c:['#1a1a1f','#463a2f','#8a6a45','#c2a478','#eadfc9']},
- {k:'dens',l:'Density',u:'per km²',dp:1,
+ {k:'dens',l:'Density',u:'per km2',dp:1,
   b:[[300,'over 300'],[120,'120 - 300'],[50,'50 - 120'],[15,'15 - 50'],[0,'under 15']],
   c:['#3b1f2b','#6d3348','#a35f78','#c99cad','#e8d6de']},
  {k:'oldep',l:'Old-age dependency',u:'per 100 working age',dp:1,
   b:[[32,'over 32'],[22,'22 - 32'],[13,'13 - 22'],[7,'7 - 13'],[0,'under 7']],
   c:['#3d2a52','#5c4079','#8a6ba8','#bcaacd','#e4dcec']},
  {k:'sexb',l:'Sex ratio at birth',u:'males per female',dp:3,
-  b:[[1.09,'over 1.09'],[1.07,'1.07 - 1.09'],[1.05,'1.05 - 1.07'],[1.03,'1.03 - 1.05'],[0,'under 1.03']],
-  c:['#5c1a10','#a83b1c','#c9a86a','#8aa8c4','#3d6f96']}
+  b:[[1.10,'over 1.10, strongly skewed'],[1.07,'1.07 - 1.10'],[1.055,'1.055 - 1.07'],[1.04,'1.04 - 1.055, typical'],[0,'under 1.04']],
+  c:['#7a1f10','#c25a2a','#e0b878','#8fb8a4','#4a7f96']}
 ];
 var mi=0, year=YEARS[YEARS.length-1], paths=null;
 
@@ -184,13 +185,18 @@ d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(f
         '<div style="font-size:0.72rem;line-height:1.75;">'+
         row('Population','pop',0,'',cur==='pop')+
         row('Growth','growth',2,'%',cur==='growth')+
+        row('Density','dens',1,'/km2',cur==='dens')+
+        '<div style="height:5px;"></div>'+
         row('Median age','median',1,'',cur==='median')+
         row('Fertility','fert',2,'',cur==='fert')+
+        row('Life expectancy','life',1,'',cur==='life')+
         '<div style="height:5px;"></div>'+
         row('Under 15','u15',1,'%',cur==='u15')+
         row('Aged 65+','o65',1,'%',cur==='o65')+
-        row('Life expectancy','life',1,'',cur==='life')+
+        row('Old-age dependency','oldep',1,'',cur==='oldep')+
+        '<div style="height:5px;"></div>'+
         row('Urban','urban',1,'%',cur==='urban')+
+        row('Sex ratio at birth','sexb',3,'',cur==='sexb')+
         '</div>');
     });
   render();
