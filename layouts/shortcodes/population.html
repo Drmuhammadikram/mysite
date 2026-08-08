@@ -1,0 +1,200 @@
+{{- $d := site.Data.population -}}
+{{- with $d -}}
+<script type="application/json" id="pp-data">{{ .countries | jsonify }}</script>
+<script type="application/json" id="pp-years">{{ .years | jsonify }}</script>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:1.5rem;width:70vw;max-width:1100px;position:relative;left:50%;transform:translateX(-50%);" id="pp-cards"></div>
+
+<div id="pp-metric" style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:0.7rem;align-items:center;width:70vw;max-width:1100px;position:relative;left:50%;transform:translateX(-50%);z-index:6;"></div>
+<div id="pp-tabs" style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:1.25rem;align-items:center;width:70vw;max-width:1100px;position:relative;left:50%;transform:translateX(-50%);z-index:6;"></div>
+
+<div style="display:grid;grid-template-columns:1fr 190px;gap:24px;align-items:start;width:70vw;max-width:1100px;position:relative;left:50%;transform:translateX(-50%);" id="pp-wrap">
+  <div id="pp-map" style="width:100%;margin-top:-3.5rem;"></div>
+  <div>
+    <div id="pp-legend-title" style="font-size:0.78rem;opacity:0.75;margin-bottom:0.7rem;line-height:1.45;"></div>
+    <div id="pp-legend"></div>
+    <div id="pp-readout" style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid rgba(128,128,128,0.2);min-height:84px;">
+      <div style="font-size:0.75rem;opacity:0.5;">Hover a country</div>
+    </div>
+  </div>
+</div>
+
+<p style="font-size:0.72rem;opacity:0.55;margin-top:1.25rem;line-height:1.6;">
+  Source: {{ .source }}. Values shown at five-year intervals from 1960, with annual data for
+  2020 onward. Figures from 2024 include UN projections where observed data is not yet
+  available.
+</p>
+
+<style>@media(max-width:760px){#pp-wrap{grid-template-columns:1fr!important}}</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+<script>
+(function(){
+var DATA=JSON.parse(document.getElementById('pp-data').textContent);
+if(typeof DATA==='string'){ DATA=JSON.parse(DATA); }
+var YEARS=JSON.parse(document.getElementById('pp-years').textContent);
+if(typeof YEARS==='string'){ YEARS=JSON.parse(YEARS); }
+var dark=matchMedia('(prefers-color-scheme: dark)').matches;
+var noData=dark?'#2c2c2a':'#eceae4';
+var M=[
+ {k:'median',l:'Median age',u:'years',dp:1,
+  b:[[42,'over 42'],[35,'35 - 42'],[28,'28 - 35'],[20,'20 - 28'],[0,'under 20']],
+  c:['#123f63','#2a7fa8','#7fb8c9','#d9b876','#b06a3b']},
+ {k:'growth',l:'Growth rate',u:'% per year',dp:2,
+  b:[[2.5,'over 2.5%'],[1.5,'1.5 - 2.5%'],[0.5,'0.5 - 1.5%'],[0,'0 - 0.5%'],[-99,'shrinking']],
+  c:['#7a2718','#b8542c','#dfa565','#bcd0c4','#4a7f6e']},
+ {k:'fert',l:'Fertility rate',u:'children per woman',dp:2,
+  b:[[5,'over 5'],[3.5,'3.5 - 5'],[2.1,'2.1 - 3.5'],[1.6,'1.6 - 2.1'],[0,'under 1.6']],
+  c:['#5c1a10','#a83b1c','#e08a3c','#a8c4d6','#3d6f96']},
+ {k:'o65',l:'Aged 65+',u:'% of population',dp:1,
+  b:[[22,'over 22%'],[15,'15 - 22%'],[9,'9 - 15%'],[5,'5 - 9%'],[0,'under 5%']],
+  c:['#3d2a52','#5c4079','#8a6ba8','#bcaacd','#e4dcec']},
+ {k:'u15',l:'Under 15',u:'% of population',dp:1,
+  b:[[42,'over 42%'],[32,'32 - 42%'],[22,'22 - 32%'],[16,'16 - 22%'],[0,'under 16%']],
+  c:['#1c4f4a','#2d7f75','#6bb3a6','#a9cfc7','#dfeeeb']},
+ {k:'life',l:'Life expectancy',u:'years',dp:1,
+  b:[[80,'over 80'],[75,'75 - 80'],[68,'68 - 75'],[60,'60 - 68'],[0,'under 60']],
+  c:['#0d4f3c','#1d7a5f','#5dab8a','#d9b876','#a8511f']},
+ {k:'urban',l:'Urban share',u:'%',dp:1,
+  b:[[80,'over 80%'],[60,'60 - 80%'],[45,'45 - 60%'],[30,'30 - 45%'],[0,'under 30%']],
+  c:['#26303f','#3f5570','#6b87a5','#a3b8cc','#dde5ee']},
+ {k:'pop',l:'Total population',u:'people',dp:0,
+  b:[[1e8,'over 100M'],[3e7,'30 - 100M'],[1e7,'10 - 30M'],[2e6,'2 - 10M'],[0,'under 2M']],
+  c:['#1a1a1f','#463a2f','#8a6a45','#c2a478','#eadfc9']},
+ {k:'dens',l:'Density',u:'per km²',dp:1,
+  b:[[300,'over 300'],[120,'120 - 300'],[50,'50 - 120'],[15,'15 - 50'],[0,'under 15']],
+  c:['#3b1f2b','#6d3348','#a35f78','#c99cad','#e8d6de']},
+ {k:'oldep',l:'Old-age dependency',u:'per 100 working age',dp:1,
+  b:[[32,'over 32'],[22,'22 - 32'],[13,'13 - 22'],[7,'7 - 13'],[0,'under 7']],
+  c:['#3d2a52','#5c4079','#8a6ba8','#bcaacd','#e4dcec']},
+ {k:'sexb',l:'Sex ratio at birth',u:'males per female',dp:3,
+  b:[[1.09,'over 1.09'],[1.07,'1.07 - 1.09'],[1.05,'1.05 - 1.07'],[1.03,'1.03 - 1.05'],[0,'under 1.03']],
+  c:['#5c1a10','#a83b1c','#c9a86a','#8aa8c4','#3d6f96']}
+];
+var mi=0, year=YEARS[YEARS.length-1], paths=null;
+
+function colorFor(v){
+  var S=M[mi];
+  if(v===null||v===undefined) return noData;
+  for(var j=0;j<S.b.length;j++){ if(v>=S.b[j][0]) return S.c[j]; }
+  return S.c[S.c.length-1];
+}
+function key(f){ return ('00'+String(f.id)).slice(-3); }
+function val(k,m,y){ var c=DATA[k]; if(!c) return null; var g=c.d[m]; if(!g) return null;
+  var v=g[y]; return (v===undefined)?null:v; }
+function fmt(v,dp){
+  if(v===null||v===undefined) return '-';
+  if(dp===0){
+    if(v>=1e9) return (v/1e9).toFixed(2)+'bn';
+    if(v>=1e6) return (v/1e6).toFixed(1)+'M';
+    if(v>=1e3) return (v/1e3).toFixed(0)+'k';
+    return String(v);
+  }
+  return v.toFixed(dp);
+}
+
+var svg=d3.select('#pp-map').append('svg')
+  .attr('viewBox','0 0 960 440').attr('width','100%').style('min-height','700px').style('display','block')
+  .attr('role','img').attr('aria-label','World map of demographic indicators');
+var path=d3.geoPath(d3.geoNaturalEarth1().scale(200).translate([460,205]));
+
+function cards(){
+  var S=M[mi], vals=[], n=0, sum=0;
+  for(var k in DATA){ var v=val(k,S.k,year); if(v!==null){ vals.push([DATA[k].n,v]); n++; sum+=v; } }
+  vals.sort(function(a,b){ return b[1]-a[1]; });
+  var top=vals[0]||['-',0], bot=vals[vals.length-1]||['-',0];
+  function card(l,big,sub){
+    return '<div style="background:rgba(128,128,128,0.06);border-radius:8px;padding:1rem;">'+
+     '<div style="font-size:0.75rem;opacity:0.7;margin-bottom:0.4rem;">'+l+'</div>'+
+     '<div style="font-size:1.7rem;line-height:1;font-weight:600;font-variant-numeric:tabular-nums;">'+big+'</div>'+
+     '<div style="font-size:0.68rem;opacity:0.55;margin-top:0.3rem;">'+sub+'</div></div>';
+  }
+  d3.select('#pp-cards').html(
+    card('Year',year,'reporting year')+
+    card('Highest',fmt(top[1],S.dp),top[0])+
+    card('Lowest',fmt(bot[1],S.dp),bot[0])+
+    card(S.k==='pop'?'World total':'Average',
+         S.k==='pop'?fmt(sum,0):fmt(n?sum/n:0,S.dp),
+         S.k==='pop'?(n+' countries'):S.u));
+}
+
+function render(){
+  var S=M[mi];
+  d3.select('#pp-legend-title').html('<strong style="font-weight:600;opacity:1">'+S.l+', '+year+
+    '</strong><br>Measured in '+S.u+'.');
+  d3.select('#pp-legend').html(S.b.map(function(b,j){
+    return '<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;font-size:0.72rem;opacity:0.75;">'+
+      '<span style="width:16px;height:11px;border-radius:2px;background:'+S.c[j]+';flex-shrink:0;border:1px solid rgba(128,128,128,0.2);"></span>'+b[1]+'</div>';
+  }).join('')+'<div style="display:flex;align-items:center;gap:8px;margin-top:8px;font-size:0.72rem;opacity:0.5;">'+
+    '<span style="width:16px;height:11px;border-radius:2px;background:'+noData+';flex-shrink:0;"></span>No data</div>');
+  d3.selectAll('#pp-metric button')
+    .style('background',function(d,j){return j===mi?'rgba(42,127,168,0.18)':'transparent';})
+    .style('border-color',function(d,j){return j===mi?'rgba(42,127,168,0.6)':'rgba(128,128,128,0.3)';})
+    .style('font-weight',function(d,j){return j===mi?'600':'400';})
+    .style('opacity',function(d,j){return j===mi?1:0.65;});
+  d3.selectAll('#pp-tabs button')
+    .style('background',function(d){return d===year?'rgba(42,127,168,0.18)':'transparent';})
+    .style('border-color',function(d){return d===year?'rgba(42,127,168,0.6)':'rgba(128,128,128,0.3)';})
+    .style('font-weight',function(d){return d===year?'600':'400';})
+    .style('opacity',function(d){return d===year?1:0.65;});
+  if(paths) paths.attr('fill',function(f){ return colorFor(val(key(f),M[mi].k,year)); });
+  cards();
+}
+
+d3.select('#pp-metric').selectAll('button').data(M).join('button')
+  .attr('type','button')
+  .style('font-size','0.75rem').style('padding','6px 11px').style('cursor','pointer')
+  .style('border','1px solid rgba(128,128,128,0.3)').style('border-radius','6px')
+  .style('color','inherit')
+  .text(function(d){return d.l;})
+  .on('click',function(e,d){ mi=M.indexOf(d); render(); });
+
+d3.select('#pp-tabs').selectAll('button').data(YEARS).join('button')
+  .attr('type','button')
+  .style('font-size','0.75rem').style('padding','6px 9px').style('cursor','pointer')
+  .style('border','1px solid rgba(128,128,128,0.3)').style('border-radius','6px')
+  .style('color','inherit')
+  .text(function(d){return d;})
+  .on('click',function(e,d){ year=d; render(); });
+
+d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(function(w){
+  var mor=w.objects.countries.geometries.filter(function(g){
+    var id=String(+g.id); return id==='504'||id==='732'; });
+  var feats=topojson.feature(w,w.objects.countries).features
+    .filter(function(f){var id=String(+f.id); return id!=='504'&&id!=='732'&&id!=='010';});
+  if(mor.length) feats.push({type:'Feature',id:504,geometry:topojson.merge(w,mor)});
+  paths=svg.selectAll('path').data(feats).join('path')
+    .attr('d',path)
+    .attr('fill',function(f){ return colorFor(val(key(f),M[mi].k,year)); })
+    .attr('stroke',dark?'rgba(255,255,255,.14)':'#fff').attr('stroke-width',0.4)
+    .style('cursor','pointer')
+    .on('mouseenter',function(e,f){
+      var k=key(f), c=DATA[k];
+      if(!c){ d3.select('#pp-readout').html('<div style="font-size:0.75rem;opacity:0.5;">No data</div>'); return; }
+      function row(lab,m,dp,suf,strong){
+        var v=val(k,m,year);
+        return '<div style="display:flex;justify-content:space-between;gap:12px;'+
+          (strong?'font-weight:600;':'opacity:0.7;')+'"><span>'+lab+'</span>'+
+          '<span style="font-variant-numeric:tabular-nums;">'+fmt(v,dp)+(v===null?'':suf)+'</span></div>';
+      }
+      var cur=M[mi].k;
+      d3.select('#pp-readout').html(
+        '<div style="font-size:0.85rem;font-weight:600;margin-bottom:0.5rem;">'+c.n+'</div>'+
+        '<div style="font-size:0.72rem;line-height:1.75;">'+
+        row('Population','pop',0,'',cur==='pop')+
+        row('Growth','growth',2,'%',cur==='growth')+
+        row('Median age','median',1,'',cur==='median')+
+        row('Fertility','fert',2,'',cur==='fert')+
+        '<div style="height:5px;"></div>'+
+        row('Under 15','u15',1,'%',cur==='u15')+
+        row('Aged 65+','o65',1,'%',cur==='o65')+
+        row('Life expectancy','life',1,'',cur==='life')+
+        row('Urban','urban',1,'%',cur==='urban')+
+        '</div>');
+    });
+  render();
+});
+})();
+</script>
+{{- end -}}
