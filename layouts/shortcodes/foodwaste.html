@@ -1,0 +1,139 @@
+{{- $d := site.Data.foodwaste -}}
+{{- with $d -}}
+<script type="application/json" id="fw-data">{{ .countries | jsonify }}</script>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:1.5rem;width:70vw;max-width:1100px;position:relative;left:50%;transform:translateX(-50%);" id="fw-cards"></div>
+
+<div id="fw-tabs" style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:1.25rem;align-items:center;width:70vw;max-width:1100px;position:relative;left:50%;transform:translateX(-50%);z-index:6;"></div>
+
+<div style="display:grid;grid-template-columns:1fr 190px;gap:24px;align-items:start;width:70vw;max-width:1100px;position:relative;left:50%;transform:translateX(-50%);" id="fw-wrap">
+  <div id="fw-map" style="width:100%;margin-top:-3.5rem;"></div>
+  <div>
+    <div id="fw-legend-title" style="font-size:0.78rem;opacity:0.75;margin-bottom:0.7rem;line-height:1.45;"></div>
+    <div id="fw-legend"></div>
+    <div id="fw-readout" style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid rgba(128,128,128,0.2);min-height:84px;">
+      <div style="font-size:0.75rem;opacity:0.5;">Hover a country</div>
+    </div>
+  </div>
+</div>
+
+<p style="font-size:0.72rem;opacity:0.55;margin-top:1.25rem;line-height:1.6;">
+  Kilograms of food wasted per person per year, 2022 estimates. Source: {{ .source }}.
+  Most countries have no direct measurement: household figures are estimated by extrapolating
+  from countries with primary studies, adjusted for income level, while retail and food service
+  figures are largely modelled defaults applied by income group. Identical values across
+  unrelated countries indicate modelled rather than measured data.
+</p>
+
+<style>@media(max-width:760px){#fw-wrap{grid-template-columns:1fr!important}}</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+<script>
+(function(){
+var DATA=JSON.parse(document.getElementById('fw-data').textContent);
+if(typeof DATA==='string'){ DATA=JSON.parse(DATA); }
+var dark=matchMedia('(prefers-color-scheme: dark)').matches;
+var noData=dark?'#2c2c2a':'#eceae4';
+var SEC=[{k:'total',l:'All sectors',b:[[200,'over 200'],[150,'150 - 200'],[110,'110 - 150'],[80,'80 - 110'],[0,'under 80']]},
+         {k:'house',l:'Household',b:[[120,'over 120'],[90,'90 - 120'],[70,'70 - 90'],[50,'50 - 70'],[0,'under 50']]},
+         {k:'food',l:'Food service',b:[[60,'over 60'],[40,'40 - 60'],[28,'28 - 40'],[18,'18 - 28'],[0,'under 18']]},
+         {k:'retail',l:'Retail',b:[[20,'over 20'],[14,'14 - 20'],[9,'9 - 14'],[5,'5 - 9'],[0,'under 5']]}];
+var COLS=['#5e2f10','#96501f','#c4823c','#e0b478','#f3e2c8'];
+var si=0, paths=null;
+
+function colorFor(v){
+  if(v===null||v===undefined) return noData;
+  var B=SEC[si].b;
+  for(var j=0;j<B.length;j++){ if(v>=B[j][0]) return COLS[j]; }
+  return COLS[COLS.length-1];
+}
+function key(f){ return ('00'+String(f.id)).slice(-3); }
+function val(k,sec){ var c=DATA[k]; if(!c) return null; var v=c.d[sec];
+  return (v===undefined||v===null)?null:v; }
+
+var svg=d3.select('#fw-map').append('svg')
+  .attr('viewBox','0 0 960 440').attr('width','100%').style('min-height','700px').style('display','block')
+  .attr('role','img').attr('aria-label','World map of food waste per capita');
+var path=d3.geoPath(d3.geoNaturalEarth1().scale(200).translate([460,205]));
+
+function cards(){
+  var S=SEC[si], vals=[], n=0, sum=0;
+  for(var k in DATA){ var v=val(k,S.k); if(v!==null){ vals.push([DATA[k].n,v]); n++; sum+=v; } }
+  vals.sort(function(a,b){ return b[1]-a[1]; });
+  var top=vals[0]||['-',0], bot=vals[vals.length-1]||['-',0];
+  function card(l,big,sub){
+    return '<div style="background:rgba(128,128,128,0.06);border-radius:8px;padding:1rem;">'+
+     '<div style="font-size:0.75rem;opacity:0.7;margin-bottom:0.4rem;">'+l+'</div>'+
+     '<div style="font-size:1.7rem;line-height:1;font-weight:600;font-variant-numeric:tabular-nums;">'+big+'</div>'+
+     '<div style="font-size:0.68rem;opacity:0.55;margin-top:0.3rem;">'+sub+'</div></div>';
+  }
+  d3.select('#fw-cards').html(
+    card('Sector',S.l,'2022 estimate')+
+    card('Highest',top[1].toFixed(0)+' kg',top[0])+
+    card('Lowest',bot[1].toFixed(0)+' kg',bot[0])+
+    card('Average',n?(sum/n).toFixed(0)+' kg':'-',n+' countries'));
+}
+
+function render(){
+  var S=SEC[si];
+  d3.select('#fw-legend-title').html('<strong style="font-weight:600;opacity:1">'+S.l+
+    '</strong><br>Kilograms per person per year, 2022.');
+  d3.select('#fw-legend').html(S.b.map(function(b,j){
+    return '<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;font-size:0.72rem;opacity:0.75;">'+
+      '<span style="width:16px;height:11px;border-radius:2px;background:'+COLS[j]+';flex-shrink:0;border:1px solid rgba(128,128,128,0.2);"></span>'+b[1]+' kg</div>';
+  }).join('')+'<div style="display:flex;align-items:center;gap:8px;margin-top:8px;font-size:0.72rem;opacity:0.5;">'+
+    '<span style="width:16px;height:11px;border-radius:2px;background:'+noData+';flex-shrink:0;"></span>No estimate</div>');
+  d3.selectAll('#fw-tabs button')
+    .style('background',function(d,j){return j===si?'rgba(150,80,31,0.18)':'transparent';})
+    .style('border-color',function(d,j){return j===si?'rgba(150,80,31,0.6)':'rgba(128,128,128,0.3)';})
+    .style('font-weight',function(d,j){return j===si?'600':'400';})
+    .style('opacity',function(d,j){return j===si?1:0.65;});
+  if(paths) paths.attr('fill',function(f){ return colorFor(val(key(f),SEC[si].k)); });
+  cards();
+}
+
+d3.select('#fw-tabs').selectAll('button').data(SEC).join('button')
+  .attr('type','button')
+  .style('font-size','0.75rem').style('padding','6px 11px').style('cursor','pointer')
+  .style('border','1px solid rgba(128,128,128,0.3)').style('border-radius','6px')
+  .style('color','inherit')
+  .text(function(d){return d.l;})
+  .on('click',function(e,d){ si=SEC.indexOf(d); render(); });
+
+d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(function(w){
+  var mor=w.objects.countries.geometries.filter(function(g){
+    var id=String(+g.id); return id==='504'||id==='732'; });
+  var feats=topojson.feature(w,w.objects.countries).features
+    .filter(function(f){var id=String(+f.id); return id!=='504'&&id!=='732'&&id!=='010';});
+  if(mor.length) feats.push({type:'Feature',id:504,geometry:topojson.merge(w,mor)});
+  paths=svg.selectAll('path').data(feats).join('path')
+    .attr('d',path)
+    .attr('fill',function(f){ return colorFor(val(key(f),SEC[si].k)); })
+    .attr('stroke',dark?'rgba(255,255,255,.14)':'#fff').attr('stroke-width',0.4)
+    .style('cursor','pointer')
+    .on('mouseenter',function(e,f){
+      var k=key(f), c=DATA[k];
+      if(!c){ d3.select('#fw-readout').html('<div style="font-size:0.75rem;opacity:0.5;">No estimate</div>'); return; }
+      function row(lab,sec,strong){
+        var v=val(k,sec);
+        return '<div style="display:flex;justify-content:space-between;gap:12px;'+
+          (strong?'font-weight:600;':'opacity:0.72;')+'"><span>'+lab+'</span>'+
+          '<span style="font-variant-numeric:tabular-nums;">'+(v===null?'-':v.toFixed(1)+' kg')+'</span></div>';
+      }
+      var cur=SEC[si].k;
+      d3.select('#fw-readout').html(
+        '<div style="font-size:0.85rem;font-weight:600;margin-bottom:0.5rem;">'+c.n+'</div>'+
+        '<div style="font-size:0.73rem;line-height:1.8;">'+
+        row('Household','house',cur==='house')+
+        row('Food service','food',cur==='food')+
+        row('Retail','retail',cur==='retail')+
+        '<div style="border-top:1px solid rgba(128,128,128,0.2);margin-top:5px;padding-top:4px;"></div>'+
+        row('Total','total',cur==='total')+
+        '</div>');
+    });
+  render();
+});
+})();
+</script>
+{{- end -}}
