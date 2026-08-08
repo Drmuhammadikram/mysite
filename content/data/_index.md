@@ -1,6 +1,6 @@
 ---
 title: Sustainability Data
-summary: Interactive datasets on planetary boundaries, ecological footprint, biocapacity, human development, ISO certifications, coal consumption, energy mix, water stress, food waste, natural disasters, life satisfaction, and progress toward the Sustainable Development Goals.
+summary: Interactive datasets on planetary boundaries, ecological footprint, biocapacity, human development, population and demography, ISO certifications, coal consumption, energy mix, water stress, food waste, natural disasters, life satisfaction, and progress toward the Sustainable Development Goals.
 type: landing
 sections:
   - block: markdown
@@ -49,6 +49,18 @@ sections:
         {{< hdi >}}
 
         [Full page: what the Index combines, and what it leaves out →](/data/human-development-index/)
+    design:
+      columns: '1'
+  - block: markdown
+    content:
+      title: 'Population and demography'
+      subtitle: ''
+      text: |-
+        Eleven demographic indicators across 182 countries from 1960 to 2025 — population, growth rate, median age, fertility, age structure, life expectancy, urbanisation and density. Demography sits underneath most of the other datasets here, since population is the multiplier on every per-capita figure.
+
+        {{< population >}}
+
+        [Full page: why median age is the default view →](/data/population/)
     design:
       columns: '1'
   - block: markdown
