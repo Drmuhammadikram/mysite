@@ -69,8 +69,8 @@ var M=[
  {k:'oldep',l:'Old-age dependency',u:'per 100 working age',dp:1,
   b:[[32,'over 32'],[22,'22 - 32'],[13,'13 - 22'],[7,'7 - 13'],[0,'under 7']],
   c:['#3d2a52','#5c4079','#8a6ba8','#bcaacd','#e4dcec']},
- {k:'sexb',l:'Sex ratio at birth',u:'males per female',dp:3,
-  b:[[1.10,'over 1.10, strongly skewed'],[1.07,'1.07 - 1.10'],[1.055,'1.055 - 1.07'],[1.04,'1.04 - 1.055, typical'],[0,'under 1.04']],
+ {k:'sexb',l:'Sex ratio at birth',u:'males per 100 females',dp:1,
+  b:[[110,'over 110, strongly skewed'],[107,'107 - 110'],[105.5,'105.5 - 107'],[104,'104 - 105.5, typical'],[0,'under 104']],
   c:['#7a1f10','#c25a2a','#e0b878','#8fb8a4','#4a7f96']}
 ];
 var mi=0, year=YEARS[YEARS.length-1], paths=null;
@@ -196,7 +196,7 @@ d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(f
         row('Old-age dependency','oldep',1,'',cur==='oldep')+
         '<div style="height:5px;"></div>'+
         row('Urban','urban',1,'%',cur==='urban')+
-        row('Sex ratio at birth','sexb',3,'',cur==='sexb')+
+        row('Sex ratio at birth','sexb',1,'',cur==='sexb')+
         '</div>');
     });
   render();
