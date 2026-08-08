@@ -1,6 +1,6 @@
 ---
 title: Sustainability Data
-summary: Interactive datasets on planetary boundaries, ecological footprint, biocapacity, human development, ISO certifications, coal consumption, energy mix, water stress, natural disasters, life satisfaction, and progress toward the Sustainable Development Goals.
+summary: Interactive datasets on planetary boundaries, ecological footprint, biocapacity, human development, ISO certifications, coal consumption, energy mix, water stress, food waste, natural disasters, life satisfaction, and progress toward the Sustainable Development Goals.
 type: landing
 sections:
   - block: markdown
@@ -97,6 +97,18 @@ sections:
         {{< waterstress >}}
 
         [Full page: how water stress is measured, and related research →](/data/water-stress/)
+    design:
+      columns: '1'
+  - block: markdown
+    content:
+      title: 'Food waste per capita'
+      subtitle: ''
+      text: |-
+        Kilograms of food wasted per person per year across household, food service, and retail, in 184 countries. Read the full page before drawing country comparisons — most of these figures are modelled rather than measured.
+
+        {{< foodwaste >}}
+
+        [Full page: why this dataset needs reading with caution →](/data/food-waste/)
     design:
       columns: '1'
   - block: markdown
