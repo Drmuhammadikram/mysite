@@ -1,8 +1,8 @@
 {
-  "citations": 6797,
+  "citations": 6839,
   "h_index": 41,
   "i10_index": 59,
-  "updated": "2026-08-03",
+  "updated": "2026-08-10",
   "by_year": [
     {
       "year": 2019,
@@ -14,15 +14,15 @@
     },
     {
       "year": 2021,
-      "citations": 663
+      "citations": 664
     },
     {
       "year": 2022,
-      "citations": 1120
+      "citations": 1124
     },
     {
       "year": 2023,
-      "citations": 1404
+      "citations": 1405
     },
     {
       "year": 2024,
@@ -30,11 +30,11 @@
     },
     {
       "year": 2025,
-      "citations": 1266
+      "citations": 1271
     },
     {
       "year": 2026,
-      "citations": 678
+      "citations": 709
     }
   ]
 }
