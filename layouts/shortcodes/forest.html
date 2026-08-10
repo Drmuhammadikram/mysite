@@ -1,7 +1,6 @@
 {{- $d := site.Data.forest -}}
 {{- with $d -}}
 <script type="application/json" id="fr-data">{{ .countries | jsonify }}</script>
-<script type="application/json" id="fr-years">{{ .years | jsonify }}</script>
 
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:1.5rem;width:70vw;max-width:1100px;position:relative;left:50%;transform:translateX(-50%);" id="fr-cards"></div>
 
@@ -20,12 +19,11 @@
 </div>
 
 <p style="font-size:0.72rem;opacity:0.55;margin-top:1.25rem;line-height:1.6;">
-  Source: {{ .source }}. Forest cover and net change come from FAO country reporting; tree
-  cover loss is satellite-observed and counts all loss including harvest and fire, so it is
-  larger than deforestation. Net change can be positive while deforestation continues, if
-  planting exceeds clearance. Deforestation is reported only in five-year assessment periods
-  and tree cover loss only from 2005, so where a year has no observation the map shows the
-  most recent earlier one and the hover panel gives its date.
+  Source: {{ .source }}. Tree cover loss is satellite-observed and reported annually from 2001;
+  it counts all canopy loss including commercial harvest and fire, much of which regrows.
+  Deforestation is the permanent conversion of forest to another land use, reported by
+  countries to the FAO only in five-year assessment periods, which is why its year buttons
+  are limited. The two measure different things and tree cover loss is always the larger.
 </p>
 
 <style>@media(max-width:760px){#fr-wrap{grid-template-columns:1fr!important}}</style>
@@ -36,32 +34,29 @@
 (function(){
 var DATA=JSON.parse(document.getElementById('fr-data').textContent);
 if(typeof DATA==='string'){ DATA=JSON.parse(DATA); }
-var YEARS=JSON.parse(document.getElementById('fr-years').textContent);
-if(typeof YEARS==='string'){ YEARS=JSON.parse(YEARS); }
 var dark=matchMedia('(prefers-color-scheme: dark)').matches;
 var noData=dark?'#2c2c2a':'#eceae4';
 var M=[
- {k:'share',l:'Forest cover',u:'% of land area',dp:1,suf:'%',
-  b:[[60,'over 60%'],[40,'40 - 60%'],[25,'25 - 40%'],[10,'10 - 25%'],[0,'under 10%']],
-  c:['#0a4a2e','#1d7a4c','#5dab7a','#b3cfa8','#e8e2c8']},
- {k:'chg',l:'Net annual change',u:'hectares per year',dp:0,suf:' ha',
-  b:[[100000,'gaining over 100k ha'],[0,'gaining'],[-50000,'losing up to 50k ha'],[-200000,'losing 50 - 200k ha'],[-1e9,'losing over 200k ha']],
-  c:['#0d5c40','#7fc9a4','#e8bd8a','#c25a2a','#7a1f10']},
- {k:'loss',l:'Tree cover loss',u:'hectares per year',dp:0,suf:' ha',
+ {k:'loss',l:'Tree cover loss (annual)',u:'hectares per year',dp:0,suf:' ha',
   b:[[1000000,'over 1M ha'],[300000,'300k - 1M ha'],[80000,'80 - 300k ha'],[15000,'15 - 80k ha'],[0,'under 15k ha']],
   c:['#5c1a10','#a83b1c','#d9803c','#e8bd8a','#f5e6d3']},
- {k:'defor',l:'Deforestation',u:'hectares per year',dp:0,suf:' ha',
+ {k:'defor',l:'Deforestation (FAO)',u:'hectares per year',dp:0,suf:' ha',
   b:[[500000,'over 500k ha'],[150000,'150 - 500k ha'],[40000,'40 - 150k ha'],[5000,'5 - 40k ha'],[0,'under 5k ha']],
-  c:['#5c1a10','#a83b1c','#d9803c','#e8bd8a','#f5e6d3']},
+  c:['#3d1208','#8a2f16','#c25a2a','#e0a870','#f5e2cc']},
  {k:'defrate',l:'Deforestation rate',u:'% of forest per year',dp:2,suf:'%',
   b:[[1.5,'over 1.5%'],[0.8,'0.8 - 1.5%'],[0.35,'0.35 - 0.8%'],[0.1,'0.1 - 0.35%'],[0,'under 0.1%']],
-  c:['#5c1a10','#a83b1c','#d9803c','#e8bd8a','#f5e6d3']},
- {k:'area',l:'Total forest area',u:'square kilometres',dp:0,suf:' km2',
-  b:[[1000000,'over 1M km2'],[300000,'300k - 1M km2'],[80000,'80 - 300k km2'],[15000,'15 - 80k km2'],[0,'under 15k km2']],
+  c:['#3d1208','#8a2f16','#c25a2a','#e0a870','#f5e2cc']},
+ {k:'share',l:'Forest cover',u:'% of land area',dp:1,suf:'%',
+  b:[[60,'over 60%'],[40,'40 - 60%'],[25,'25 - 40%'],[10,'10 - 25%'],[0,'under 10%']],
   c:['#0a4a2e','#1d7a4c','#5dab7a','#b3cfa8','#e8e2c8']}
 ];
-var mi=0, year=YEARS[YEARS.length-1], paths=null;
+var mi=0, year=null, paths=null;
 
+function yearsFor(k){
+  var s={};
+  for(var c in DATA){ var g=DATA[c].d[k]; if(g) for(var y in g) s[y]=1; }
+  return Object.keys(s).sort();
+}
 function colorFor(v){
   var S=M[mi];
   if(v===null||v===undefined) return noData;
@@ -69,15 +64,10 @@ function colorFor(v){
   return S.c[S.c.length-1];
 }
 function key(f){ return ('00'+String(f.id)).slice(-3); }
-function nearest(k,m,y){
-  var c=DATA[k]; if(!c) return null; var g=c.d[m]; if(!g) return null;
-  if(g[y]!==undefined) return [y,g[y]];
-  var ys=Object.keys(g).sort(), best=null;
-  for(var i=0;i<ys.length;i++){ if(ys[i]<=y) best=ys[i]; }
-  if(!best && ys.length) best=ys[0];
-  return best?[best,g[best]]:null;
-}
-function val(k,m,y){ var N=nearest(k,m,y); return N?N[1]:null; }
+function val(k,m,y){ var c=DATA[k]; if(!c) return null; var g=c.d[m]; if(!g) return null;
+  var v=g[y]; return (v===undefined)?null:v; }
+function latest(k,m){ var c=DATA[k]; if(!c) return null; var g=c.d[m]; if(!g) return null;
+  var ys=Object.keys(g).sort(); return ys.length?[ys[ys.length-1],g[ys[ys.length-1]]]:null; }
 function fmt(v,dp,suf){
   if(v===null||v===undefined) return '-';
   var s;
@@ -92,32 +82,44 @@ function fmt(v,dp,suf){
 
 var svg=d3.select('#fr-map').append('svg')
   .attr('viewBox','0 0 960 440').attr('width','100%').style('min-height','700px').style('display','block')
-  .attr('role','img').attr('aria-label','World map of forest cover and deforestation');
+  .attr('role','img').attr('aria-label','World map of forest loss');
 var path=d3.geoPath(d3.geoNaturalEarth1().scale(200).translate([460,205]));
 
 function cards(){
   var S=M[mi], vals=[], n=0, sum=0;
   for(var k in DATA){ var v=val(k,S.k,year); if(v!==null){ vals.push([DATA[k].n,v]); n++; sum+=v; } }
   vals.sort(function(a,b){ return b[1]-a[1]; });
-  var top=vals[0]||['-',0], bot=vals[vals.length-1]||['-',0];
+  var top=vals[0]||['-',0];
   function card(l,big,sub){
     return '<div style="background:rgba(128,128,128,0.06);border-radius:8px;padding:1rem;">'+
      '<div style="font-size:0.75rem;opacity:0.7;margin-bottom:0.4rem;">'+l+'</div>'+
      '<div style="font-size:1.6rem;line-height:1;font-weight:600;font-variant-numeric:tabular-nums;">'+big+'</div>'+
      '<div style="font-size:0.68rem;opacity:0.55;margin-top:0.3rem;">'+sub+'</div></div>';
   }
-  var showLow=(S.k==='chg');
   d3.select('#fr-cards').html(
     card('Year',year,'reporting year')+
     card('Highest',fmt(top[1],S.dp,S.suf),top[0])+
-    card(showLow?'Largest loss':'Total',
-         showLow?fmt(bot[1],S.dp,S.suf):fmt(sum,S.dp,S.suf),
-         showLow?bot[0]:('across '+n+' countries'))+
+    card(S.k==='defrate'||S.k==='share'?'Average':'World total',
+         S.k==='defrate'||S.k==='share'?fmt(n?sum/n:0,S.dp,S.suf):fmt(sum,S.dp,S.suf),
+         'across '+n+' countries')+
     card('Reporting',n,'countries'));
+}
+
+function buildYears(){
+  var YS=yearsFor(M[mi].k);
+  if(YS.indexOf(year)<0) year=YS[YS.length-1];
+  d3.select('#fr-tabs').selectAll('button').data(YS,function(d){return d;}).join('button')
+    .attr('type','button')
+    .style('font-size','0.75rem').style('padding','6px 9px').style('cursor','pointer')
+    .style('border','1px solid rgba(128,128,128,0.3)').style('border-radius','6px')
+    .style('color','inherit')
+    .text(function(d){return d;})
+    .on('click',function(e,d){ year=d; render(); });
 }
 
 function render(){
   var S=M[mi];
+  buildYears();
   d3.select('#fr-legend-title').html('<strong style="font-weight:600;opacity:1">'+S.l+', '+year+
     '</strong><br>Measured in '+S.u+'.');
   d3.select('#fr-legend').html(S.b.map(function(b,j){
@@ -126,13 +128,13 @@ function render(){
   }).join('')+'<div style="display:flex;align-items:center;gap:8px;margin-top:8px;font-size:0.72rem;opacity:0.5;">'+
     '<span style="width:16px;height:11px;border-radius:2px;background:'+noData+';flex-shrink:0;"></span>No data</div>');
   d3.selectAll('#fr-metric button')
-    .style('background',function(d,j){return j===mi?'rgba(29,122,76,0.18)':'transparent';})
-    .style('border-color',function(d,j){return j===mi?'rgba(29,122,76,0.6)':'rgba(128,128,128,0.3)';})
+    .style('background',function(d,j){return j===mi?'rgba(168,59,28,0.18)':'transparent';})
+    .style('border-color',function(d,j){return j===mi?'rgba(168,59,28,0.6)':'rgba(128,128,128,0.3)';})
     .style('font-weight',function(d,j){return j===mi?'600':'400';})
     .style('opacity',function(d,j){return j===mi?1:0.65;});
   d3.selectAll('#fr-tabs button')
-    .style('background',function(d){return d===year?'rgba(29,122,76,0.18)':'transparent';})
-    .style('border-color',function(d){return d===year?'rgba(29,122,76,0.6)':'rgba(128,128,128,0.3)';})
+    .style('background',function(d){return d===year?'rgba(168,59,28,0.18)':'transparent';})
+    .style('border-color',function(d){return d===year?'rgba(168,59,28,0.6)':'rgba(128,128,128,0.3)';})
     .style('font-weight',function(d){return d===year?'600':'400';})
     .style('opacity',function(d){return d===year?1:0.65;});
   if(paths) paths.attr('fill',function(f){ return colorFor(val(key(f),M[mi].k,year)); });
@@ -145,15 +147,7 @@ d3.select('#fr-metric').selectAll('button').data(M).join('button')
   .style('border','1px solid rgba(128,128,128,0.3)').style('border-radius','6px')
   .style('color','inherit')
   .text(function(d){return d.l;})
-  .on('click',function(e,d){ mi=M.indexOf(d); render(); });
-
-d3.select('#fr-tabs').selectAll('button').data(YEARS).join('button')
-  .attr('type','button')
-  .style('font-size','0.75rem').style('padding','6px 9px').style('cursor','pointer')
-  .style('border','1px solid rgba(128,128,128,0.3)').style('border-radius','6px')
-  .style('color','inherit')
-  .text(function(d){return d;})
-  .on('click',function(e,d){ year=d; render(); });
+  .on('click',function(e,d){ mi=M.indexOf(d); year=null; render(); });
 
 d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(function(w){
   var mor=w.objects.countries.geometries.filter(function(g){
@@ -163,31 +157,29 @@ d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(f
   if(mor.length) feats.push({type:'Feature',id:504,geometry:topojson.merge(w,mor)});
   paths=svg.selectAll('path').data(feats).join('path')
     .attr('d',path)
-    .attr('fill',function(f){ return colorFor(val(key(f),M[mi].k,year)); })
     .attr('stroke',dark?'rgba(255,255,255,.14)':'#fff').attr('stroke-width',0.4)
     .style('cursor','pointer')
     .on('mouseenter',function(e,f){
       var k=key(f), c=DATA[k];
       if(!c){ d3.select('#fr-readout').html('<div style="font-size:0.75rem;opacity:0.5;">No data</div>'); return; }
       function row(lab,m,dp,suf,strong){
-        var N=nearest(k,m,year);
+        var v=val(k,m,year), L=(v===null)?latest(k,m):[year,v];
         return '<div style="display:flex;justify-content:space-between;gap:10px;'+
           (strong?'font-weight:600;':'opacity:0.72;')+'"><span>'+lab+'</span>'+
           '<span style="font-variant-numeric:tabular-nums;">'+
-          (N?fmt(N[1],dp,suf)+(N[0]!==year?' <span style="opacity:0.5;font-weight:400;">'+N[0]+'</span>':''):'-')+
+          (L?fmt(L[1],dp,suf)+(L[0]!==year?' <span style="opacity:0.5;font-weight:400;">'+L[0]+'</span>':''):'-')+
           '</span></div>';
       }
       var cur=M[mi].k;
       d3.select('#fr-readout').html(
         '<div style="font-size:0.85rem;font-weight:600;margin-bottom:0.5rem;">'+c.n+'</div>'+
         '<div style="font-size:0.72rem;line-height:1.8;">'+
-        row('Forest cover','share',1,'%',cur==='share')+
-        row('Forest area','area',0,' km2',cur==='area')+
-        '<div style="height:5px;"></div>'+
-        row('Net change','chg',0,' ha',cur==='chg')+
+        row('Tree cover loss','loss',0,' ha',cur==='loss')+
         row('Deforestation','defor',0,' ha',cur==='defor')+
         row('Deforestation rate','defrate',2,'%',cur==='defrate')+
-        row('Tree cover loss','loss',0,' ha',cur==='loss')+
+        '<div style="height:5px;"></div>'+
+        row('Forest cover','share',1,'%',cur==='share')+
+        row('Forest area','area',0,' km2',false)+
         '</div>');
     });
   render();
