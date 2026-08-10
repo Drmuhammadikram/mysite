@@ -1,6 +1,6 @@
 ---
 title: Sustainability Data
-summary: Interactive datasets on planetary boundaries, ecological footprint, biocapacity, human development, population and demography, ISO certifications, coal consumption, energy mix, water stress, food waste, natural disasters, life satisfaction, and progress toward the Sustainable Development Goals.
+summary: Interactive datasets on planetary boundaries, ecological footprint, biocapacity, human development, poverty, population and demography, ISO certifications, coal consumption, energy mix, water stress, food waste, natural disasters, life satisfaction, and progress toward the Sustainable Development Goals.
 type: landing
 sections:
   - block: markdown
@@ -53,10 +53,22 @@ sections:
       columns: '1'
   - block: markdown
     content:
+      title: 'Poverty worldwide'
+      subtitle: ''
+      text: |-
+        Extreme poverty at the international $3 a day line, alongside each country's own national poverty line. The gap between the two is often larger than the gap between countries — India records 5.3% by the international measure and 21.9% by its own.
+
+        {{< poverty >}}
+
+        [Full page: two lines, two different questions →](/data/poverty/)
+    design:
+      columns: '1'
+  - block: markdown
+    content:
       title: 'Population and demography'
       subtitle: ''
       text: |-
-        Eleven demographic indicators across 182 countries from 1960 to 2025 — population, growth rate, median age, fertility, age structure, life expectancy, urbanisation and density. Demography sits underneath most of the other datasets here, since population is the multiplier on every per-capita figure.
+        Eleven demographic indicators across 182 countries from 1960 to 2023 — population, growth rate, median age, fertility, age structure, life expectancy, urbanisation and density. Demography sits underneath most of the other datasets here, since population is the multiplier on every per-capita figure.
 
         {{< population >}}
 
