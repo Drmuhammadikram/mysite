@@ -1,6 +1,6 @@
 ---
 title: Sustainability Data
-summary: Interactive datasets on planetary boundaries, ecological footprint, biocapacity, human development, poverty, population and demography, ISO certifications, coal consumption, energy mix, water stress, food waste, natural disasters, life satisfaction, and progress toward the Sustainable Development Goals.
+summary: Interactive datasets on planetary boundaries, ecological footprint, biocapacity, human development, poverty, population and demography, ISO certifications, coal consumption, energy mix, water stress, forests and deforestation, food waste, natural disasters, life satisfaction, and progress toward the Sustainable Development Goals.
 type: landing
 sections:
   - block: markdown
@@ -121,6 +121,18 @@ sections:
         {{< waterstress >}}
 
         [Full page: how water stress is measured, and related research →](/data/water-stress/)
+    design:
+      columns: '1'
+  - block: markdown
+    content:
+      title: 'Forests and deforestation'
+      subtitle: ''
+      text: |-
+        Forest cover, net change, deforestation and satellite-observed tree cover loss across 168 countries. These four measure different things and are routinely conflated — a country can show net forest gain while deforestation continues, if planting outpaces clearance.
+
+        {{< forest >}}
+
+        [Full page: four measures that are routinely confused →](/data/deforestation/)
     design:
       columns: '1'
   - block: markdown
