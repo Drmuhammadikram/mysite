@@ -1,0 +1,149 @@
+{{- $d := site.Data.poverty -}}
+{{- with $d -}}
+<script type="application/json" id="pv-data">{{ .countries | jsonify }}</script>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:1.5rem;width:70vw;max-width:1100px;position:relative;left:50%;transform:translateX(-50%);" id="pv-cards"></div>
+
+<div id="pv-tabs" style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:1.25rem;align-items:center;width:70vw;max-width:1100px;position:relative;left:50%;transform:translateX(-50%);z-index:6;"></div>
+
+<div style="display:grid;grid-template-columns:1fr 190px;gap:24px;align-items:start;width:70vw;max-width:1100px;position:relative;left:50%;transform:translateX(-50%);" id="pv-wrap">
+  <div id="pv-map" style="width:100%;margin-top:-3.5rem;"></div>
+  <div>
+    <div id="pv-legend-title" style="font-size:0.78rem;opacity:0.75;margin-bottom:0.7rem;line-height:1.45;"></div>
+    <div id="pv-legend"></div>
+    <div id="pv-readout" style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid rgba(128,128,128,0.2);min-height:84px;">
+      <div style="font-size:0.75rem;opacity:0.5;">Hover a country</div>
+    </div>
+  </div>
+</div>
+
+<p style="font-size:0.72rem;opacity:0.55;margin-top:1.25rem;line-height:1.6;">
+  Source: {{ .source }}. Each country shows its most recent available observation, with the
+  year given on hover. Poverty data comes from household surveys conducted irregularly, so
+  reference years differ between countries and direct comparison carries that caveat. The
+  international line is set at $3 a day in 2021 purchasing power parity.
+</p>
+
+<style>@media(max-width:760px){#pv-wrap{grid-template-columns:1fr!important}}</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+<script>
+(function(){
+var DATA=JSON.parse(document.getElementById('pv-data').textContent);
+if(typeof DATA==='string'){ DATA=JSON.parse(DATA); }
+var dark=matchMedia('(prefers-color-scheme: dark)').matches;
+var noData=dark?'#2c2c2a':'#eceae4';
+var M=[
+ {k:'ext',l:'Extreme poverty, $3 a day',
+  b:[[40,'over 40%'],[20,'20 - 40%'],[8,'8 - 20%'],[2,'2 - 8%'],[0,'under 2%']]},
+ {k:'nat',l:'National poverty line',
+  b:[[45,'over 45%'],[30,'30 - 45%'],[18,'18 - 30%'],[9,'9 - 18%'],[0,'under 9%']]}
+];
+var COLS=['#5c1a10','#a83b1c','#d9803c','#e8bd8a','#f5e6d3'];
+var mi=0, paths=null;
+
+function colorFor(v){
+  if(v===null||v===undefined) return noData;
+  var B=M[mi].b;
+  for(var j=0;j<B.length;j++){ if(v>=B[j][0]) return COLS[j]; }
+  return COLS[COLS.length-1];
+}
+function key(f){ return ('00'+String(f.id)).slice(-3); }
+function last(k,m){ var c=DATA[k]; if(!c||!c.last) return null; return c.last[m]||null; }
+function val(k,m){ var L=last(k,m); return L?L[1]:null; }
+
+var svg=d3.select('#pv-map').append('svg')
+  .attr('viewBox','0 0 960 440').attr('width','100%').style('min-height','700px').style('display','block')
+  .attr('role','img').attr('aria-label','World map of poverty rates');
+var path=d3.geoPath(d3.geoNaturalEarth1().scale(200).translate([460,205]));
+
+function cards(){
+  var S=M[mi], vals=[], n=0, sum=0, yrs=[];
+  for(var k in DATA){
+    var L=last(k,S.k);
+    if(L){ vals.push([DATA[k].n,L[1]]); n++; sum+=L[1]; yrs.push(+L[0]); }
+  }
+  vals.sort(function(a,b){ return b[1]-a[1]; });
+  var top=vals[0]||['-',0];
+  yrs.sort(function(a,b){return a-b;});
+  var med=yrs.length?yrs[Math.floor(yrs.length/2)]:'-';
+  function card(l,big,sub){
+    return '<div style="background:rgba(128,128,128,0.06);border-radius:8px;padding:1rem;">'+
+     '<div style="font-size:0.75rem;opacity:0.7;margin-bottom:0.4rem;">'+l+'</div>'+
+     '<div style="font-size:1.7rem;line-height:1;font-weight:600;font-variant-numeric:tabular-nums;">'+big+'</div>'+
+     '<div style="font-size:0.68rem;opacity:0.55;margin-top:0.3rem;">'+sub+'</div></div>';
+  }
+  d3.select('#pv-cards').html(
+    card('Measure',mi===0?'$3/day':'National','poverty line')+
+    card('Highest',top[1].toFixed(1)+'%',top[0])+
+    card('Average',n?(sum/n).toFixed(1)+'%':'-','across '+n+' countries')+
+    card('Median year',med,'of observation'));
+}
+
+function render(){
+  var S=M[mi];
+  d3.select('#pv-legend-title').html('<strong style="font-weight:600;opacity:1">'+S.l+
+    '</strong><br>Share of population, most recent observation.');
+  d3.select('#pv-legend').html(S.b.map(function(b,j){
+    return '<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;font-size:0.72rem;opacity:0.75;">'+
+      '<span style="width:16px;height:11px;border-radius:2px;background:'+COLS[j]+';flex-shrink:0;border:1px solid rgba(128,128,128,0.2);"></span>'+b[1]+'</div>';
+  }).join('')+'<div style="display:flex;align-items:center;gap:8px;margin-top:8px;font-size:0.72rem;opacity:0.5;">'+
+    '<span style="width:16px;height:11px;border-radius:2px;background:'+noData+';flex-shrink:0;"></span>No survey data</div>');
+  d3.selectAll('#pv-tabs button')
+    .style('background',function(d,j){return j===mi?'rgba(168,59,28,0.18)':'transparent';})
+    .style('border-color',function(d,j){return j===mi?'rgba(168,59,28,0.6)':'rgba(128,128,128,0.3)';})
+    .style('font-weight',function(d,j){return j===mi?'600':'400';})
+    .style('opacity',function(d,j){return j===mi?1:0.65;});
+  if(paths) paths.attr('fill',function(f){ return colorFor(val(key(f),M[mi].k)); });
+  cards();
+}
+
+d3.select('#pv-tabs').selectAll('button').data(M).join('button')
+  .attr('type','button')
+  .style('font-size','0.75rem').style('padding','6px 12px').style('cursor','pointer')
+  .style('border','1px solid rgba(128,128,128,0.3)').style('border-radius','6px')
+  .style('color','inherit')
+  .text(function(d){return d.l;})
+  .on('click',function(e,d){ mi=M.indexOf(d); render(); });
+
+d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(function(w){
+  var mor=w.objects.countries.geometries.filter(function(g){
+    var id=String(+g.id); return id==='504'||id==='732'; });
+  var feats=topojson.feature(w,w.objects.countries).features
+    .filter(function(f){var id=String(+f.id); return id!=='504'&&id!=='732'&&id!=='010';});
+  if(mor.length) feats.push({type:'Feature',id:504,geometry:topojson.merge(w,mor)});
+  paths=svg.selectAll('path').data(feats).join('path')
+    .attr('d',path)
+    .attr('fill',function(f){ return colorFor(val(key(f),M[mi].k)); })
+    .attr('stroke',dark?'rgba(255,255,255,.14)':'#fff').attr('stroke-width',0.4)
+    .style('cursor','pointer')
+    .on('mouseenter',function(e,f){
+      var k=key(f), c=DATA[k];
+      if(!c){ d3.select('#pv-readout').html('<div style="font-size:0.75rem;opacity:0.5;">No survey data</div>'); return; }
+      var e1=last(k,'ext'), n1=last(k,'nat');
+      function row(lab,L,strong){
+        return '<div style="display:flex;justify-content:space-between;gap:10px;'+
+          (strong?'font-weight:600;':'opacity:0.72;')+'"><span>'+lab+'</span>'+
+          '<span style="font-variant-numeric:tabular-nums;">'+
+          (L?L[1].toFixed(1)+'% <span style="opacity:0.55;font-weight:400;">'+L[0]+'</span>':'-')+
+          '</span></div>';
+      }
+      var gap='';
+      if(e1&&n1){
+        var d0=n1[1]-e1[1];
+        if(Math.abs(d0)>=1) gap='<div style="margin-top:0.45rem;padding-top:0.4rem;border-top:1px solid rgba(128,128,128,0.2);opacity:0.62;">'+
+          'National line is '+Math.abs(d0).toFixed(1)+' points '+(d0>0?'higher':'lower')+'</div>';
+      }
+      d3.select('#pv-readout').html(
+        '<div style="font-size:0.85rem;font-weight:600;margin-bottom:0.5rem;">'+c.n+'</div>'+
+        '<div style="font-size:0.73rem;line-height:1.8;">'+
+        row('$3 a day','ext'===M[mi].k?e1:e1,M[mi].k==='ext')+
+        row('National line',n1,M[mi].k==='nat')+
+        gap+'</div>');
+    });
+  render();
+});
+})();
+</script>
+{{- end -}}
