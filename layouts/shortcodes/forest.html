@@ -23,8 +23,9 @@
   Source: {{ .source }}. Forest cover and net change come from FAO country reporting; tree
   cover loss is satellite-observed and counts all loss including harvest and fire, so it is
   larger than deforestation. Net change can be positive while deforestation continues, if
-  planting exceeds clearance. Deforestation figures are reported only in five-year assessment
-  periods.
+  planting exceeds clearance. Deforestation is reported only in five-year assessment periods
+  and tree cover loss only from 2005, so where a year has no observation the map shows the
+  most recent earlier one and the hover panel gives its date.
 </p>
 
 <style>@media(max-width:760px){#fr-wrap{grid-template-columns:1fr!important}}</style>
@@ -68,8 +69,6 @@ function colorFor(v){
   return S.c[S.c.length-1];
 }
 function key(f){ return ('00'+String(f.id)).slice(-3); }
-function val(k,m,y){ var c=DATA[k]; if(!c) return null; var g=c.d[m]; if(!g) return null;
-  var v=g[y]; return (v===undefined)?null:v; }
 function nearest(k,m,y){
   var c=DATA[k]; if(!c) return null; var g=c.d[m]; if(!g) return null;
   if(g[y]!==undefined) return [y,g[y]];
@@ -78,6 +77,7 @@ function nearest(k,m,y){
   if(!best && ys.length) best=ys[0];
   return best?[best,g[best]]:null;
 }
+function val(k,m,y){ var N=nearest(k,m,y); return N?N[1]:null; }
 function fmt(v,dp,suf){
   if(v===null||v===undefined) return '-';
   var s;
