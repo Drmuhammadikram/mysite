@@ -150,25 +150,56 @@ sections:
       text: |-
         Nineteen master's theses supervised to completion, concentrated on sustainable development, green technology strategy, and multi-criteria decision analysis in Morocco and the wider MENA region.
 
-        <div style="display:grid;gap:0;margin-top:0.6rem;">
-          <div style="font-size:0.85rem;line-height:1.5;padding:0.65rem 0;border-bottom:1px solid rgba(128,128,128,0.13);">Green bonds and green technology: the influence of economic and environmental factors in the MENA region</div>
-          <div style="font-size:0.85rem;line-height:1.5;padding:0.65rem 0;border-bottom:1px solid rgba(128,128,128,0.13);">AI adoption and its impact on the Sustainable Development Goals in Morocco's manufacturing sector</div>
-          <div style="font-size:0.85rem;line-height:1.5;padding:0.65rem 0;border-bottom:1px solid rgba(128,128,128,0.13);">Developing green technology strategies for sustainable investment in Morocco: an integrated TWOS-fuzzy AHP approach</div>
-          <div style="font-size:0.85rem;line-height:1.5;padding:0.65rem 0;border-bottom:1px solid rgba(128,128,128,0.13);">Green marketing, brand loyalty and electronic word-of-mouth: applying the theory of planned behaviour in the North African consumer market</div>
-          <div style="font-size:0.85rem;line-height:1.5;padding:0.65rem 0;border-bottom:1px solid rgba(128,128,128,0.13);">Green marketing, brand loyalty and eWOM: evaluating the mediating role of CSR within the theory of planned behaviour</div>
-          <div style="font-size:0.85rem;line-height:1.5;padding:0.65rem 0;border-bottom:1px solid rgba(128,128,128,0.13);">Prioritisation of green management practice strategies using fuzzy AHP in the Moroccan hospitality industry</div>
-          <div style="font-size:0.85rem;line-height:1.5;padding:0.65rem 0;border-bottom:1px solid rgba(128,128,128,0.13);">Towards sustainable development in Morocco: evaluating green growth strategies using integrated decision-making models</div>
-          <div style="font-size:0.85rem;line-height:1.5;padding:0.65rem 0;border-bottom:1px solid rgba(128,128,128,0.13);">Greenwashing in the MENA region: a multi-criteria decision-making analysis using fuzzy AHP</div>
-          <div style="font-size:0.85rem;line-height:1.5;padding:0.65rem 0;border-bottom:1px solid rgba(128,128,128,0.13);">Assessment, prediction and future trends of sustainable finance, carbon emissions and SDG performance in the Middle East and Africa region</div>
-          <div style="font-size:0.85rem;line-height:1.5;padding:0.65rem 0;border-bottom:1px solid rgba(128,128,128,0.13);">The impact of industrial growth on green growth in Morocco</div>
-          <div style="font-size:0.85rem;line-height:1.5;padding:0.65rem 0;border-bottom:1px solid rgba(128,128,128,0.13);">QES certifications and economic development in the top fifteen African countries</div>
-          <div style="font-size:0.85rem;line-height:1.5;padding:0.65rem 0;border-bottom:1px solid rgba(128,128,128,0.13);">Investigating the impact of electric vehicle market adoption on economic and environmental outcomes</div>
-          <div style="font-size:0.85rem;line-height:1.5;padding:0.65rem 0;border-bottom:1px solid rgba(128,128,128,0.13);">The impact of government effectiveness on financial and economic SDG performance during a pandemic</div>
-          <div style="font-size:0.85rem;line-height:1.5;padding:0.65rem 0;border-bottom:1px solid rgba(128,128,128,0.13);">COVID-19 and the effect of voice and accountability on performance across the seventeen Sustainable Development Goals</div>
-          <div style="font-size:0.85rem;line-height:1.5;padding:0.65rem 0;border-bottom:1px solid rgba(128,128,128,0.13);">Moroccan investment in sub-Saharan Africa: opportunities and challenges</div>
-          <div style="font-size:0.85rem;line-height:1.5;padding:0.65rem 0;border-bottom:1px solid rgba(128,128,128,0.13);">Volkswagen crisis management and the response to Dieselgate</div>
-          <div style="font-size:0.85rem;line-height:1.5;padding:0.65rem 0;border-bottom:1px solid rgba(128,128,128,0.13);">The effect of change management on organisational performance</div>
-          <div style="font-size:0.85rem;line-height:1.5;padding:0.65rem 0;">The influence of flexible work arrangements on employee productivity</div>
+        <style>
+        .th{display:grid;gap:9px;}
+        .th-i{display:flex;align-items:flex-start;gap:13px;padding:0.85rem 1.1rem;border-radius:9px;
+              background:rgba(128,128,128,0.05);border-left:3px solid;
+              transition:background .16s ease,transform .16s ease;}
+        .th-i:hover{background:rgba(128,128,128,0.09);transform:translateX(2px);}
+        .th-n{font-size:0.68rem;font-weight:700;font-variant-numeric:tabular-nums;
+              opacity:0.45;flex-shrink:0;padding-top:0.15rem;width:18px;}
+        .th-t{font-size:0.85rem;line-height:1.5;flex:1;}
+        .th-g{font-size:0.66rem;letter-spacing:0.07em;text-transform:uppercase;opacity:0.5;
+              margin:1.5rem 0 0.6rem;font-weight:600;}
+        </style>
+
+        <div class="th-g" style="margin-top:0.7rem;">Green technology and sustainable investment</div>
+        <div class="th">
+          <div class="th-i" style="border-color:#1baf7a;"><span class="th-n">01</span><span class="th-t">Green bonds and green technology: the influence of economic and environmental factors in the MENA region</span></div>
+          <div class="th-i" style="border-color:#1baf7a;"><span class="th-n">02</span><span class="th-t">Developing green technology strategies for sustainable investment in Morocco: an integrated TWOS-fuzzy AHP approach</span></div>
+          <div class="th-i" style="border-color:#1baf7a;"><span class="th-n">03</span><span class="th-t">Prioritisation of green management practice strategies using fuzzy AHP in the Moroccan hospitality industry</span></div>
+          <div class="th-i" style="border-color:#1baf7a;"><span class="th-n">04</span><span class="th-t">Towards sustainable development in Morocco: evaluating green growth strategies using integrated decision-making models</span></div>
+          <div class="th-i" style="border-color:#1baf7a;"><span class="th-n">05</span><span class="th-t">The impact of industrial growth on green growth in Morocco</span></div>
+        </div>
+
+        <div class="th-g">Sustainable Development Goals and governance</div>
+        <div class="th">
+          <div class="th-i" style="border-color:#2a7fa8;"><span class="th-n">06</span><span class="th-t">AI adoption and its impact on the Sustainable Development Goals in Morocco's manufacturing sector</span></div>
+          <div class="th-i" style="border-color:#2a7fa8;"><span class="th-n">07</span><span class="th-t">Assessment, prediction and future trends of sustainable finance, carbon emissions and SDG performance in the Middle East and Africa region</span></div>
+          <div class="th-i" style="border-color:#2a7fa8;"><span class="th-n">08</span><span class="th-t">The impact of government effectiveness on financial and economic SDG performance during a pandemic</span></div>
+          <div class="th-i" style="border-color:#2a7fa8;"><span class="th-n">09</span><span class="th-t">COVID-19 and the effect of voice and accountability on performance across the seventeen Sustainable Development Goals</span></div>
+          <div class="th-i" style="border-color:#2a7fa8;"><span class="th-n">10</span><span class="th-t">QES certifications and economic development in the top fifteen African countries</span></div>
+        </div>
+
+        <div class="th-g">Green marketing and consumer behaviour</div>
+        <div class="th">
+          <div class="th-i" style="border-color:#7a4fa0;"><span class="th-n">11</span><span class="th-t">Exploring the influence of green marketing on brand loyalty and electronic word-of-mouth: applying the theory of planned behaviour in the North African consumer market</span></div>
+          <div class="th-i" style="border-color:#7a4fa0;"><span class="th-n">12</span><span class="th-t">Green marketing, brand loyalty and eWOM: evaluating the mediating role of CSR within the theory of planned behaviour</span></div>
+          <div class="th-i" style="border-color:#7a4fa0;"><span class="th-n">13</span><span class="th-t">Greenwashing in the MENA region: a multi-criteria decision-making analysis using fuzzy AHP</span></div>
+        </div>
+
+        <div class="th-g">Corporate strategy and organisational performance</div>
+        <div class="th">
+          <div class="th-i" style="border-color:#c2703f;"><span class="th-n">14</span><span class="th-t">Volkswagen crisis management and the response to Dieselgate</span></div>
+          <div class="th-i" style="border-color:#c2703f;"><span class="th-n">15</span><span class="th-t">Moroccan investment in sub-Saharan Africa: opportunities and challenges</span></div>
+          <div class="th-i" style="border-color:#c2703f;"><span class="th-n">16</span><span class="th-t">The effect of change management on organisational performance</span></div>
+          <div class="th-i" style="border-color:#c2703f;"><span class="th-n">17</span><span class="th-t">The influence of flexible work arrangements on employee productivity</span></div>
+        </div>
+
+        <div class="th-g">Energy and mobility transition</div>
+        <div class="th">
+          <div class="th-i" style="border-color:#b5761f;"><span class="th-n">18</span><span class="th-t">Investigating the impact of electric vehicle market adoption on economic and environmental outcomes</span></div>
+          <div class="th-i" style="border-color:#b5761f;"><span class="th-n">19</span><span class="th-t">Green bonds and green technology: analysing economic and environmental drivers in emerging markets</span></div>
         </div>
     design:
       columns: '1'
