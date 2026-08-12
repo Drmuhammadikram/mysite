@@ -103,6 +103,85 @@ sections:
       columns: '1'
   - block: markdown
     content:
+      title: 'Capstone Supervision'
+      subtitle: ''
+      text: |-
+        Each semester I set a single research theme for the undergraduate capstone cohort at the School of Business Administration, and supervise the projects developed within it.
+
+        <div style="display:grid;gap:14px;margin-top:0.6rem;">
+
+          <div style="background:rgba(128,128,128,0.05);border-left:3px solid #1baf7a;border-radius:9px;padding:1.15rem 1.3rem;">
+            <div style="font-size:0.68rem;letter-spacing:0.07em;text-transform:uppercase;opacity:0.55;margin-bottom:0.4rem;">Fall 2025</div>
+            <div style="font-size:0.92rem;font-weight:600;line-height:1.4;margin-bottom:0.6rem;">AI-Driven Decision Intelligence and Digital Ecosystems: Redesigning Competitive Strategy</div>
+            <div style="font-size:0.78rem;opacity:0.68;line-height:1.7;">Strategic analyses of Autohall, Label Vie, Bank of Africa, ONCF, Maroc Telecom and Managem.</div>
+          </div>
+
+          <div style="background:rgba(128,128,128,0.05);border-left:3px solid #2a7fa8;border-radius:9px;padding:1.15rem 1.3rem;">
+            <div style="font-size:0.68rem;letter-spacing:0.07em;text-transform:uppercase;opacity:0.55;margin-bottom:0.4rem;">Spring 2025</div>
+            <div style="font-size:0.92rem;font-weight:600;line-height:1.4;margin-bottom:0.6rem;">Driving Circular Economy Innovation in Morocco: Strategies for Sustainable Industrial Transformation</div>
+            <div style="font-size:0.78rem;opacity:0.68;line-height:1.7;">Circular economy assessments of TAQA Morocco, Groupe Akdital, CMGP, Maroc Telecom, Cosumar, Lesieur Cristal, Mutandis, Lafarge Holcim and Auto Hall.</div>
+          </div>
+
+          <div style="background:rgba(128,128,128,0.05);border-left:3px solid #c2703f;border-radius:9px;padding:1.15rem 1.3rem;">
+            <div style="font-size:0.68rem;letter-spacing:0.07em;text-transform:uppercase;opacity:0.55;margin-bottom:0.4rem;">Fall 2024</div>
+            <div style="font-size:0.92rem;font-weight:600;line-height:1.4;margin-bottom:0.6rem;">Strategic Insights and Corporate Excellence: An Analysis of Casablanca Stock Exchange Companies</div>
+            <div style="font-size:0.78rem;opacity:0.68;line-height:1.7;">Twenty-two listed firms analysed, including Afriquia Gas, Lafarge Holcim, SNEP, Lesieur Cristal, Cartier Saada, Dari, TotalEnergies Marketing Maroc, Cosumar and Unimer.</div>
+          </div>
+
+          <div style="background:rgba(128,128,128,0.05);border-left:3px solid #7a4fa0;border-radius:9px;padding:1.15rem 1.3rem;">
+            <div style="font-size:0.68rem;letter-spacing:0.07em;text-transform:uppercase;opacity:0.55;margin-bottom:0.4rem;">Spring 2024</div>
+            <div style="font-size:0.92rem;font-weight:600;line-height:1.4;margin-bottom:0.6rem;">AI-Driven Solutions for Accelerating Progress on the Sustainable Development Goals in Morocco</div>
+            <div style="font-size:0.78rem;opacity:0.68;line-height:1.7;">Projects mapped to specific Goals — water scarcity and recycling (SDG 6, 11, 13), heritage and livelihoods (SDG 1, 5, 8), obesity and public health (SDG 3), household food systems (SDG 2, 12), and consultancy access for small firms (SDG 8).</div>
+          </div>
+
+          <div style="background:rgba(128,128,128,0.05);border-left:3px solid #b5761f;border-radius:9px;padding:1.15rem 1.3rem;">
+            <div style="font-size:0.68rem;letter-spacing:0.07em;text-transform:uppercase;opacity:0.55;margin-bottom:0.4rem;">Fall 2023</div>
+            <div style="font-size:0.92rem;font-weight:600;line-height:1.4;margin-bottom:0.6rem;">Enabling Business Excellence with Artificial Intelligence: A Blueprint for Multidimensional Socio-Economic Growth in Morocco</div>
+            <div style="font-size:0.78rem;opacity:0.68;line-height:1.7;">AI applications developed for blood bank logistics, freelance labour markets, school guidance, vertical farming, retail personalisation, prenatal and postnatal care, and housing.</div>
+          </div>
+
+        </div>
+    design:
+      columns: '1'
+  - block: markdown
+    content:
+      title: 'Master&rsquo;s Thesis Supervision'
+      subtitle: ''
+      text: |-
+        Nineteen master's theses supervised to completion, concentrated on sustainable development, green technology strategy, and multi-criteria decision analysis in Morocco and the wider MENA region.
+
+        <div style="display:grid;gap:0;margin-top:0.6rem;">
+          <div style="font-size:0.85rem;line-height:1.5;padding:0.65rem 0;border-bottom:1px solid rgba(128,128,128,0.13);">Green bonds and green technology: the influence of economic and environmental factors in the MENA region</div>
+          <div style="font-size:0.85rem;line-height:1.5;padding:0.65rem 0;border-bottom:1px solid rgba(128,128,128,0.13);">AI adoption and its impact on the Sustainable Development Goals in Morocco's manufacturing sector</div>
+          <div style="font-size:0.85rem;line-height:1.5;padding:0.65rem 0;border-bottom:1px solid rgba(128,128,128,0.13);">Developing green technology strategies for sustainable investment in Morocco: an integrated TWOS-fuzzy AHP approach</div>
+          <div style="font-size:0.85rem;line-height:1.5;padding:0.65rem 0;border-bottom:1px solid rgba(128,128,128,0.13);">Green marketing, brand loyalty and electronic word-of-mouth: applying the theory of planned behaviour in the North African consumer market</div>
+          <div style="font-size:0.85rem;line-height:1.5;padding:0.65rem 0;border-bottom:1px solid rgba(128,128,128,0.13);">Green marketing, brand loyalty and eWOM: evaluating the mediating role of CSR within the theory of planned behaviour</div>
+          <div style="font-size:0.85rem;line-height:1.5;padding:0.65rem 0;border-bottom:1px solid rgba(128,128,128,0.13);">Prioritisation of green management practice strategies using fuzzy AHP in the Moroccan hospitality industry</div>
+          <div style="font-size:0.85rem;line-height:1.5;padding:0.65rem 0;border-bottom:1px solid rgba(128,128,128,0.13);">Towards sustainable development in Morocco: evaluating green growth strategies using integrated decision-making models</div>
+          <div style="font-size:0.85rem;line-height:1.5;padding:0.65rem 0;border-bottom:1px solid rgba(128,128,128,0.13);">Greenwashing in the MENA region: a multi-criteria decision-making analysis using fuzzy AHP</div>
+          <div style="font-size:0.85rem;line-height:1.5;padding:0.65rem 0;border-bottom:1px solid rgba(128,128,128,0.13);">Assessment, prediction and future trends of sustainable finance, carbon emissions and SDG performance in the Middle East and Africa region</div>
+          <div style="font-size:0.85rem;line-height:1.5;padding:0.65rem 0;border-bottom:1px solid rgba(128,128,128,0.13);">The impact of industrial growth on green growth in Morocco</div>
+          <div style="font-size:0.85rem;line-height:1.5;padding:0.65rem 0;border-bottom:1px solid rgba(128,128,128,0.13);">QES certifications and economic development in the top fifteen African countries</div>
+          <div style="font-size:0.85rem;line-height:1.5;padding:0.65rem 0;border-bottom:1px solid rgba(128,128,128,0.13);">Investigating the impact of electric vehicle market adoption on economic and environmental outcomes</div>
+          <div style="font-size:0.85rem;line-height:1.5;padding:0.65rem 0;border-bottom:1px solid rgba(128,128,128,0.13);">The impact of government effectiveness on financial and economic SDG performance during a pandemic</div>
+          <div style="font-size:0.85rem;line-height:1.5;padding:0.65rem 0;border-bottom:1px solid rgba(128,128,128,0.13);">COVID-19 and the effect of voice and accountability on performance across the seventeen Sustainable Development Goals</div>
+          <div style="font-size:0.85rem;line-height:1.5;padding:0.65rem 0;border-bottom:1px solid rgba(128,128,128,0.13);">Moroccan investment in sub-Saharan Africa: opportunities and challenges</div>
+          <div style="font-size:0.85rem;line-height:1.5;padding:0.65rem 0;border-bottom:1px solid rgba(128,128,128,0.13);">Volkswagen crisis management and the response to Dieselgate</div>
+          <div style="font-size:0.85rem;line-height:1.5;padding:0.65rem 0;border-bottom:1px solid rgba(128,128,128,0.13);">The effect of change management on organisational performance</div>
+          <div style="font-size:0.85rem;line-height:1.5;padding:0.65rem 0;">The influence of flexible work arrangements on employee productivity</div>
+        </div>
+    design:
+      columns: '1'
+  - block: markdown
+    content:
+      title: 'Peer Review'
+      subtitle: ''
+      text: |-
+        {{< reviewing >}}
+    design:
+      columns: '1'
+  - block: markdown
+    content:
       title: 'Professional Courses & Certifications'
       subtitle: ''
       text: |-
