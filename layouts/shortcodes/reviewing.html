@@ -10,14 +10,14 @@
     <div style="font-size:0.68rem;opacity:0.55;margin-top:0.3rem;">across the field</div>
   </div>
   <div style="background:rgba(128,128,128,0.06);border-radius:8px;padding:1rem;">
-    <div style="font-size:0.75rem;opacity:0.7;margin-bottom:0.4rem;">Most reviewed</div>
-    <div style="font-size:1.15rem;line-height:1.25;font-weight:600;margin-top:0.3rem;">115</div>
-    <div style="font-size:0.68rem;opacity:0.55;margin-top:0.3rem;">Environmental Science and Pollution Research</div>
+    <div style="font-size:0.75rem;opacity:0.7;margin-bottom:0.4rem;">Period</div>
+    <div style="font-size:1.45rem;line-height:1.1;font-weight:600;font-variant-numeric:tabular-nums;margin-top:0.25rem;">2019–2026</div>
+    <div style="font-size:0.68rem;opacity:0.55;margin-top:0.3rem;">Web of Science record</div>
   </div>
   <div style="background:rgba(128,128,128,0.06);border-radius:8px;padding:1rem;">
-    <div style="font-size:0.75rem;opacity:0.7;margin-bottom:0.4rem;">Publications</div>
-    <div style="font-size:1.9rem;line-height:1;font-weight:600;font-variant-numeric:tabular-nums;">108</div>
-    <div style="font-size:0.68rem;opacity:0.55;margin-top:0.3rem;">reviewed for</div>
+    <div style="font-size:0.75rem;opacity:0.7;margin-bottom:0.4rem;">Most reviewed</div>
+    <div style="font-size:1.9rem;line-height:1;font-weight:600;font-variant-numeric:tabular-nums;">86</div>
+    <div style="font-size:0.68rem;opacity:0.55;margin-top:0.3rem;">Env. Science and Pollution Research</div>
   </div>
 </div>
 
@@ -25,47 +25,53 @@
 
 <p style="font-size:0.72rem;opacity:0.55;margin-top:1.1rem;line-height:1.6;">
   Peer review activity verified through
-  <a href="https://orcid.org/0000-0003-2656-9302">ORCID</a>. The chart shows the twenty
-  journals with the most reviews; a further sixty journals account for the remainder.
+  <a href="https://orcid.org/0000-0003-2656-9302">ORCID</a> and the Web of Science reviewer
+  record. The chart shows the twenty-five journals with the most reviews; a further fifty-five
+  journals account for the remainder.
 </p>
 
 <script>
 (function(){
 var J=[
-["Environmental Science and Pollution Research",115],
-["Environment, Development and Sustainability",64],
-["Sustainable Futures",37],
-["Sustainability",30],
+["Environmental Science and Pollution Research",86],
+["Environment, Development and Sustainability",50],
 ["International Journal of Energy Research",27],
+["Sustainability",25],
+["Journal of Global Responsibility",20],
+["Sustainable Futures",20],
 ["SAGE Open",19],
-["Journal of Global Responsibility",17],
-["Journal of Environmental Management",14],
+["Journal of Environmental Management",15],
+["Sustainable Production and Consumption",13],
+["Business Strategy and the Environment",13],
+["Sustainable Development",13],
 ["Frontiers in Environmental Science",12],
-["PLoS One",12],
-["Sustainable Development",10],
-["Business Strategy and the Environment",9],
 ["Management Science and Business Decisions",9],
 ["International Journal of Grey Systems",8],
-["Computers & Industrial Engineering",8],
 ["Journal of Cleaner Production",7],
-["Next Research",7],
+["PLoS One",7],
 ["Scientific Reports",7],
-["Risks",6],
-["Energies",6]
+["Corporate Social Responsibility and Environmental Management",7],
+["Energies",6],
+["Technological Forecasting and Social Change",5],
+["The TQM Journal",5],
+["Next Research",4],
+["Computers & Industrial Engineering",4],
+["Current Opinion in Green and Sustainable Chemistry",4],
+["Modern Supply Chain Research and Applications",4]
 ];
 var dark=matchMedia('(prefers-color-scheme: dark)').matches;
 var max=J[0][1];
-var C=['#0d5c46','#166b52','#1d7a5f','#2a8f6f','#3aa07f','#4fb08e','#66bd9c','#7fc9a9',
-       '#98d4b6','#b0dec3','#c2b878','#cbaa62','#d29c4f','#d78d3f','#d97e34','#d96f2c',
-       '#d55f26','#cd5023','#c24322','#b53823'];
-var html='<div style="display:grid;gap:6px;">';
+var C=['#0d5c46','#12684f','#177458','#1d8062','#248c6c','#2d9877','#3aa382','#4aad8d',
+       '#5cb798','#70c0a3','#b8a862','#c29d55','#ca924b','#d18744','#d67c3e','#d9713a',
+       '#da6637','#d95c35','#d65235','#d14836','#c93f37','#bf3738','#b33038','#a52a38','#962537'];
+var track=dark?'rgba(255,255,255,0.07)':'rgba(0,0,0,0.05)';
+var html='<div style="display:grid;gap:7px;">';
 J.forEach(function(j,i){
   var w=(j[1]/max*100).toFixed(1);
-  html+='<div style="display:grid;grid-template-columns:1fr 46px;gap:12px;align-items:center;">'+
+  html+='<div style="display:grid;grid-template-columns:1fr 44px;gap:12px;align-items:center;">'+
     '<div>'+
-    '<div style="display:flex;justify-content:space-between;font-size:0.78rem;margin-bottom:3px;">'+
-    '<span style="opacity:0.85;">'+j[0]+'</span></div>'+
-    '<div style="height:8px;border-radius:5px;background:'+(dark?'rgba(255,255,255,0.07)':'rgba(0,0,0,0.055)')+';overflow:hidden;">'+
+    '<div style="font-size:0.78rem;opacity:0.85;margin-bottom:3px;line-height:1.35;">'+j[0]+'</div>'+
+    '<div style="height:8px;border-radius:5px;background:'+track+';overflow:hidden;">'+
     '<div style="height:100%;width:'+w+'%;background:'+C[i]+';border-radius:5px;"></div></div>'+
     '</div>'+
     '<div style="font-size:0.82rem;font-weight:600;font-variant-numeric:tabular-nums;text-align:right;color:'+C[i]+';">'+j[1]+'</div>'+
