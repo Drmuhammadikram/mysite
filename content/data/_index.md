@@ -15,6 +15,8 @@ sections:
         [Full page: the nine boundaries explained, and what crossing them means →](/data/planetary-boundaries/)
     design:
       columns: '1'
+      spacing:
+        padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
       title: 'Ecological footprint and biocapacity worldwide'
@@ -27,6 +29,8 @@ sections:
         [Full page: methodology, how to read it, and related research →](/data/ecological-footprint/)
     design:
       columns: '1'
+      spacing:
+        padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
       title: 'SDG Index: progress toward the Goals'
@@ -39,6 +43,8 @@ sections:
         [Full page: methodology, how to read the Index, and related research →](/data/sdg-index/)
     design:
       columns: '1'
+      spacing:
+        padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
       title: 'Human Development Index worldwide'
@@ -51,6 +57,8 @@ sections:
         [Full page: what the Index combines, and what it leaves out →](/data/human-development-index/)
     design:
       columns: '1'
+      spacing:
+        padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
       title: 'Poverty worldwide'
@@ -63,6 +71,8 @@ sections:
         [Full page: two lines, two different questions →](/data/poverty/)
     design:
       columns: '1'
+      spacing:
+        padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
       title: 'Population and demography'
@@ -75,6 +85,8 @@ sections:
         [Full page: why median age is the default view →](/data/population/)
     design:
       columns: '1'
+      spacing:
+        padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
       title: 'ISO management system certifications worldwide'
@@ -87,6 +99,8 @@ sections:
         [Full page: what the ISO Survey measures, and its limits →](/data/iso-certifications/)
     design:
       columns: '1'
+      spacing:
+        padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
       title: 'Coal consumption worldwide'
@@ -99,6 +113,8 @@ sections:
         [Full page: why three metrics, and how to read them →](/data/coal-consumption/)
     design:
       columns: '1'
+      spacing:
+        padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
       title: 'Energy mix by source'
@@ -111,6 +127,8 @@ sections:
         [Full page: why primary energy rather than electricity →](/data/energy-mix/)
     design:
       columns: '1'
+      spacing:
+        padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
       title: 'Water stress worldwide'
@@ -123,6 +141,8 @@ sections:
         [Full page: how water stress is measured, and related research →](/data/water-stress/)
     design:
       columns: '1'
+      spacing:
+        padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
       title: 'Forests and deforestation'
@@ -135,6 +155,8 @@ sections:
         [Full page: four measures that are routinely confused →](/data/deforestation/)
     design:
       columns: '1'
+      spacing:
+        padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
       title: 'Food waste per capita'
@@ -147,6 +169,8 @@ sections:
         [Full page: why this dataset needs reading with caution →](/data/food-waste/)
     design:
       columns: '1'
+      spacing:
+        padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
       title: 'Natural disasters worldwide'
@@ -159,6 +183,8 @@ sections:
         [Full page: what EM-DAT records, and why reporting bias matters →](/data/natural-disasters/)
     design:
       columns: '1'
+      spacing:
+        padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
       title: 'Life satisfaction worldwide'
@@ -171,6 +197,8 @@ sections:
         [Full page: the Cantril ladder, and what life evaluation captures →](/data/life-satisfaction/)
     design:
       columns: '1'
+      spacing:
+        padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
       title: 'Estimate your carbon footprint'
@@ -181,4 +209,6 @@ sections:
         {{< carboncalc >}}
     design:
       columns: '1'
+      spacing:
+        padding: ['1rem', '0', '1rem', '0']
 ---
