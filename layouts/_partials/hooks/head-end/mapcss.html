@@ -4,9 +4,16 @@
   [id$="-cards"],
   [id$="-tabs"],
   [id$="-metric"],
-  [id$="-src"]{
+  [id$="-src"],
+  #pb-legend,
+  #pb-read{
     width: 96vw !important;
     max-width: 96vw !important;
+    position: relative !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
   }
   [id$="-map"]{
     margin-top: 0 !important;
@@ -19,18 +26,6 @@
   }
   [id$="-cards"]{
     grid-template-columns: repeat(2, 1fr) !important;
-  }
-  #pb-wrap,
-  #pb-legend,
-  #pb-read{
-    width: 98vw !important;
-    max-width: 98vw !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-  }
-  #pb-wrap svg{
-    width: 100% !important;
-    height: auto !important;
   }
 }
 </style>
