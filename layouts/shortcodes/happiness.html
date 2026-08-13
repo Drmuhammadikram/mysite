@@ -38,6 +38,7 @@ if(typeof DATA==='string'){ DATA=JSON.parse(DATA); }
 var YEARS=JSON.parse(document.getElementById('hp-years').textContent);
 if(typeof YEARS==='string'){ YEARS=JSON.parse(YEARS); }
 var dark=matchMedia('(prefers-color-scheme: dark)').matches;
+var globe=window.innerWidth<820;
 var noData=dark?'#2c2c2a':'#eceae4';
 var BANDS=[[7,'7.0 and above'],[6,'6.0 - 7.0'],[5,'5.0 - 6.0'],[4,'4.0 - 5.0'],[0,'Below 4.0']];
 var COLS=['#14496b','#2a7fa8','#6fb3c9','#c9a86a','#a8613b'];
@@ -51,10 +52,39 @@ function colorFor(v){
 function key(f){ return ('00'+String(f.id)).slice(-3); }
 function val(k,y){ var c=DATA[k]; if(!c) return null; var v=c.y[y]; return (v===undefined)?null:v; }
 
+var W=globe?420:960, H=globe?420:440;
 var svg=d3.select('#hp-map').append('svg')
-  .attr('viewBox','0 0 960 440').attr('width','100%').style('min-height','700px').style('display','block')
+  .attr('viewBox','0 0 '+W+' '+H).attr('width','100%')
+  .style('min-height',globe?'0':'700px').style('display','block')
+  .style('touch-action',globe?'none':'auto')
   .attr('role','img').attr('aria-label','World map of self-reported life satisfaction');
-var path=d3.geoPath(d3.geoNaturalEarth1().scale(200).translate([460,205]));
+var proj=globe
+  ? d3.geoOrthographic().scale(198).translate([210,210]).rotate([-10,-18,0]).clipAngle(90)
+  : d3.geoNaturalEarth1().scale(200).translate([460,205]);
+var path=d3.geoPath(proj);
+
+function show(k){
+  var c=DATA[k];
+  if(!c){ d3.select('#hp-readout').html('<div style="font-size:0.75rem;opacity:0.5;">No data</div>'); return; }
+  var v=val(k,year), first=null;
+  for(var i=0;i<YEARS.length;i++){ var x=val(k,YEARS[i]); if(x!==null){ first=x; break; } }
+  var rank='';
+  if(v!==null){
+    var all=[]; for(var kk in DATA){ var vv=val(kk,year); if(vv!==null) all.push(vv); }
+    all.sort(function(a,b){return b-a;});
+    rank='<br><span style="opacity:0.6;">Rank '+(all.indexOf(v)+1)+' of '+all.length+'</span>';
+  }
+  var trend='';
+  if(v!==null&&first!==null){
+    var d0=v-first;
+    trend='<br><span style="opacity:0.6;">'+(d0>0?'+':'')+d0.toFixed(2)+' since '+YEARS[0]+'</span>';
+  }
+  d3.select('#hp-readout').html(
+    '<div style="font-size:0.85rem;font-weight:600;margin-bottom:0.4rem;">'+c.n+'</div>'+
+    '<div style="font-size:1.5rem;font-weight:600;font-variant-numeric:tabular-nums;line-height:1;color:'+
+    colorFor(v)+';">'+(v===null?'-':v.toFixed(2))+'</div>'+
+    '<div style="font-size:0.72rem;opacity:0.72;line-height:1.6;margin-top:0.4rem;">out of 10'+rank+trend+'</div>');
+}
 
 function cards(){
   var vals=[], n=0, sum=0;
@@ -106,33 +136,41 @@ d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(f
   var feats=topojson.feature(w,w.objects.countries).features
     .filter(function(f){var id=String(+f.id); return id!=='504'&&id!=='732'&&id!=='010';});
   if(mor.length) feats.push({type:'Feature',id:504,geometry:topojson.merge(w,mor)});
-  paths=svg.selectAll('path').data(feats).join('path')
+
+  if(globe){
+    svg.append('circle').attr('cx',210).attr('cy',210).attr('r',198)
+      .attr('fill',dark?'#101a20':'#dbe8ef');
+    svg.append('path').datum(d3.geoGraticule10())
+      .attr('class','hp-grat').attr('d',path).attr('fill','none')
+      .attr('stroke',dark?'rgba(255,255,255,.10)':'rgba(0,0,0,.09)').attr('stroke-width',0.5);
+  }
+
+  paths=svg.selectAll('path.hp-c').data(feats).join('path')
+    .attr('class','hp-c')
     .attr('d',path)
     .attr('fill',function(f){ return colorFor(val(key(f),year)); })
     .attr('stroke',dark?'rgba(255,255,255,.14)':'#fff').attr('stroke-width',0.4)
     .style('cursor','pointer')
-    .on('mouseenter',function(e,f){
-      var k=key(f), c=DATA[k];
-      if(!c){ d3.select('#hp-readout').html('<div style="font-size:0.75rem;opacity:0.5;">No data</div>'); return; }
-      var v=val(k,year), first=null;
-      for(var i=0;i<YEARS.length;i++){ var x=val(k,YEARS[i]); if(x!==null){ first=x; break; } }
-      var rank='';
-      if(v!==null){
-        var all=[]; for(var kk in DATA){ var vv=val(kk,year); if(vv!==null) all.push(vv); }
-        all.sort(function(a,b){return b-a;});
-        rank='<br><span style="opacity:0.6;">Rank '+(all.indexOf(v)+1)+' of '+all.length+'</span>';
-      }
-      var trend='';
-      if(v!==null&&first!==null){
-        var d0=v-first;
-        trend='<br><span style="opacity:0.6;">'+(d0>0?'+':'')+d0.toFixed(2)+' since '+YEARS[0]+'</span>';
-      }
-      d3.select('#hp-readout').html(
-        '<div style="font-size:0.85rem;font-weight:600;margin-bottom:0.4rem;">'+c.n+'</div>'+
-        '<div style="font-size:1.5rem;font-weight:600;font-variant-numeric:tabular-nums;line-height:1;color:'+
-        colorFor(v)+';">'+(v===null?'-':v.toFixed(2))+'</div>'+
-        '<div style="font-size:0.72rem;opacity:0.72;line-height:1.6;margin-top:0.4rem;">out of 10'+rank+trend+'</div>');
-    });
+    .on('mouseenter',function(e,f){ if(!globe) show(key(f)); })
+    .on('click',function(e,f){ show(key(f)); });
+
+  if(globe){
+    svg.append('circle').attr('cx',210).attr('cy',210).attr('r',198)
+      .attr('fill','none').attr('stroke',dark?'rgba(255,255,255,.22)':'rgba(0,0,0,.18)')
+      .attr('stroke-width',1).style('pointer-events','none');
+    var x0,y0,r0;
+    svg.call(d3.drag()
+      .on('start',function(e){ x0=e.x; y0=e.y; r0=proj.rotate(); })
+      .on('drag',function(e){
+        var kk=0.32;
+        proj.rotate([r0[0]+(e.x-x0)*kk, Math.max(-88,Math.min(88,r0[1]-(e.y-y0)*kk)), 0]);
+        paths.attr('d',path); svg.select('.hp-grat').attr('d',path);
+      }));
+    d3.select('#hp-map').append('div')
+      .style('font-size','0.7rem').style('opacity','0.5')
+      .style('text-align','center').style('margin-top','0.4rem')
+      .text('Drag to rotate · tap a country for detail');
+  }
   render();
 });
 })();
