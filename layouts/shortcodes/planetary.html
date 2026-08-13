@@ -60,7 +60,8 @@ var PB=[
  {n:'Stratospheric\nozone depletion',k:'ozone',c:[{l:'Ozone concentration',f:0.33,z:0,v:'285.7 DU',b:'277 DU',u:0}]},
  {n:'Introduction of\nnovel entities',k:'novel',c:[{l:'Untested chemicals released',f:1,z:2,v:'transgressed',b:'zero',u:1}]}
 ];
-var R0=54,RPB=136,RHR=180,RMAX=236,RIC=266,CX=430,CY=398;
+var narrow=window.innerWidth<820;
+var R0=54,RPB=136,RHR=180,RMAX=236,RIC=narrow?250:266,CX=430,CY=398;
 var dark=matchMedia('(prefers-color-scheme: dark)').matches;
 var ink=dark?'#e2e0db':'#15302a';
 var G=[[R0,'#0b6b48'],[96,'#3ea567'],[RPB,'#93c04b'],[148,'#e8b53a'],[RHR,'#e07f2b'],[204,'#bd3418'],[RMAX,'#711a4c']];
@@ -75,7 +76,7 @@ function rad(z,f){
   if(z===1) return RPB+f*(RHR-RPB);
   return RHR+Math.min(f,1)*(RMAX-RHR);
 }
-var s='<svg viewBox="0 0 860 800" width="100%" style="display:block" role="img" aria-label="Planetary boundaries diagram, seven of nine breached">';
+var s='<svg viewBox="'+(narrow?'55 40 750 720':'0 0 860 800')+'" width="100%" style="display:block" role="img" aria-label="Planetary boundaries diagram, seven of nine breached">';
 s+='<defs>';
 s+='<radialGradient id="pbg" gradientUnits="userSpaceOnUse" cx="'+CX+'" cy="'+CY+'" r="'+RMAX+'">';
 G.forEach(function(x){ s+='<stop offset="'+(x[0]/RMAX).toFixed(3)+'" stop-color="'+x[1]+'"/>'; });
