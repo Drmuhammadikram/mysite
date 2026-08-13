@@ -3,7 +3,7 @@ title: 'Experience'
 date: 2023-10-24
 type: landing
 design:
-  spacing: '2rem'
+  spacing: '1.5rem'
 sections:
   - block: resume-experience
     content:
