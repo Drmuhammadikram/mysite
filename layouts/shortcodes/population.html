@@ -37,6 +37,7 @@ if(typeof DATA==='string'){ DATA=JSON.parse(DATA); }
 var YEARS=JSON.parse(document.getElementById('pp-years').textContent);
 if(typeof YEARS==='string'){ YEARS=JSON.parse(YEARS); }
 var dark=matchMedia('(prefers-color-scheme: dark)').matches;
+var globe=window.innerWidth<820;
 var noData=dark?'#2c2c2a':'#eceae4';
 var M=[
  {k:'median',l:'Median age',u:'years',dp:1,
@@ -95,10 +96,46 @@ function fmt(v,dp){
   return v.toFixed(dp);
 }
 
+var W=globe?420:960, H=globe?420:440;
 var svg=d3.select('#pp-map').append('svg')
-  .attr('viewBox','0 0 960 440').attr('width','100%').style('min-height','700px').style('display','block')
+  .attr('viewBox','0 0 '+W+' '+H).attr('width','100%')
+  .style('min-height',globe?'0':'700px').style('display','block')
+  .style('touch-action',globe?'none':'auto')
   .attr('role','img').attr('aria-label','World map of demographic indicators');
-var path=d3.geoPath(d3.geoNaturalEarth1().scale(200).translate([460,205]));
+var proj=globe
+  ? d3.geoOrthographic().scale(198).translate([210,210]).rotate([-10,-18,0]).clipAngle(90)
+  : d3.geoNaturalEarth1().scale(200).translate([460,205]);
+var path=d3.geoPath(proj);
+
+function show(k){
+  var c=DATA[k];
+  if(!c){ d3.select('#pp-readout').html('<div style="font-size:0.75rem;opacity:0.5;">No data</div>'); return; }
+  function row(lab,m,dp,suf,strong){
+    var v=val(k,m,year);
+    return '<div style="display:flex;justify-content:space-between;gap:12px;'+
+      (strong?'font-weight:600;':'opacity:0.7;')+'"><span>'+lab+'</span>'+
+      '<span style="font-variant-numeric:tabular-nums;">'+fmt(v,dp)+(v===null?'':suf)+'</span></div>';
+  }
+  var cur=M[mi].k;
+  d3.select('#pp-readout').html(
+    '<div style="font-size:0.85rem;font-weight:600;margin-bottom:0.5rem;">'+c.n+'</div>'+
+    '<div style="font-size:0.72rem;line-height:1.75;">'+
+    row('Population','pop',0,'',cur==='pop')+
+    row('Growth','growth',2,'%',cur==='growth')+
+    row('Density','dens',1,'/km2',cur==='dens')+
+    '<div style="height:5px;"></div>'+
+    row('Median age','median',1,'',cur==='median')+
+    row('Fertility','fert',2,'',cur==='fert')+
+    row('Life expectancy','life',1,'',cur==='life')+
+    '<div style="height:5px;"></div>'+
+    row('Under 15','u15',1,'%',cur==='u15')+
+    row('Aged 65+','o65',1,'%',cur==='o65')+
+    row('Old-age dependency','oldep',1,'',cur==='oldep')+
+    '<div style="height:5px;"></div>'+
+    row('Urban','urban',1,'%',cur==='urban')+
+    row('Sex ratio at birth','sexb',1,'',cur==='sexb')+
+    '</div>');
+}
 
 function cards(){
   var S=M[mi], vals=[], n=0, sum=0;
@@ -165,40 +202,41 @@ d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(f
   var feats=topojson.feature(w,w.objects.countries).features
     .filter(function(f){var id=String(+f.id); return id!=='504'&&id!=='732'&&id!=='010';});
   if(mor.length) feats.push({type:'Feature',id:504,geometry:topojson.merge(w,mor)});
-  paths=svg.selectAll('path').data(feats).join('path')
+
+  if(globe){
+    svg.append('circle').attr('cx',210).attr('cy',210).attr('r',198)
+      .attr('fill',dark?'#101a20':'#dbe8ef');
+    svg.append('path').datum(d3.geoGraticule10())
+      .attr('class','pp-grat').attr('d',path).attr('fill','none')
+      .attr('stroke',dark?'rgba(255,255,255,.10)':'rgba(0,0,0,.09)').attr('stroke-width',0.5);
+  }
+
+  paths=svg.selectAll('path.pp-c').data(feats).join('path')
+    .attr('class','pp-c')
     .attr('d',path)
     .attr('fill',function(f){ return colorFor(val(key(f),M[mi].k,year)); })
     .attr('stroke',dark?'rgba(255,255,255,.14)':'#fff').attr('stroke-width',0.4)
     .style('cursor','pointer')
-    .on('mouseenter',function(e,f){
-      var k=key(f), c=DATA[k];
-      if(!c){ d3.select('#pp-readout').html('<div style="font-size:0.75rem;opacity:0.5;">No data</div>'); return; }
-      function row(lab,m,dp,suf,strong){
-        var v=val(k,m,year);
-        return '<div style="display:flex;justify-content:space-between;gap:12px;'+
-          (strong?'font-weight:600;':'opacity:0.7;')+'"><span>'+lab+'</span>'+
-          '<span style="font-variant-numeric:tabular-nums;">'+fmt(v,dp)+(v===null?'':suf)+'</span></div>';
-      }
-      var cur=M[mi].k;
-      d3.select('#pp-readout').html(
-        '<div style="font-size:0.85rem;font-weight:600;margin-bottom:0.5rem;">'+c.n+'</div>'+
-        '<div style="font-size:0.72rem;line-height:1.75;">'+
-        row('Population','pop',0,'',cur==='pop')+
-        row('Growth','growth',2,'%',cur==='growth')+
-        row('Density','dens',1,'/km2',cur==='dens')+
-        '<div style="height:5px;"></div>'+
-        row('Median age','median',1,'',cur==='median')+
-        row('Fertility','fert',2,'',cur==='fert')+
-        row('Life expectancy','life',1,'',cur==='life')+
-        '<div style="height:5px;"></div>'+
-        row('Under 15','u15',1,'%',cur==='u15')+
-        row('Aged 65+','o65',1,'%',cur==='o65')+
-        row('Old-age dependency','oldep',1,'',cur==='oldep')+
-        '<div style="height:5px;"></div>'+
-        row('Urban','urban',1,'%',cur==='urban')+
-        row('Sex ratio at birth','sexb',1,'',cur==='sexb')+
-        '</div>');
-    });
+    .on('mouseenter',function(e,f){ if(!globe) show(key(f)); })
+    .on('click',function(e,f){ show(key(f)); });
+
+  if(globe){
+    svg.append('circle').attr('cx',210).attr('cy',210).attr('r',198)
+      .attr('fill','none').attr('stroke',dark?'rgba(255,255,255,.22)':'rgba(0,0,0,.18)')
+      .attr('stroke-width',1).style('pointer-events','none');
+    var x0,y0,r0;
+    svg.call(d3.drag()
+      .on('start',function(e){ x0=e.x; y0=e.y; r0=proj.rotate(); })
+      .on('drag',function(e){
+        var kk=0.32;
+        proj.rotate([r0[0]+(e.x-x0)*kk, Math.max(-88,Math.min(88,r0[1]-(e.y-y0)*kk)), 0]);
+        paths.attr('d',path); svg.select('.pp-grat').attr('d',path);
+      }));
+    d3.select('#pp-map').append('div')
+      .style('font-size','0.7rem').style('opacity','0.5')
+      .style('text-align','center').style('margin-top','0.4rem')
+      .text('Drag to rotate · tap a country for detail');
+  }
   render();
 });
 })();
