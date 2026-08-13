@@ -58,6 +58,7 @@ var DESC={'ISO 9001':'Quality management systems.','ISO 14001':'Environmental ma
 'ISO 45001':'Occupational health and safety management systems.',
 'ISO 22000':'Food safety management systems.','ISO 50001':'Energy management systems.'};
 var dark=matchMedia('(prefers-color-scheme: dark)').matches;
+var globe=window.innerWidth<820;
 var noData=dark?'#2c2c2a':'#eceae4';
 var BANDS=[[10000,'> 10,000'],[2000,'2,000-10,000'],[500,'500-2,000'],[100,'100-500'],[1,'1-100'],[0,'None reported']];
 var COLS=['#0d3b2e','#166b52','#2e9e74','#7fc9a4','#c8e6d7','#eef6f2'];
@@ -72,10 +73,31 @@ function key(f){ return ('00'+String(f.id)).slice(-3); }
 function lookup(std,k){ var g=DATA[std]; return g?g[k]:null; }
 function fmt(n){ return n.toLocaleString('en-GB'); }
 
+var W=globe?420:960, H=globe?420:440;
 var svg=d3.select('#iso-map').append('svg')
-  .attr('viewBox','0 0 960 440').attr('width','100%').style('min-height','700px').style('display','block')
+  .attr('viewBox','0 0 '+W+' '+H).attr('width','100%')
+  .style('min-height',globe?'0':'700px').style('display','block')
+  .style('touch-action',globe?'none':'auto')
   .attr('role','img').attr('aria-label','World map of ISO management system certificates');
-var path=d3.geoPath(d3.geoNaturalEarth1().scale(200).translate([460,205]));
+var proj=globe
+  ? d3.geoOrthographic().scale(198).translate([210,210]).rotate([-10,-18,0]).clipAngle(90)
+  : d3.geoNaturalEarth1().scale(200).translate([460,205]);
+var path=d3.geoPath(proj);
+
+function show(k){
+  var r=lookup(STD[cur],k);
+  if(!r){ d3.select('#iso-readout').html('<div style="font-size:0.75rem;opacity:0.5;">Not reported</div>'); return; }
+  var lines='';
+  STD.forEach(function(s){
+    var x=lookup(s,k);
+    lines+='<div style="display:flex;justify-content:space-between;gap:12px;'+
+      (s===STD[cur]?'font-weight:600;':'opacity:0.65;')+'"><span>'+s+'</span>'+
+      '<span style="font-variant-numeric:tabular-nums;">'+(x?fmt(x.v):'-')+'</span></div>';
+  });
+  d3.select('#iso-readout').html(
+    '<div style="font-size:0.85rem;font-weight:600;margin-bottom:0.5rem;">'+r.n+'</div>'+
+    '<div style="font-size:0.72rem;line-height:1.7;">'+lines+'</div>');
+}
 
 function render(){
   var s=STD[cur];
@@ -109,25 +131,41 @@ d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(f
   var feats=topojson.feature(w,w.objects.countries).features
     .filter(function(f){var id=String(+f.id); return id!=='504'&&id!=='732'&&id!=='010';});
   if(mor.length) feats.push({type:'Feature',id:504,geometry:topojson.merge(w,mor)});
-  paths=svg.selectAll('path').data(feats).join('path')
+
+  if(globe){
+    svg.append('circle').attr('cx',210).attr('cy',210).attr('r',198)
+      .attr('fill',dark?'#101a20':'#dbe8ef');
+    svg.append('path').datum(d3.geoGraticule10())
+      .attr('class','iso-grat').attr('d',path).attr('fill','none')
+      .attr('stroke',dark?'rgba(255,255,255,.10)':'rgba(0,0,0,.09)').attr('stroke-width',0.5);
+  }
+
+  paths=svg.selectAll('path.iso-c').data(feats).join('path')
+    .attr('class','iso-c')
     .attr('d',path)
     .attr('fill',function(f){ var r=lookup(STD[cur],key(f)); return colorFor(r?r.v:null); })
     .attr('stroke',dark?'rgba(255,255,255,.14)':'#fff').attr('stroke-width',0.4)
     .style('cursor','pointer')
-    .on('mouseenter',function(e,f){
-      var k=key(f), r=lookup(STD[cur],k);
-      if(!r){ d3.select('#iso-readout').html('<div style="font-size:0.75rem;opacity:0.5;">Not reported</div>'); return; }
-      var lines='';
-      STD.forEach(function(s){
-        var x=lookup(s,k);
-        lines+='<div style="display:flex;justify-content:space-between;gap:12px;'+
-          (s===STD[cur]?'font-weight:600;':'opacity:0.65;')+'"><span>'+s+'</span>'+
-          '<span style="font-variant-numeric:tabular-nums;">'+(x?fmt(x.v):'-')+'</span></div>';
-      });
-      d3.select('#iso-readout').html(
-        '<div style="font-size:0.85rem;font-weight:600;margin-bottom:0.5rem;">'+r.n+'</div>'+
-        '<div style="font-size:0.72rem;line-height:1.7;">'+lines+'</div>');
-    });
+    .on('mouseenter',function(e,f){ if(!globe) show(key(f)); })
+    .on('click',function(e,f){ show(key(f)); });
+
+  if(globe){
+    svg.append('circle').attr('cx',210).attr('cy',210).attr('r',198)
+      .attr('fill','none').attr('stroke',dark?'rgba(255,255,255,.22)':'rgba(0,0,0,.18)')
+      .attr('stroke-width',1).style('pointer-events','none');
+    var x0,y0,r0;
+    svg.call(d3.drag()
+      .on('start',function(e){ x0=e.x; y0=e.y; r0=proj.rotate(); })
+      .on('drag',function(e){
+        var kk=0.32;
+        proj.rotate([r0[0]+(e.x-x0)*kk, Math.max(-88,Math.min(88,r0[1]-(e.y-y0)*kk)), 0]);
+        paths.attr('d',path); svg.select('.iso-grat').attr('d',path);
+      }));
+    d3.select('#iso-map').append('div')
+      .style('font-size','0.7rem').style('opacity','0.5')
+      .style('text-align','center').style('margin-top','0.4rem')
+      .text('Drag to rotate · tap a country for detail');
+  }
   render();
 });
 })();
