@@ -199,16 +199,4 @@ sections:
       columns: '1'
       spacing:
         padding: ['1rem', '0', '1rem', '0']
-  - block: markdown
-    content:
-      title: 'Estimate your carbon footprint'
-      subtitle: ''
-      text: |-
-        Adjust the inputs to see how household energy, travel, and diet contribute to an annual carbon footprint, and how the total compares against national averages and the per-person budget consistent with 1.5 °C.
-
-        {{< carboncalc >}}
-    design:
-      columns: '1'
-      spacing:
-        padding: ['1rem', '0', '1rem', '0']
 ---
