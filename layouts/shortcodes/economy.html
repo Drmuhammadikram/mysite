@@ -1,0 +1,227 @@
+{{- $d := site.Data.econ -}}
+{{- with $d -}}
+<script type="application/json" id="ec-data">{{ .countries | jsonify }}</script>
+<script type="application/json" id="ec-years">{{ .years | jsonify }}</script>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:1.5rem;width:70vw;max-width:1100px;position:relative;left:50%;transform:translateX(-50%);" id="ec-cards"></div>
+
+<div id="ec-metric" style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:0.7rem;align-items:center;width:70vw;max-width:1100px;position:relative;left:50%;transform:translateX(-50%);z-index:6;"></div>
+<div id="ec-tabs" style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:1.25rem;align-items:center;width:70vw;max-width:1100px;position:relative;left:50%;transform:translateX(-50%);z-index:6;"></div>
+
+<div style="display:grid;grid-template-columns:1fr 190px;gap:24px;align-items:start;width:70vw;max-width:1100px;position:relative;left:50%;transform:translateX(-50%);" id="ec-wrap">
+  <div id="ec-map" style="width:100%;margin-top:-3.5rem;"></div>
+  <div>
+    <div id="ec-legend-title" style="font-size:0.78rem;opacity:0.75;margin-bottom:0.7rem;line-height:1.45;"></div>
+    <div id="ec-legend"></div>
+    <div id="ec-readout" style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid rgba(128,128,128,0.2);min-height:84px;">
+      <div style="font-size:0.75rem;opacity:0.5;">Hover a country</div>
+    </div>
+  </div>
+</div>
+
+<p style="font-size:0.72rem;opacity:0.55;margin-top:1.25rem;line-height:1.6;">
+  Source: {{ .source }}. GDP figures are in international dollars at purchasing power parity,
+  which adjusts for price differences between countries and is the appropriate basis for
+  comparison. Trade openness is exports plus imports as a share of GDP, so it exceeds 100%
+  where re-exports are large. Values shown at five-year intervals from 1990, with annual data
+  from 2019.
+</p>
+
+<style>@media(max-width:760px){#ec-wrap{grid-template-columns:1fr!important}}</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+<script>
+(function(){
+var DATA=JSON.parse(document.getElementById('ec-data').textContent);
+if(typeof DATA==='string'){ DATA=JSON.parse(DATA); }
+var YEARS=JSON.parse(document.getElementById('ec-years').textContent);
+if(typeof YEARS==='string'){ YEARS=JSON.parse(YEARS); }
+var dark=matchMedia('(prefers-color-scheme: dark)').matches;
+var globe=window.innerWidth<820;
+var noData=dark?'#2c2c2a':'#eceae4';
+var M=[
+ {k:'gdppc',l:'GDP per capita',u:'international $, PPP',dp:0,pre:'$',suf:'',
+  b:[[50000,'over $50,000'],[25000,'$25,000 - 50,000'],[12000,'$12,000 - 25,000'],[4000,'$4,000 - 12,000'],[0,'under $4,000']],
+  c:['#123f63','#2a7fa8','#7fb8c9','#d9b876','#b06a3b']},
+ {k:'gdp',l:'Total GDP',u:'international $, PPP',dp:0,pre:'$',suf:'',
+  b:[[5e12,'over $5tn'],[1e12,'$1 - 5tn'],[2.5e11,'$250bn - 1tn'],[5e10,'$50 - 250bn'],[0,'under $50bn']],
+  c:['#123f63','#2a7fa8','#7fb8c9','#c3d5de','#e8eff3']},
+ {k:'trade',l:'Trade openness',u:'% of GDP',dp:1,pre:'',suf:'%',
+  b:[[120,'over 120%'],[80,'80 - 120%'],[55,'55 - 80%'],[35,'35 - 55%'],[0,'under 35%']],
+  c:['#0d5c46','#1d7a5f','#5dab8a','#a8cfbc','#dfeee7']},
+ {k:'infl',l:'Inflation',u:'% per year',dp:1,pre:'',suf:'%',
+  b:[[20,'over 20%'],[8,'8 - 20%'],[4,'4 - 8%'],[2,'2 - 4%'],[-99,'under 2%']],
+  c:['#5c1a10','#a83b1c','#e08a3c','#c9d8cc','#7fb8a8']},
+ {k:'unemp',l:'Unemployment',u:'% of labour force',dp:1,pre:'',suf:'%',
+  b:[[15,'over 15%'],[10,'10 - 15%'],[6,'6 - 10%'],[3,'3 - 6%'],[0,'under 3%']],
+  c:['#5c1a10','#a83b1c','#dfa565','#bcd0c4','#4a7f6e']}
+];
+var mi=0, year=YEARS[YEARS.length-1], paths=null;
+
+function colorFor(v){
+  var S=M[mi];
+  if(v===null||v===undefined) return noData;
+  for(var j=0;j<S.b.length;j++){ if(v>=S.b[j][0]) return S.c[j]; }
+  return S.c[S.c.length-1];
+}
+function key(f){ return ('00'+String(f.id)).slice(-3); }
+function val(k,m,y){ var c=DATA[k]; if(!c) return null; var g=c.d[m]; if(!g) return null;
+  var v=g[y]; return (v===undefined)?null:v; }
+function fmt(v,S){
+  if(v===null||v===undefined) return '-';
+  if(S.dp===0){
+    var a=Math.abs(v);
+    if(a>=1e12) return S.pre+(v/1e12).toFixed(2)+'tn';
+    if(a>=1e9) return S.pre+(v/1e9).toFixed(0)+'bn';
+    if(a>=1e3) return S.pre+Math.round(v).toLocaleString('en-GB');
+    return S.pre+v.toFixed(0);
+  }
+  return S.pre+v.toFixed(S.dp)+S.suf;
+}
+
+var W=globe?420:960, H=globe?420:440;
+var svg=d3.select('#ec-map').append('svg')
+  .attr('viewBox','0 0 '+W+' '+H).attr('width','100%')
+  .style('min-height',globe?'0':'700px').style('display','block')
+  .style('touch-action',globe?'none':'auto')
+  .attr('role','img').attr('aria-label','World map of economic indicators');
+var proj=globe
+  ? d3.geoOrthographic().scale(198).translate([210,210]).rotate([-10,-18,0]).clipAngle(90)
+  : d3.geoNaturalEarth1().scale(200).translate([460,205]);
+var path=d3.geoPath(proj);
+
+function show(k){
+  var c=DATA[k];
+  if(!c){ d3.select('#ec-readout').html('<div style="font-size:0.75rem;opacity:0.5;">No data</div>'); return; }
+  function row(lab,m,strong){
+    var S=null; for(var i=0;i<M.length;i++){ if(M[i].k===m) S=M[i]; }
+    var v=val(k,m,year);
+    return '<div style="display:flex;justify-content:space-between;gap:12px;'+
+      (strong?'font-weight:600;':'opacity:0.7;')+'"><span>'+lab+'</span>'+
+      '<span style="font-variant-numeric:tabular-nums;">'+fmt(v,S)+'</span></div>';
+  }
+  var cur=M[mi].k;
+  var g0=val(k,'gdppc',YEARS[0]), g1=val(k,'gdppc',year), trend='';
+  if(g0!==null&&g1!==null&&g0>0){
+    var pc=(g1-g0)/g0*100;
+    trend='<div style="margin-top:0.45rem;padding-top:0.4rem;border-top:1px solid rgba(128,128,128,0.2);opacity:0.6;">'+
+      (pc>0?'+':'')+pc.toFixed(0)+'% GDP per capita since '+YEARS[0]+'</div>';
+  }
+  d3.select('#ec-readout').html(
+    '<div style="font-size:0.85rem;font-weight:600;margin-bottom:0.5rem;">'+c.n+'</div>'+
+    '<div style="font-size:0.73rem;line-height:1.8;">'+
+    row('GDP per capita','gdppc',cur==='gdppc')+
+    row('Total GDP','gdp',cur==='gdp')+
+    '<div style="height:5px;"></div>'+
+    row('Trade openness','trade',cur==='trade')+
+    row('Inflation','infl',cur==='infl')+
+    row('Unemployment','unemp',cur==='unemp')+
+    trend+'</div>');
+}
+
+function cards(){
+  var S=M[mi], vals=[], n=0, sum=0;
+  for(var k in DATA){ var v=val(k,S.k,year); if(v!==null){ vals.push([DATA[k].n,v]); n++; sum+=v; } }
+  vals.sort(function(a,b){ return b[1]-a[1]; });
+  var top=vals[0]||['-',0], bot=vals[vals.length-1]||['-',0];
+  function card(l,big,sub){
+    return '<div style="background:rgba(128,128,128,0.06);border-radius:8px;padding:1rem;">'+
+     '<div style="font-size:0.75rem;opacity:0.7;margin-bottom:0.4rem;">'+l+'</div>'+
+     '<div style="font-size:1.55rem;line-height:1.1;font-weight:600;font-variant-numeric:tabular-nums;">'+big+'</div>'+
+     '<div style="font-size:0.68rem;opacity:0.55;margin-top:0.3rem;">'+sub+'</div></div>';
+  }
+  d3.select('#ec-cards').html(
+    card('Year',year,'reporting year')+
+    card('Highest',fmt(top[1],S),top[0])+
+    card('Lowest',fmt(bot[1],S),bot[0])+
+    card(S.k==='gdp'?'World total':'Average',
+         S.k==='gdp'?fmt(sum,S):fmt(n?sum/n:0,S),
+         n+' countries'));
+}
+
+function render(){
+  var S=M[mi];
+  d3.select('#ec-legend-title').html('<strong style="font-weight:600;opacity:1">'+S.l+', '+year+
+    '</strong><br>Measured in '+S.u+'.');
+  d3.select('#ec-legend').html(S.b.map(function(b,j){
+    return '<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;font-size:0.72rem;opacity:0.75;">'+
+      '<span style="width:16px;height:11px;border-radius:2px;background:'+S.c[j]+';flex-shrink:0;border:1px solid rgba(128,128,128,0.2);"></span>'+b[1]+'</div>';
+  }).join('')+'<div style="display:flex;align-items:center;gap:8px;margin-top:8px;font-size:0.72rem;opacity:0.5;">'+
+    '<span style="width:16px;height:11px;border-radius:2px;background:'+noData+';flex-shrink:0;"></span>No data</div>');
+  d3.selectAll('#ec-metric button')
+    .style('background',function(d,j){return j===mi?'rgba(42,127,168,0.18)':'transparent';})
+    .style('border-color',function(d,j){return j===mi?'rgba(42,127,168,0.6)':'rgba(128,128,128,0.3)';})
+    .style('font-weight',function(d,j){return j===mi?'600':'400';})
+    .style('opacity',function(d,j){return j===mi?1:0.65;});
+  d3.selectAll('#ec-tabs button')
+    .style('background',function(d){return d===year?'rgba(42,127,168,0.18)':'transparent';})
+    .style('border-color',function(d){return d===year?'rgba(42,127,168,0.6)':'rgba(128,128,128,0.3)';})
+    .style('font-weight',function(d){return d===year?'600':'400';})
+    .style('opacity',function(d){return d===year?1:0.65;});
+  if(paths) paths.attr('fill',function(f){ return colorFor(val(key(f),M[mi].k,year)); });
+  cards();
+}
+
+d3.select('#ec-metric').selectAll('button').data(M).join('button')
+  .attr('type','button')
+  .style('font-size','0.75rem').style('padding','6px 11px').style('cursor','pointer')
+  .style('border','1px solid rgba(128,128,128,0.3)').style('border-radius','6px')
+  .style('color','inherit')
+  .text(function(d){return d.l;})
+  .on('click',function(e,d){ mi=M.indexOf(d); render(); });
+
+d3.select('#ec-tabs').selectAll('button').data(YEARS).join('button')
+  .attr('type','button')
+  .style('font-size','0.75rem').style('padding','6px 9px').style('cursor','pointer')
+  .style('border','1px solid rgba(128,128,128,0.3)').style('border-radius','6px')
+  .style('color','inherit')
+  .text(function(d){return d;})
+  .on('click',function(e,d){ year=d; render(); });
+
+d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(function(w){
+  var mor=w.objects.countries.geometries.filter(function(g){
+    var id=String(+g.id); return id==='504'||id==='732'; });
+  var feats=topojson.feature(w,w.objects.countries).features
+    .filter(function(f){var id=String(+f.id); return id!=='504'&&id!=='732'&&id!=='010';});
+  if(mor.length) feats.push({type:'Feature',id:504,geometry:topojson.merge(w,mor)});
+
+  if(globe){
+    svg.append('circle').attr('cx',210).attr('cy',210).attr('r',198)
+      .attr('fill',dark?'#101a20':'#dbe8ef');
+    svg.append('path').datum(d3.geoGraticule10())
+      .attr('class','ec-grat').attr('d',path).attr('fill','none')
+      .attr('stroke',dark?'rgba(255,255,255,.10)':'rgba(0,0,0,.09)').attr('stroke-width',0.5);
+  }
+
+  paths=svg.selectAll('path.ec-c').data(feats).join('path')
+    .attr('class','ec-c')
+    .attr('d',path)
+    .attr('fill',function(f){ return colorFor(val(key(f),M[mi].k,year)); })
+    .attr('stroke',dark?'rgba(255,255,255,.14)':'#fff').attr('stroke-width',0.4)
+    .style('cursor','pointer')
+    .on('mouseenter',function(e,f){ if(!globe) show(key(f)); })
+    .on('click',function(e,f){ show(key(f)); });
+
+  if(globe){
+    svg.append('circle').attr('cx',210).attr('cy',210).attr('r',198)
+      .attr('fill','none').attr('stroke',dark?'rgba(255,255,255,.22)':'rgba(0,0,0,.18)')
+      .attr('stroke-width',1).style('pointer-events','none');
+    var x0,y0,r0;
+    svg.call(d3.drag()
+      .on('start',function(e){ x0=e.x; y0=e.y; r0=proj.rotate(); })
+      .on('drag',function(e){
+        var kk=0.32;
+        proj.rotate([r0[0]+(e.x-x0)*kk, Math.max(-88,Math.min(88,r0[1]-(e.y-y0)*kk)), 0]);
+        paths.attr('d',path); svg.select('.ec-grat').attr('d',path);
+      }));
+    d3.select('#ec-map').append('div')
+      .style('font-size','0.7rem').style('opacity','0.5')
+      .style('text-align','center').style('margin-top','0.4rem')
+      .text('Drag to rotate · tap a country for detail');
+  }
+  render();
+});
+})();
+</script>
+{{- end -}}
