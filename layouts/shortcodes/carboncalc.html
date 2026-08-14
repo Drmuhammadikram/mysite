@@ -1,51 +1,58 @@
-<div style="display:grid;grid-template-columns:1fr 320px;gap:28px;align-items:start;" id="cc-wrap">
+<div class="cc-panel">
 
-  <div>
-    <div style="margin-bottom:1.6rem;">
-      <div style="font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;opacity:0.7;margin-bottom:0.85rem;">Home energy</div>
-      <label style="display:block;font-size:0.87rem;margin-bottom:0.3rem;">Electricity <span style="opacity:0.55;">kWh per month</span></label>
-      <input type="range" id="cc-e1" min="0" max="1500" step="10" value="250" style="width:100%;">
-      <div style="text-align:right;font-size:0.8rem;font-weight:600;margin-bottom:0.9rem;" id="cc-e1v">250</div>
+  <div class="cc-inputs">
+    <div class="cc-grp">
+      <div class="cc-grp-h">Home energy</div>
 
-      <label style="display:block;font-size:0.87rem;margin-bottom:0.3rem;">Gas or heating <span style="opacity:0.55;">kWh per month</span></label>
-      <input type="range" id="cc-e2" min="0" max="2000" step="10" value="400" style="width:100%;">
-      <div style="text-align:right;font-size:0.8rem;font-weight:600;" id="cc-e2v">400</div>
+      <div class="cc-row">
+        <div class="cc-row-t"><span>Electricity</span><span class="cc-u">kWh / month</span></div>
+        <div class="cc-num" id="cc-e1v">250</div>
+      </div>
+      <input type="range" id="cc-e1" min="0" max="1500" step="10" value="250" class="cc-sl">
+
+      <div class="cc-row">
+        <div class="cc-row-t"><span>Gas or heating</span><span class="cc-u">kWh / month</span></div>
+        <div class="cc-num" id="cc-e2v">400</div>
+      </div>
+      <input type="range" id="cc-e2" min="0" max="2000" step="10" value="400" class="cc-sl">
     </div>
 
-    <div style="margin-bottom:1.6rem;">
-      <div style="font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;opacity:0.7;margin-bottom:0.85rem;">Travel</div>
-      <label style="display:block;font-size:0.87rem;margin-bottom:0.3rem;">Car <span style="opacity:0.55;">km per week</span></label>
-      <input type="range" id="cc-e3" min="0" max="800" step="10" value="150" style="width:100%;">
-      <div style="text-align:right;font-size:0.8rem;font-weight:600;margin-bottom:0.9rem;" id="cc-e3v">150</div>
+    <div class="cc-grp">
+      <div class="cc-grp-h">Travel</div>
 
-      <label style="display:block;font-size:0.87rem;margin-bottom:0.3rem;">Flights <span style="opacity:0.55;">hours in the air per year</span></label>
-      <input type="range" id="cc-e4" min="0" max="120" step="1" value="8" style="width:100%;">
-      <div style="text-align:right;font-size:0.8rem;font-weight:600;" id="cc-e4v">8</div>
+      <div class="cc-row">
+        <div class="cc-row-t"><span>Car</span><span class="cc-u">km / week</span></div>
+        <div class="cc-num" id="cc-e3v">150</div>
+      </div>
+      <input type="range" id="cc-e3" min="0" max="800" step="10" value="150" class="cc-sl">
+
+      <div class="cc-row">
+        <div class="cc-row-t"><span>Flights</span><span class="cc-u">hours airborne / year</span></div>
+        <div class="cc-num" id="cc-e4v">8</div>
+      </div>
+      <input type="range" id="cc-e4" min="0" max="120" step="1" value="8" class="cc-sl">
     </div>
 
-    <div>
-      <div style="font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;opacity:0.7;margin-bottom:0.85rem;">Diet</div>
-      <div id="cc-diet" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+    <div class="cc-grp">
+      <div class="cc-grp-h">Diet</div>
+      <div id="cc-diet" class="cc-seg"></div>
     </div>
   </div>
 
-  <div>
-    <div style="background:rgba(128,128,128,0.06);border-radius:12px;padding:1.35rem;">
-      <div style="font-size:0.78rem;opacity:0.7;margin-bottom:0.3rem;">Your annual footprint</div>
-      <div style="display:flex;align-items:baseline;gap:7px;margin-bottom:1rem;">
-        <span id="cc-total" style="font-size:2.6rem;line-height:1;font-weight:600;letter-spacing:-0.02em;font-variant-numeric:tabular-nums;">0</span>
-        <span style="font-size:0.85rem;opacity:0.65;">t CO₂e</span>
-      </div>
-      <div style="position:relative;height:180px;"><canvas id="cc-chart"></canvas></div>
-      <div id="cc-legend" style="margin-top:0.9rem;"></div>
+  <div class="cc-out">
+    <div class="cc-readout">
+      <div class="cc-readout-l">Annual footprint</div>
+      <div class="cc-readout-v"><span id="cc-total">0.0</span><span class="cc-readout-u">t CO₂e</span></div>
+      <div class="cc-bar" id="cc-stack"></div>
+      <div id="cc-legend" class="cc-leg"></div>
     </div>
-    <div id="cc-compare" style="margin-top:12px;"></div>
+    <div id="cc-compare"></div>
   </div>
 </div>
 
-<div id="cc-rec" style="margin-top:1.9rem;"></div>
+<div id="cc-rec"></div>
 
-<p style="font-size:0.72rem;opacity:0.55;margin-top:1.75rem;line-height:1.65;">
+<p class="cc-note">
   An indicative estimate, not an audit. Energy and transport factors are from the
   <a href="https://www.gov.uk/government/collections/government-conversion-factors-for-company-reporting">UK Government GHG conversion factors (2024)</a>;
   dietary factors are derived from Poore &amp; Nemecek (2018), <em>Science</em> 360(6392), 987–992.
@@ -53,35 +60,67 @@
   read as approximate. The 1.5 °C reference is the per-person budget consistent with the Paris Agreement.
 </p>
 
-<style>@media(max-width:760px){#cc-wrap{grid-template-columns:1fr!important}}</style>
+<style>
+.cc-panel{display:grid;grid-template-columns:1fr 330px;gap:30px;align-items:start;
+  font-variant-numeric:tabular-nums;}
+.cc-grp{margin-bottom:1.7rem;}
+.cc-grp-h{font-size:0.66rem;letter-spacing:0.11em;text-transform:uppercase;opacity:0.5;
+  font-weight:600;margin-bottom:0.9rem;padding-bottom:0.45rem;
+  border-bottom:1px solid rgba(128,128,128,0.18);}
+.cc-row{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:0.4rem;}
+.cc-row-t{display:flex;align-items:baseline;gap:8px;font-size:0.86rem;}
+.cc-u{font-size:0.7rem;opacity:0.45;}
+.cc-num{font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+  font-size:0.86rem;font-weight:600;min-width:62px;text-align:right;
+  padding:3px 9px;border-radius:5px;background:rgba(128,128,128,0.09);
+  border:1px solid rgba(128,128,128,0.16);letter-spacing:0.01em;}
+.cc-sl{width:100%;margin:0 0 1.1rem;accent-color:#1d7a5f;}
+.cc-seg{display:flex;flex-wrap:wrap;gap:0;border:1px solid rgba(128,128,128,0.24);
+  border-radius:7px;overflow:hidden;}
+.cc-seg button{flex:1;min-width:78px;font-size:0.76rem;padding:8px 6px;cursor:pointer;
+  border:none;border-right:1px solid rgba(128,128,128,0.18);background:transparent;
+  color:inherit;transition:background .14s ease;}
+.cc-seg button:last-child{border-right:none;}
+.cc-readout{border:1px solid rgba(128,128,128,0.22);border-radius:12px;padding:1.3rem 1.4rem;}
+.cc-readout-l{font-size:0.66rem;letter-spacing:0.11em;text-transform:uppercase;
+  opacity:0.5;font-weight:600;margin-bottom:0.6rem;}
+.cc-readout-v{display:flex;align-items:baseline;gap:8px;margin-bottom:1.15rem;}
+.cc-readout-v span:first-child{font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+  font-size:3rem;line-height:1;font-weight:600;letter-spacing:-0.03em;}
+.cc-readout-u{font-size:0.8rem;opacity:0.55;}
+.cc-bar{display:flex;height:11px;border-radius:6px;overflow:hidden;
+  background:rgba(128,128,128,0.12);margin-bottom:1rem;}
+.cc-bar div{height:100%;transition:width .18s ease;}
+.cc-leg > div{display:flex;align-items:center;gap:8px;font-size:0.77rem;margin-bottom:6px;}
+.cc-cmp{border:1px solid rgba(128,128,128,0.22);border-radius:12px;padding:1.3rem 1.4rem;margin-top:12px;}
+.cc-note{font-size:0.72rem;opacity:0.55;margin-top:1.75rem;line-height:1.65;}
+@media(max-width:760px){.cc-panel{grid-template-columns:1fr;}}
+</style>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
 (function(){
   var F = { e:0.207, g:0.183, c:0.170, f:250 };
   var D = [["Vegan",1.1],["Vegetarian",1.4],["Low meat",1.9],["Average",2.5],["High meat",3.3]];
-  var C = ['#d85a30','#c2703f','#8f3417','#1d9e75'];
-  var di = 3, ch = null;
+  var C = ['#c2703f','#8a4a2c','#5c1a10','#1d7a5f'];
+  var di = 3;
   var $ = function(i){ return document.getElementById(i); };
   var dark = matchMedia('(prefers-color-scheme: dark)').matches;
   var track = dark ? 'rgba(255,255,255,0.10)' : 'rgba(0,0,0,0.08)';
-  var neutralBar = dark ? 'rgba(255,255,255,0.28)' : 'rgba(0,0,0,0.22)';
+  var neutralBar = dark ? 'rgba(255,255,255,0.26)' : 'rgba(0,0,0,0.20)';
+  var mono = "ui-monospace,'SF Mono',Menlo,Consolas,monospace";
 
   D.forEach(function(d,i){
     var b = document.createElement('button');
     b.type = 'button'; b.textContent = d[0];
-    b.style.cssText = 'font-size:0.79rem;padding:6px 12px;cursor:pointer;border-radius:6px;' +
-      'border:1px solid rgba(128,128,128,0.3);background:transparent;color:inherit;';
     b.onclick = function(){ di = i; paint(); go(); };
     $('cc-diet').appendChild(b);
   });
 
   function paint(){
     Array.prototype.forEach.call($('cc-diet').children, function(b,i){
-      b.style.background = i === di ? 'rgba(29,158,117,0.14)' : 'transparent';
-      b.style.borderColor = i === di ? 'rgba(29,158,117,0.5)' : 'rgba(128,128,128,0.3)';
+      b.style.background = i === di ? 'rgba(29,122,95,0.16)' : 'transparent';
       b.style.fontWeight = i === di ? '600' : '400';
-      b.style.opacity = i === di ? '1' : '0.72';
+      b.style.opacity = i === di ? '1' : '0.6';
     });
   }
 
@@ -100,42 +139,35 @@
     var t = p.reduce(function(a,x){ return a + x[1]; }, 0);
     $('cc-total').textContent = t.toFixed(1);
 
-    var vals = p.map(function(x){ return x[1]; });
-    if (ch) { ch.data.datasets[0].data = vals; ch.update('none'); }
-    else {
-      ch = new Chart($('cc-chart'), {
-        type:'doughnut',
-        data:{ labels:p.map(function(x){ return x[0]; }),
-               datasets:[{ data:vals, backgroundColor:C, borderWidth:0, cutout:'62%' }] },
-        options:{ responsive:true, maintainAspectRatio:false,
-          plugins:{ legend:{ display:false },
-            tooltip:{ callbacks:{ label:function(c){
-              return c.label + '  ' + c.raw.toFixed(1) + ' t (' + (c.raw/t*100).toFixed(0) + '%)'; } } } } }
-      });
-    }
+    $('cc-stack').innerHTML = p.map(function(x,i){
+      var w = t > 0 ? (x[1]/t*100) : 0;
+      return '<div style="width:' + w.toFixed(2) + '%;background:' + C[i] + ';" title="' +
+        x[0] + ' ' + x[1].toFixed(1) + ' t"></div>';
+    }).join('');
 
     $('cc-legend').innerHTML = p.map(function(x,i){
-      return '<div style="display:flex;align-items:center;gap:7px;font-size:0.78rem;margin-bottom:5px;">' +
+      return '<div>' +
         '<span style="width:9px;height:9px;border-radius:2px;background:' + C[i] + ';flex-shrink:0;"></span>' +
-        '<span style="opacity:0.75;">' + x[0] + '</span>' +
-        '<span style="margin-left:auto;font-variant-numeric:tabular-nums;font-weight:600;">' + x[1].toFixed(1) + '</span>' +
-        '<span style="opacity:0.5;width:34px;text-align:right;">' + (x[1]/t*100).toFixed(0) + '%</span></div>';
+        '<span style="opacity:0.72;">' + x[0] + '</span>' +
+        '<span style="margin-left:auto;font-family:' + mono + ';font-weight:600;">' + x[1].toFixed(1) + '</span>' +
+        '<span style="opacity:0.45;width:38px;text-align:right;font-family:' + mono + ';">' +
+        (t > 0 ? (x[1]/t*100).toFixed(0) : 0) + '%</span></div>';
     }).join('');
 
     var R = [["1.5 °C budget",2.3],["World average",4.7],["Morocco",2.0],["EU average",7.4],["United States",14.3]];
     var mx = Math.max(t, 14.3);
     var rows = [["You", t, true]].concat(R.map(function(r){ return [r[0], r[1], false]; }));
     $('cc-compare').innerHTML =
-      '<div style="background:rgba(128,128,128,0.06);border-radius:12px;padding:1.35rem;">' +
-      '<div style="font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;opacity:0.7;margin-bottom:0.85rem;">How you compare</div>' +
+      '<div class="cc-cmp">' +
+      '<div class="cc-readout-l">How you compare</div>' +
       rows.map(function(r){
-        return '<div style="margin-bottom:9px;">' +
-          '<div style="display:flex;justify-content:space-between;font-size:0.76rem;margin-bottom:3px;">' +
-          '<span style="opacity:' + (r[2] ? '1' : '0.7') + ';font-weight:' + (r[2] ? '600' : '400') + ';">' + r[0] + '</span>' +
-          '<span style="font-variant-numeric:tabular-nums;opacity:0.7;">' + r[1].toFixed(1) + '</span></div>' +
-          '<div style="height:5px;border-radius:3px;background:' + track + ';">' +
+        return '<div style="margin-bottom:10px;">' +
+          '<div style="display:flex;justify-content:space-between;font-size:0.76rem;margin-bottom:4px;">' +
+          '<span style="opacity:' + (r[2] ? '1' : '0.65') + ';font-weight:' + (r[2] ? '600' : '400') + ';">' + r[0] + '</span>' +
+          '<span style="font-family:' + mono + ';opacity:0.7;">' + r[1].toFixed(1) + '</span></div>' +
+          '<div style="height:5px;border-radius:3px;background:' + track + ';overflow:hidden;">' +
           '<div style="height:100%;width:' + (r[1]/mx*100).toFixed(1) + '%;border-radius:3px;background:' +
-          (r[2] ? (t > 2.3 ? '#d85a30' : '#1d9e75') : neutralBar) + ';"></div></div></div>';
+          (r[2] ? (t > 2.3 ? '#bd3418' : '#1d7a5f') : neutralBar) + ';"></div></div></div>';
       }).join('') + '</div>';
 
     var s = [];
@@ -145,18 +177,18 @@
       "A renewable electricity tariff can cut that share by 80% or more without changing how much you use."]);
     if (p[1][1] > 2) s.push(["Car travel dominates your transport",
       "Shifting a quarter of those kilometres to rail or bus would save about " + (p[1][1]*0.25).toFixed(1) + " t a year."]);
-    if (di >= 3) s.push(["Diet accounts for " + (p[3][1]/t*100).toFixed(0) + "% of your total",
+    if (di >= 3) s.push(["Diet accounts for " + (t > 0 ? (p[3][1]/t*100).toFixed(0) : 0) + "% of your total",
       "Moving from average to low-meat saves around 0.6 t a year, without eliminating anything."]);
     if (t <= 2.3) s.push(["You are within the 1.5 °C budget",
       "At " + t.toFixed(1) + " t you sit below the 2.3 t per-person level consistent with the Paris Agreement."]);
 
     $('cc-rec').innerHTML = s.length ?
-      '<div style="font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;opacity:0.7;margin-bottom:0.85rem;">Where reductions would count most</div>' +
+      '<div class="cc-readout-l" style="margin-top:1.9rem;margin-bottom:0.85rem;">Where reductions would count most</div>' +
       '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;">' +
       s.map(function(x){
-        return '<div style="background:rgba(128,128,128,0.04);border:1px solid rgba(128,128,128,0.18);border-radius:12px;padding:1rem 1.15rem;">' +
-          '<div style="font-size:0.88rem;font-weight:600;margin-bottom:0.4rem;line-height:1.4;">' + x[0] + '</div>' +
-          '<div style="font-size:0.8rem;opacity:0.72;line-height:1.6;">' + x[1] + '</div></div>';
+        return '<div style="border:1px solid rgba(128,128,128,0.2);border-radius:12px;padding:1rem 1.15rem;">' +
+          '<div style="font-size:0.87rem;font-weight:600;margin-bottom:0.4rem;line-height:1.4;">' + x[0] + '</div>' +
+          '<div style="font-size:0.8rem;opacity:0.7;line-height:1.6;">' + x[1] + '</div></div>';
       }).join('') + '</div>' : '';
   }
 
