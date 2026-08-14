@@ -1,6 +1,6 @@
 ---
 title: Sustainability Data
-summary: Interactive datasets on planetary boundaries, ecological footprint, biocapacity, human development, poverty, population and demography, ISO certifications, coal consumption, energy mix, water stress, forests and deforestation, food waste, natural disasters, life satisfaction, and progress toward the Sustainable Development Goals.
+summary: Interactive datasets on planetary boundaries, ecological footprint, biocapacity, human development, poverty, economic indicators, population and demography, ISO certifications, coal consumption, energy mix, water stress, forests and deforestation, food waste, natural disasters, life satisfaction, and progress toward the Sustainable Development Goals.
 type: landing
 sections:
   - block: markdown
@@ -69,6 +69,20 @@ sections:
         {{< poverty >}}
 
         [Full page: two lines, two different questions →](/data/poverty/)
+    design:
+      columns: '1'
+      spacing:
+        padding: ['1rem', '0', '1rem', '0']
+  - block: markdown
+    content:
+      title: 'Economic indicators'
+      subtitle: ''
+      text: |-
+        GDP per capita, total GDP, trade openness, inflation and unemployment across 188 countries from 1990. Income is the strongest single predictor of almost every other indicator on this page — keeping it here makes that relationship checkable rather than assumed.
+
+        {{< economy >}}
+
+        [Full page: why economic data sits alongside the environmental →](/data/economy/)
     design:
       columns: '1'
       spacing:
