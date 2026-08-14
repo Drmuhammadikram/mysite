@@ -1,5 +1,6 @@
 <style>
 @media (max-width: 768px){
+
   [id$="-wrap"],
   [id$="-cards"],
   [id$="-tabs"],
@@ -7,25 +8,41 @@
   [id$="-src"],
   #pb-legend,
   #pb-read{
-    width: 96vw !important;
-    max-width: 96vw !important;
+    width: calc(100% - 24px) !important;
+    max-width: calc(100% - 24px) !important;
+    box-sizing: border-box !important;
     position: relative !important;
     left: 50% !important;
     transform: translateX(-50%) !important;
     margin-left: 0 !important;
     margin-right: 0 !important;
   }
+
   [id$="-map"]{
     margin-top: 0 !important;
   }
+
   [id$="-map"] svg{
+    width: 100% !important;
+    height: auto !important;
     min-height: 0 !important;
   }
+
   [id$="-wrap"]{
     grid-template-columns: 1fr !important;
   }
+
   [id$="-cards"]{
-    grid-template-columns: repeat(2, 1fr) !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   }
+}
+
+/* Small phones */
+@media (max-width: 480px){
+
+  [id$="-cards"]{
+    grid-template-columns: 1fr !important;
+  }
+
 }
 </style>
