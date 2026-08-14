@@ -60,7 +60,7 @@ var svg=d3.select('#wt-map').append('svg')
   .attr('role','img').attr('aria-label','World map of water stress by country');
 
 var proj = globe
-  ? d3.geoOrthographic().scale(198).translate([210,210]).rotate([-10,-18,0]).clipAngle(90)
+  ? d3.geoOrthographic().scale(195).translate([210,210]).rotate([-10,-18,0]).clipAngle(90)
   : d3.geoNaturalEarth1().scale(200).translate([460,205]);
 var path=d3.geoPath(proj);
 
@@ -134,7 +134,7 @@ d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(f
   if(mor.length) feats.push({type:'Feature',id:504,geometry:topojson.merge(w,mor)});
 
   if(globe){
-    svg.append('circle').attr('cx',210).attr('cy',210).attr('r',198)
+    svg.append('circle').attr('cx',210).attr('cy',210).attr('r',165)
       .attr('fill',dark?'#101a20':'#dbe8ef');
     svg.append('path').datum(d3.geoGraticule10())
       .attr('class','wt-grat').attr('d',path).attr('fill','none')
