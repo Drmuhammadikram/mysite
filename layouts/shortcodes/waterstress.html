@@ -151,7 +151,7 @@ d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(f
     .on('click',function(e,f){ readout(key(f)); });
 
   if(globe){
-    var outline=svg.append('circle').attr('cx',210).attr('cy',210).attr('r',198)
+    var outline=svg.append('circle').attr('cx',210).attr('cy',210).attr('r',165)
       .attr('fill','none').attr('stroke',dark?'rgba(255,255,255,.22)':'rgba(0,0,0,.18)')
       .attr('stroke-width',1).style('pointer-events','none');
 
