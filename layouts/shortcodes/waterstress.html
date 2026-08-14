@@ -134,7 +134,7 @@ d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(f
   if(mor.length) feats.push({type:'Feature',id:504,geometry:topojson.merge(w,mor)});
 
   if(globe){
-    svg.append('circle').attr('cx',210).attr('cy',210).attr('r',165)
+    svg.append('circle').attr('cx',210).attr('cy',210).attr('r',198)
       .attr('fill',dark?'#101a20':'#dbe8ef');
     svg.append('path').datum(d3.geoGraticule10())
       .attr('class','wt-grat').attr('d',path).attr('fill','none')
