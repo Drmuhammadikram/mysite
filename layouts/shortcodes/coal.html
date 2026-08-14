@@ -72,7 +72,7 @@ var svg=d3.select('#cl-map').append('svg')
   .style('touch-action',globe?'none':'auto')
   .attr('role','img').attr('aria-label','World map of coal consumption by country');
 var proj=globe
-  ? d3.geoOrthographic().scale(198).translate([210,210]).rotate([-10,-18,0]).clipAngle(90)
+  ? d3.geoOrthographic().scale(165).translate([210,210]).rotate([-10,-18,0]).clipAngle(90)
   : d3.geoNaturalEarth1().scale(200).translate([460,205]);
 var path=d3.geoPath(proj);
 
@@ -160,7 +160,7 @@ d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(f
   if(mor.length) feats.push({type:'Feature',id:504,geometry:topojson.merge(w,mor)});
 
   if(globe){
-    svg.append('circle').attr('cx',210).attr('cy',210).attr('r',198)
+    svg.append('circle').attr('cx',210).attr('cy',210).attr('r',165)
       .attr('fill',dark?'#101a20':'#dbe8ef');
     svg.append('path').datum(d3.geoGraticule10())
       .attr('class','cl-grat').attr('d',path).attr('fill','none')
@@ -177,7 +177,7 @@ d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(f
     .on('click',function(e,f){ show(key(f)); });
 
   if(globe){
-    svg.append('circle').attr('cx',210).attr('cy',210).attr('r',198)
+    svg.append('circle').attr('cx',210).attr('cy',210).attr('r',165)
       .attr('fill','none').attr('stroke',dark?'rgba(255,255,255,.22)':'rgba(0,0,0,.18)')
       .attr('stroke-width',1).style('pointer-events','none');
     var x0,y0,r0;
