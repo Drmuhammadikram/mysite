@@ -92,6 +92,22 @@ sections:
       columns: '1'
   - block: markdown
     content:
+      title: ''
+      subtitle: ''
+      text: |-
+        <a href="https://www.timeshighereducation.com/campus/how-embed-sustainability-your-business-school" style="display:block;text-decoration:none;color:inherit;border:1px solid rgba(128,128,128,0.2);border-radius:14px;padding:1.6rem 1.8rem;transition:border-color .18s ease,transform .18s ease;" onmouseover="this.style.borderColor='rgba(27,175,122,0.5)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='rgba(128,128,128,0.2)';this.style.transform='none'">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:1.1rem;flex-wrap:wrap;">
+            <img src="/uploads/logos/the-logo.png" alt="Times Higher Education" style="height:26px;width:auto;">
+            <span style="font-size:0.66rem;letter-spacing:0.09em;text-transform:uppercase;opacity:0.5;font-weight:600;">Feature article · October 2025</span>
+          </div>
+          <div style="font-size:1.35rem;font-weight:600;line-height:1.3;margin-bottom:0.6rem;letter-spacing:-0.01em;">How to embed sustainability in your business school</div>
+          <div style="font-size:0.9rem;opacity:0.72;line-height:1.6;margin-bottom:1rem;">Vague symbolic gestures and greenwashing are no longer enough. Written for THE Campus on moving business schools from recycling bins and mission statements to sustainability embedded across curriculum, campus operations, research agendas and industry partnerships — with seven practical steps for institutions starting out.</div>
+          <div style="font-size:0.8rem;color:#1baf7a;font-weight:500;">Read at Times Higher Education →</div>
+        </a>
+    design:
+      columns: '1'
+  - block: markdown
+    content:
       title: '📚 Research Statement'
       subtitle: ''
       text: |-
