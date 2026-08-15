@@ -1,6 +1,6 @@
 ---
 title: Sustainability Data
-summary: Interactive datasets on planetary boundaries, ecological footprint, biocapacity, human development, poverty, economic indicators, population and demography, ISO certifications, coal consumption, energy mix, water stress, forests and deforestation, food waste, natural disasters, life satisfaction, and progress toward the Sustainable Development Goals.
+summary: Interactive datasets on planetary boundaries, ecological footprint, biocapacity, human development, poverty, economic indicators, internet access, population and demography, ISO certifications, coal consumption, energy mix, water stress, forests and deforestation, food waste, natural disasters, life satisfaction, and progress toward the Sustainable Development Goals.
 type: landing
 sections:
   - block: markdown
@@ -83,6 +83,20 @@ sections:
         {{< economy >}}
 
         [Full page: why economic data sits alongside the environmental →](/data/economy/)
+    design:
+      columns: '1'
+      spacing:
+        padding: ['1rem', '0', '1rem', '0']
+  - block: markdown
+    content:
+      title: 'Internet access worldwide'
+      subtitle: ''
+      text: |-
+        Internet use, mobile subscriptions and fixed broadband across 188 countries from 1995. Switching between mobile and broadband reorders the map substantially — much of the world came online without ever building fixed-line infrastructure, and that difference shapes what connectivity is actually good for.
+
+        {{< internet >}}
+
+        [Full page: why mobile and broadband tell different stories →](/data/internet/)
     design:
       columns: '1'
       spacing:
