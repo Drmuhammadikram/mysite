@@ -1,6 +1,6 @@
 ---
 title: Sustainability Data
-summary: Interactive datasets on planetary boundaries, ecological footprint, biocapacity, human development, poverty, economic indicators, internet access, population and demography, ISO certifications, coal consumption, energy mix, water stress, forests and deforestation, food waste, natural disasters, life satisfaction, and progress toward the Sustainable Development Goals.
+summary: Interactive datasets on planetary boundaries, ecological footprint, biocapacity, human development, poverty, economic indicators, governance, internet access, population and demography, ISO certifications, coal consumption, energy mix, water stress, forests and deforestation, food waste, natural disasters, life satisfaction, and progress toward the Sustainable Development Goals.
 type: landing
 sections:
   - block: markdown
@@ -83,6 +83,20 @@ sections:
         {{< economy >}}
 
         [Full page: why economic data sits alongside the environmental →](/data/economy/)
+    design:
+      columns: '1'
+      spacing:
+        padding: ['1rem', '0', '1rem', '0']
+  - block: markdown
+    content:
+      title: 'Governance indicators'
+      subtitle: ''
+      text: |-
+        Six dimensions of institutional quality — government effectiveness, regulatory quality, rule of law, control of corruption, voice and accountability, and political stability — across 188 countries from 1996. Environmental policy does not implement itself, and these are the closest available proxy for the institutional capacity it requires.
+
+        {{< governance >}}
+
+        [Full page: what the six dimensions measure, and how not to read them →](/data/governance/)
     design:
       columns: '1'
       spacing:
