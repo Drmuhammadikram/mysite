@@ -1,6 +1,6 @@
 ---
 title: Sustainability Data
-summary: Interactive datasets on planetary boundaries, ecological footprint, biocapacity, human development, poverty, economic indicators, governance, internet access, population and demography, ISO certifications, coal consumption, energy mix, water stress, forests and deforestation, food waste, natural disasters, life satisfaction, and progress toward the Sustainable Development Goals.
+summary: Interactive datasets on planetary boundaries, ecological footprint, biocapacity, human development, poverty, economic indicators, governance, internet access, population and demography, ISO certifications, coal consumption, energy mix, electric vehicles, water stress, forests and deforestation, food waste, natural disasters, life satisfaction, and progress toward the Sustainable Development Goals.
 type: landing
 sections:
   - block: markdown
@@ -167,6 +167,20 @@ sections:
         {{< energymix >}}
 
         [Full page: why primary energy rather than electricity →](/data/energy-mix/)
+    design:
+      columns: '1'
+      spacing:
+        padding: ['1rem', '0', '1rem', '0']
+  - block: markdown
+    content:
+      title: 'Electric vehicle adoption'
+      subtitle: ''
+      text: |-
+        Electric car sales and stock across 56 markets from 2010. Norway sells 97% electric but only 36% of its cars on the road are — the gap between those two figures is how long a vehicle fleet takes to turn over, and it is the number that matters for emissions.
+
+        {{< ev >}}
+
+        [Full page: why sales share and fleet share differ →](/data/electric-vehicles/)
     design:
       columns: '1'
       spacing:
