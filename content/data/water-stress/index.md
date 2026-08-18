@@ -11,6 +11,8 @@ sections:
         Freshwater withdrawal as a share of available renewable resources, tracked annually from 2000 to 2023.
 
         {{< waterstress >}}
+
+        {{< dl file="water-stress-full.csv" rows="5,064" span="2000 to 2023" source="FAO AQUASTAT via the UN SDG Global Database" >}}
     design:
       columns: '1'
   - block: markdown
