@@ -63,7 +63,7 @@ var PB=[
 var narrow=window.innerWidth<820;
 var R0=54,RPB=136,RHR=180,RMAX=236,RIC=narrow?250:266,CX=430,CY=398;
 var dark=matchMedia('(prefers-color-scheme: dark)').matches;
-var ink=dark?'#e2e0db':'#15302a';
+var ink=dark?'#e2e0db':'#0d1f1a';
 var G=[[R0,'#0b6b48'],[96,'#3ea567'],[RPB,'#93c04b'],[148,'#e8b53a'],[RHR,'#e07f2b'],[204,'#bd3418'],[RMAX,'#711a4c']];
 function frac(r){ return (r-R0)/(RMAX-R0); }
 function pt(r,a){return [(CX+r*Math.sin(a)).toFixed(1),(CY-r*Math.cos(a)).toFixed(1)];}
@@ -102,12 +102,12 @@ PB.forEach(function(p,i){
   var mid=i*seg+seg/2, ip=pt(RIC,mid);
   s+='<g transform="translate('+(+ip[0]-10)+','+(+ip[1]-10)+')" style="pointer-events:none">'+
      '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="'+ink+'" stroke-width="1.5" '+
-     'stroke-linecap="round" stroke-linejoin="round" opacity="0.75">'+I[p.k]+'</svg></g>';
+     'stroke-linecap="round" stroke-linejoin="round" opacity="0.9">'+I[p.k]+'</svg></g>';
   var lp=pt(RIC+24,mid), sn=Math.sin(mid);
   var anc=Math.abs(sn)<0.3?'middle':(sn>0?'start':'end');
   p.n.split('\n').forEach(function(ln,k,ar){
     s+='<text x="'+lp[0]+'" y="'+(+lp[1]+k*13.5-(ar.length-1)*6.5+4)+'" text-anchor="'+anc+
-       '" font-size="11.5" font-weight="500" fill="'+ink+'" opacity="0.85" style="pointer-events:none">'+ln+'</text>';
+       '" font-size="11.5" font-weight="500" fill="'+ink+'" opacity="1" style="pointer-events:none">'+ln+'</text>';
   });
 });
 s+='<circle cx="'+CX+'" cy="'+CY+'" r="'+R0+'" fill="'+(dark?'#1a1a19':'#ffffff')+'"/>';
