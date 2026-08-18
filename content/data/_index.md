@@ -1,6 +1,6 @@
 ---
 title: Sustainability Data
-summary: Interactive datasets on planetary boundaries, ecological footprint, biocapacity, human development, poverty, economic indicators, governance, internet access, population and demography, ISO certifications, coal consumption, energy mix, electric vehicles, water stress, forests and deforestation, food waste, natural disasters, life satisfaction, and progress toward the Sustainable Development Goals.
+summary: Interactive datasets on planetary boundaries, ecological footprint, biocapacity, human development, poverty, economic indicators, governance, internet access, population and demography, ISO certifications, coal consumption, energy mix, oil refining, electric vehicles, water stress, forests and deforestation, food waste, natural disasters, life satisfaction, and progress toward the Sustainable Development Goals.
 type: landing
 sections:
   - block: markdown
@@ -167,6 +167,20 @@ sections:
         {{< energymix >}}
 
         [Full page: why primary energy rather than electricity →](/data/energy-mix/)
+    design:
+      columns: '1'
+      spacing:
+        padding: ['1rem', '0', '1rem', '0']
+  - block: markdown
+    content:
+      title: 'Oil refining'
+      subtitle: ''
+      text: |-
+        Refining capacity, throughput and utilisation across 74 countries from 1980. Crude oil is not a usable fuel — refining capacity determines whether a country can meet its own fuel demand or must import refined products. Morocco has reported none since its Mohammedia refinery closed in 2015.
+
+        {{< refining >}}
+
+        [Full page: capacity, throughput, and the gap between them →](/data/refining/)
     design:
       columns: '1'
       spacing:
