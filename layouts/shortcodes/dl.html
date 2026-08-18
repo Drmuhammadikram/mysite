@@ -1,0 +1,22 @@
+{{- $file := .Get "file" -}}
+{{- $rows := .Get "rows" -}}
+{{- $span := .Get "span" -}}
+{{- $src := .Get "source" -}}
+<div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:1.5rem;padding:1.1rem 1.3rem;border:1px solid rgba(128,128,128,0.22);border-radius:11px;">
+  <a href="/uploads/data/{{ $file }}" download
+     style="display:inline-flex;align-items:center;gap:8px;font-size:0.8rem;font-weight:600;
+            padding:9px 16px;text-decoration:none;border:1px solid rgba(29,122,95,0.45);
+            border-radius:7px;background:rgba(29,122,95,0.10);color:inherit;flex-shrink:0;">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+         stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+    </svg>
+    Download CSV
+  </a>
+  <div style="font-size:0.72rem;opacity:0.62;line-height:1.6;flex:1;min-width:250px;">
+    Complete annual series, {{ $span }} &middot; {{ $rows }} observations. The map above shows
+    selected years; this file contains every year.<br>
+    Free to use. Please cite <strong>{{ $src }}</strong> as the original source, and
+    <em>M. Ikram, drmuhammadikram.com</em> for the compilation.
+  </div>
+</div>
