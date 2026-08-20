@@ -1,25 +1,28 @@
-<div style="display:grid;grid-template-columns:1fr 190px;gap:20px;align-items:start;" id="aq-wrap">
-  <div id="aq-map" style="width:100%;"></div>
+{{- $d := site.Data.air -}}
+{{- with $d -}}
+<script type="application/json" id="aq-data">{{ .countries | jsonify }}</script>
+<script type="application/json" id="aq-years">{{ .years | jsonify }}</script>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:1.5rem;width:70vw;max-width:1100px;position:relative;left:50%;transform:translateX(-50%);" id="aq-cards"></div>
+
+<div id="aq-tabs" style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:1.25rem;align-items:center;width:70vw;max-width:1100px;position:relative;left:50%;transform:translateX(-50%);z-index:6;"></div>
+
+<div style="display:grid;grid-template-columns:1fr 190px;gap:24px;align-items:start;width:70vw;max-width:1100px;position:relative;left:50%;transform:translateX(-50%);" id="aq-wrap">
+  <div id="aq-map" style="width:100%;margin-top:-3.5rem;"></div>
   <div>
-    <div style="font-size:0.78rem;opacity:0.75;margin-bottom:0.7rem;line-height:1.45;">
-      <strong style="font-weight:600;opacity:1;">Air Quality Index</strong><br>
-      Circles are ground stations. Shaded cells are modelled estimates.
-    </div>
+    <div id="aq-legend-title" style="font-size:0.78rem;opacity:0.75;margin-bottom:0.7rem;line-height:1.45;"></div>
     <div id="aq-legend"></div>
-    <div id="aq-readout" style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid rgba(128,128,128,0.2);min-height:90px;">
-      <div style="font-size:0.75rem;opacity:0.5;">Hover a station</div>
+    <div id="aq-readout" style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid rgba(128,128,128,0.2);min-height:84px;">
+      <div style="font-size:0.75rem;opacity:0.5;">Hover a country</div>
     </div>
-    <div id="aq-count" style="margin-top:1rem;font-size:0.72rem;opacity:0.55;"></div>
   </div>
 </div>
 
 <p style="font-size:0.72rem;opacity:0.55;margin-top:1.25rem;line-height:1.6;">
-  Live readings across North Africa. Station data from the
-  <a href="https://waqi.info">World Air Quality Index project</a>; the shaded background is
-  modelled from the Copernicus Atmosphere Monitoring Service via
-  <a href="https://open-meteo.com">Open-Meteo</a> (CC BY 4.0). Where stations exist and report,
-  they measure directly; elsewhere the model estimates. Sparse station coverage across the
-  region reflects monitoring infrastructure rather than air quality itself.
+  Mean annual population-weighted exposure to fine particulate matter under 2.5 micrometres,
+  in micrograms per cubic metre. Source: {{ .source }}. The WHO air quality guideline is
+  5 µg/m³; the interim targets run at 35, 25, 15 and 10. National averages weight by where
+  people live, but still conceal wide variation between cities and rural areas within a country.
 </p>
 
 <style>@media(max-width:760px){#aq-wrap{grid-template-columns:1fr!important}}</style>
@@ -28,107 +31,144 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
 <script>
 (function(){
-  var TOKEN = 'dc6ad272f691ae0998d466e17facbd6a20854c34';
+var DATA=JSON.parse(document.getElementById('aq-data').textContent);
+if(typeof DATA==='string'){ DATA=JSON.parse(DATA); }
+var YEARS=JSON.parse(document.getElementById('aq-years').textContent);
+if(typeof YEARS==='string'){ YEARS=JSON.parse(YEARS); }
+var dark=matchMedia('(prefers-color-scheme: dark)').matches;
+var globe=window.innerWidth<820;
+var noData=dark?'#2c2c2a':'#eceae4';
+var BANDS=[[35,'over 35, WHO target 1'],[25,'25 - 35'],[15,'15 - 25'],[10,'10 - 15'],
+           [5,'5 - 10'],[0,'under 5, meets guideline']];
+var COLS=['#4a1030','#8a1f35','#c25a2a','#e0a03c','#a8c48a','#1d7a5f'];
+var year=YEARS[YEARS.length-1], paths=null;
 
-  var dark = matchMedia('(prefers-color-scheme: dark)').matches;
-  var land = dark ? '#2c2c2a' : '#eceae4';
+function colorFor(v){
+  if(v===null||v===undefined) return noData;
+  for(var j=0;j<BANDS.length;j++){ if(v>=BANDS[j][0]) return COLS[j]; }
+  return COLS[COLS.length-1];
+}
+function key(f){ return ('00'+String(f.id)).slice(-3); }
+function val(k,y){ var c=DATA[k]; if(!c) return null; var g=c.d.pm25; if(!g) return null;
+  var v=g[y]; return (v===undefined)?null:v; }
 
-  var BANDS = [
-    [50,  '#009966', '0–50',    'Good',            'Air quality is satisfactory.'],
-    [100, '#ffde33', '51–100',  'Moderate',        'Acceptable, though sensitive people may be affected.'],
-    [150, '#ff9933', '101–150', 'Unhealthy for sensitive groups', 'Sensitive groups may experience effects.'],
-    [200, '#cc0033', '151–200', 'Unhealthy',       'Everyone may begin to experience health effects.'],
-    [300, '#660099', '201–300', 'Very unhealthy',  'Health alert: everyone may experience serious effects.'],
-    [9999,'#7e0023', '301+',    'Hazardous',       'Health warning of emergency conditions.']
-  ];
-  function band(v){
-    for (var i = 0; i < BANDS.length; i++) if (v <= BANDS[i][0]) return BANDS[i];
-    return BANDS[BANDS.length - 1];
+var W=globe?420:960, H=globe?420:440;
+var svg=d3.select('#aq-map').append('svg')
+  .attr('viewBox','0 0 '+W+' '+H).attr('width','100%')
+  .style('min-height',globe?'0':'700px').style('display','block')
+  .style('touch-action',globe?'none':'auto')
+  .attr('role','img').attr('aria-label','World map of PM2.5 air pollution exposure');
+var proj=globe
+  ? d3.geoOrthographic().scale(165).translate([210,210]).rotate([-10,-18,0]).clipAngle(90)
+  : d3.geoNaturalEarth1().scale(200).translate([460,205]);
+var path=d3.geoPath(proj);
+
+function show(k){
+  var c=DATA[k];
+  if(!c){ d3.select('#aq-readout').html('<div style="font-size:0.75rem;opacity:0.5;">No data</div>'); return; }
+  var v=val(k,year), first=val(k,YEARS[0]);
+  var band='';
+  if(v!==null){ for(var j=0;j<BANDS.length;j++){ if(v>=BANDS[j][0]){ band=BANDS[j][1]; break; } } }
+  var mult='';
+  if(v!==null) mult='<br><span style="opacity:0.6;">'+(v/5).toFixed(1)+'&times; the WHO guideline</span>';
+  var trend='';
+  if(v!==null&&first!==null&&first>0){
+    var pc=(v-first)/first*100;
+    trend='<br><span style="opacity:0.6;">'+(pc>0?'+':'')+pc.toFixed(0)+'% since '+YEARS[0]+'</span>';
+  }
+  d3.select('#aq-readout').html(
+    '<div style="font-size:0.85rem;font-weight:600;margin-bottom:0.4rem;">'+c.n+'</div>'+
+    '<div style="font-size:1.5rem;font-weight:600;font-variant-numeric:tabular-nums;line-height:1;color:'+
+    colorFor(v)+';">'+(v===null?'-':v.toFixed(1))+'<span style="font-size:0.8rem;opacity:0.6;font-weight:400;"> µg/m³</span></div>'+
+    '<div style="font-size:0.72rem;opacity:0.72;line-height:1.6;margin-top:0.4rem;">'+band+mult+trend+'</div>');
+}
+
+function cards(){
+  var vals=[], n=0, sum=0, meets=0;
+  for(var k in DATA){ var v=val(k,year); if(v!==null){ vals.push([DATA[k].n,v]); n++; sum+=v; if(v<5) meets++; } }
+  vals.sort(function(a,b){ return b[1]-a[1]; });
+  var top=vals[0]||['-',0];
+  function card(l,big,sub){
+    return '<div style="background:rgba(128,128,128,0.06);border-radius:8px;padding:1rem;">'+
+     '<div style="font-size:0.75rem;opacity:0.7;margin-bottom:0.4rem;">'+l+'</div>'+
+     '<div style="font-size:1.7rem;line-height:1;font-weight:600;font-variant-numeric:tabular-nums;">'+big+'</div>'+
+     '<div style="font-size:0.68rem;opacity:0.55;margin-top:0.3rem;">'+sub+'</div></div>';
+  }
+  d3.select('#aq-cards').html(
+    card('Year',year,'reporting year')+
+    card('Highest',top[1].toFixed(1),top[0])+
+    card('Average',n?(sum/n).toFixed(1):'-','µg/m³ across '+n+' countries')+
+    card('Meet guideline',meets,'of '+n+' countries'));
+}
+
+function render(){
+  d3.select('#aq-legend-title').html('<strong style="font-weight:600;opacity:1">PM2.5 exposure, '+year+
+    '</strong><br>Micrograms per cubic metre. WHO guideline is 5.');
+  d3.select('#aq-legend').html(BANDS.map(function(b,j){
+    return '<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;font-size:0.72rem;opacity:0.75;">'+
+      '<span style="width:16px;height:11px;border-radius:2px;background:'+COLS[j]+';flex-shrink:0;border:1px solid rgba(128,128,128,0.2);"></span>'+b[1]+'</div>';
+  }).join('')+'<div style="display:flex;align-items:center;gap:8px;margin-top:8px;font-size:0.72rem;opacity:0.5;">'+
+    '<span style="width:16px;height:11px;border-radius:2px;background:'+noData+';flex-shrink:0;"></span>No data</div>');
+  d3.selectAll('#aq-tabs button')
+    .style('background',function(d){return d===year?'rgba(194,90,42,0.18)':'transparent';})
+    .style('border-color',function(d){return d===year?'rgba(194,90,42,0.6)':'rgba(128,128,128,0.3)';})
+    .style('font-weight',function(d){return d===year?'600':'400';})
+    .style('opacity',function(d){return d===year?1:0.65;});
+  if(paths) paths.attr('fill',function(f){ return colorFor(val(key(f),year)); });
+  cards();
+}
+
+d3.select('#aq-tabs').selectAll('button').data(YEARS).join('button')
+  .attr('type','button')
+  .style('font-size','0.75rem').style('padding','6px 10px').style('cursor','pointer')
+  .style('border','1px solid rgba(128,128,128,0.3)').style('border-radius','6px')
+  .style('color','inherit')
+  .text(function(d){return d;})
+  .on('click',function(e,d){ year=d; render(); });
+
+d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(function(w){
+  var mor=w.objects.countries.geometries.filter(function(g){
+    var id=String(+g.id); return id==='504'||id==='732'; });
+  var feats=topojson.feature(w,w.objects.countries).features
+    .filter(function(f){var id=String(+f.id); return id!=='504'&&id!=='732'&&id!=='010';});
+  if(mor.length) feats.push({type:'Feature',id:504,geometry:topojson.merge(w,mor)});
+
+  if(globe){
+    svg.append('circle').attr('cx',210).attr('cy',210).attr('r',165)
+      .attr('fill',dark?'#101a20':'#dbe8ef');
+    svg.append('path').datum(d3.geoGraticule10())
+      .attr('class','aq-grat').attr('d',path).attr('fill','none')
+      .attr('stroke',dark?'rgba(255,255,255,.10)':'rgba(0,0,0,.09)').attr('stroke-width',0.5);
   }
 
-  d3.select('#aq-legend').html(BANDS.map(function(b){
-    return '<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;font-size:0.72rem;opacity:0.78;">' +
-      '<span style="width:16px;height:11px;border-radius:2px;background:' + b[1] +
-      ';flex-shrink:0;border:1px solid rgba(128,128,128,0.2);"></span>' + b[2] + '</div>';
-  }).join(''));
+  paths=svg.selectAll('path.aq-c').data(feats).join('path')
+    .attr('class','aq-c')
+    .attr('d',path)
+    .attr('fill',function(f){ return colorFor(val(key(f),year)); })
+    .attr('stroke',dark?'rgba(255,255,255,.14)':'#fff').attr('stroke-width',0.4)
+    .style('cursor','pointer')
+    .on('mouseenter',function(e,f){ if(!globe) show(key(f)); })
+    .on('click',function(e,f){ show(key(f)); });
 
-  var svg = d3.select('#aq-map').append('svg')
-    .attr('viewBox','0 0 720 460').attr('width','100%')
-    .style('display','block')
-    .attr('role','img').attr('aria-label','Air quality index across North Africa');
-
-  var proj = d3.geoMercator().center([12, 27]).scale(760).translate([360, 230]);
-  var path = d3.geoPath(proj);
-
-  var gLand = svg.append('g'), gModel = svg.append('g'), gStat = svg.append('g');
-
-  d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(function(w){
-    var mor = w.objects.countries.geometries.filter(function(g){
-      var id = String(+g.id); return id === '504' || id === '732';
-    });
-    var feats = topojson.feature(w, w.objects.countries).features
-      .filter(function(f){ var id = String(+f.id); return id !== '504' && id !== '732'; });
-    if (mor.length) feats.push({ type:'Feature', id:504, geometry: topojson.merge(w, mor) });
-    gLand.selectAll('path').data(feats).join('path')
-      .attr('d', path).attr('fill', land)
-      .attr('stroke', dark ? 'rgba(255,255,255,.12)' : '#fff').attr('stroke-width', 0.6);
-  });
-
-  fetch('https://api.waqi.info/map/bounds/?latlng=15,-18,38,38&token=' + TOKEN)
-    .then(function(r){ return r.json(); })
-    .then(function(j){
-      if (j.status !== 'ok' || !j.data) { d3.select('#aq-count').text('Station data unavailable'); return; }
-      var pts = j.data.map(function(s){
-        var v = parseInt(s.aqi, 10);
-        if (isNaN(v)) return null;
-        var xy = proj([s.lon, s.lat]);
-        if (!xy) return null;
-        return { x:xy[0], y:xy[1], v:v, n:s.station.name, t:s.station.time };
-      }).filter(Boolean);
-
-      gStat.selectAll('circle').data(pts).join('circle')
-        .attr('cx', function(d){ return d.x; }).attr('cy', function(d){ return d.y; })
-        .attr('r', function(d){ return d.v > 150 ? 9 : d.v > 100 ? 8 : 7; })
-        .attr('fill', function(d){ return band(d.v)[1]; })
-        .attr('stroke', dark ? 'rgba(0,0,0,.45)' : 'rgba(255,255,255,.9)').attr('stroke-width', 1.4)
-        .style('cursor','pointer')
-        .on('mouseenter', function(e,d){
-          var b = band(d.v);
-          d3.select('#aq-readout').html(
-            '<div style="font-size:0.82rem;font-weight:600;margin-bottom:0.4rem;line-height:1.35;">' + d.n + '</div>' +
-            '<div style="display:flex;align-items:baseline;gap:6px;margin-bottom:0.4rem;">' +
-            '<span style="font-size:1.6rem;font-weight:600;font-variant-numeric:tabular-nums;color:' + b[1] + ';">' + d.v + '</span>' +
-            '<span style="font-size:0.75rem;opacity:0.7;">AQI</span></div>' +
-            '<div style="font-size:0.75rem;font-weight:600;margin-bottom:0.3rem;">' + b[3] + '</div>' +
-            '<div style="font-size:0.72rem;opacity:0.68;line-height:1.55;">' + b[4] + '</div>' +
-            (d.t ? '<div style="font-size:0.68rem;opacity:0.45;margin-top:0.5rem;">' +
-              d.t.slice(0,16).replace('T',' ') + '</div>' : ''));
-        });
-
-      d3.select('#aq-count').text(pts.length + ' reporting stations in the region');
-    })
-    .catch(function(){ d3.select('#aq-count').text('Station data unavailable'); });
-
-  var grid = [];
-  for (var la = 15; la <= 38; la += 1.6)
-    for (var lo = -17; lo <= 37; lo += 1.9)
-      grid.push([la, lo]);
-  fetch('https://air-quality-api.open-meteo.com/v1/air-quality?latitude=' +
-        grid.map(function(p){ return p[0]; }).join(',') + '&longitude=' +
-        grid.map(function(p){ return p[1]; }).join(',') + '&current=us_aqi&timezone=UTC')
-    .then(function(r){ return r.json(); })
-    .then(function(j){
-      var arr = Array.isArray(j) ? j : [j], cells = [];
-      arr.forEach(function(d, i){
-        var v = d.current && d.current.us_aqi;
-        if (v == null || !grid[i]) return;
-        var xy = proj([grid[i][1], grid[i][0]]);
-        if (xy) cells.push({ x:xy[0], y:xy[1], v:v });
-      });
-      gModel.selectAll('circle').data(cells).join('circle')
-        .attr('cx', function(d){ return d.x; }).attr('cy', function(d){ return d.y; })
-        .attr('r', 13).attr('fill', function(d){ return band(d.v)[1]; })
-        .attr('opacity', 0.30).style('pointer-events','none');
-    });
+  if(globe){
+    svg.append('circle').attr('cx',210).attr('cy',210).attr('r',165)
+      .attr('fill','none').attr('stroke',dark?'rgba(255,255,255,.22)':'rgba(0,0,0,.18)')
+      .attr('stroke-width',1).style('pointer-events','none');
+    var x0,y0,r0;
+    svg.call(d3.drag()
+      .on('start',function(e){ x0=e.x; y0=e.y; r0=proj.rotate(); })
+      .on('drag',function(e){
+        var kk=0.32;
+        proj.rotate([r0[0]+(e.x-x0)*kk, Math.max(-88,Math.min(88,r0[1]-(e.y-y0)*kk)), 0]);
+        paths.attr('d',path); svg.select('.aq-grat').attr('d',path);
+      }));
+    d3.select('#aq-map').append('div')
+      .style('font-size','0.7rem').style('opacity','0.5')
+      .style('text-align','center').style('margin-top','0.4rem')
+      .text('Drag to rotate · tap a country for detail');
+  }
+  render();
+});
 })();
 </script>
+{{- end -}}
