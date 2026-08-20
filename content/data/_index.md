@@ -1,6 +1,6 @@
 ---
 title: Sustainability Data
-summary: Nineteen interactive datasets on planetary boundaries, ecological footprint, biocapacity, human development, poverty, economic indicators, governance, internet access, population and demography, ISO certifications, coal consumption, energy mix, oil refining, electric vehicles, water stress, forests and deforestation, food waste, natural disasters, life satisfaction, and progress toward the Sustainable Development Goals.
+summary: Twenty interactive datasets on planetary boundaries, ecological footprint, biocapacity, human development, poverty, economic indicators, governance, internet access, population and demography, ISO certifications, coal consumption, energy mix, oil refining, electric vehicles, water stress, forests and deforestation, food waste, natural disasters, life satisfaction, air quality, and progress toward the Sustainable Development Goals.
 type: landing
 sections:
   - block: markdown
@@ -215,7 +215,21 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '16. Forests and deforestation'
+      title: '16. Air quality worldwide'
+      subtitle: ''
+      text: |-
+        Mean annual exposure to PM2.5 across 171 countries from 1990. The WHO guideline is 5 micrograms per cubic metre; Morocco sits at 18.7, China at 32, India at 54. Almost no country meets the standard, which is why the WHO publishes four interim targets rather than one.
+
+        {{< airquality >}}
+
+        [Full page: what PM2.5 is, and why national averages hide the cities →](/data/air-quality/)
+    design:
+      columns: '1'
+      spacing:
+        padding: ['1rem', '0', '1rem', '0']
+  - block: markdown
+    content:
+      title: '17. Forests and deforestation'
       subtitle: ''
       text: |-
         Forest cover, net change, deforestation and satellite-observed tree cover loss across 168 countries. These four measure different things and are routinely conflated — a country can show net forest gain while deforestation continues, if planting outpaces clearance.
@@ -229,7 +243,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '17. Food waste per capita'
+      title: '18. Food waste per capita'
       subtitle: ''
       text: |-
         Kilograms of food wasted per person per year across household, food service, and retail, in 184 countries. Read the full page before drawing country comparisons — most of these figures are modelled rather than measured.
@@ -243,7 +257,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '18. Natural disasters worldwide'
+      title: '19. Natural disasters worldwide'
       subtitle: ''
       text: |-
         Recorded natural hazard events from 2000 to 2025 across 180 countries, from the EM-DAT international disaster database. Switch between hazard types and between events, deaths, and people affected.
@@ -257,7 +271,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '19. Life satisfaction worldwide'
+      title: '20. Life satisfaction worldwide'
       subtitle: ''
       text: |-
         How people rate their own lives on a scale from 0 to 10, across 162 countries from 2011 to 2025. Drawn from the Gallup World Poll and published annually in the World Happiness Report.
