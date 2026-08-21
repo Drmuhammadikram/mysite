@@ -1,6 +1,6 @@
 ---
 title: Sustainability Data
-summary: Twenty interactive datasets on planetary boundaries, ecological footprint, biocapacity, human development, poverty, economic indicators, governance, internet access, population and demography, ISO certifications, coal consumption, energy mix, oil refining, electric vehicles, water stress, forests and deforestation, food waste, natural disasters, life satisfaction, air quality, and progress toward the Sustainable Development Goals.
+summary: Twenty-one interactive datasets on planetary boundaries, ecological footprint, biocapacity, human development, poverty, economic indicators, governance, internet access, population and demography, ISO certifications, coal consumption, energy mix, oil refining, electric vehicles, water stress, air quality, forests and deforestation, food waste, natural disasters, life satisfaction, research output, and progress toward the Sustainable Development Goals.
 type: landing
 sections:
   - block: markdown
@@ -279,6 +279,20 @@ sections:
         {{< happiness >}}
 
         [Full page: the Cantril ladder, and what life evaluation captures →](/data/life-satisfaction/)
+    design:
+      columns: '1'
+      spacing:
+        padding: ['1rem', '0', '1rem', '0']
+  - block: markdown
+    content:
+      title: '21. Research output by country'
+      subtitle: ''
+      text: |-
+        Documents, citations, h-index and self-citation rates across 204 countries, cumulative 1996 to 2025. Switching between volume and citations per document reorders the map almost entirely — the first measures scale, the second measures reception, and they are routinely conflated.
+
+        {{< scimago >}}
+
+        [Full page: volume, impact, and what Scopus leaves out →](/data/research-output/)
     design:
       columns: '1'
       spacing:
