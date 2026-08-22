@@ -95,6 +95,14 @@ sections:
       title: ''
       subtitle: ''
       text: |-
+        {{< pubprofile >}}
+    design:
+      columns: '1'
+  - block: markdown
+    content:
+      title: ''
+      subtitle: ''
+      text: |-
         <a href="https://www.timeshighereducation.com/campus/how-embed-sustainability-your-business-school" style="display:block;text-decoration:none;color:inherit;border:1px solid rgba(128,128,128,0.2);border-radius:14px;padding:1.6rem 1.8rem;transition:border-color .18s ease,transform .18s ease;" onmouseover="this.style.borderColor='rgba(27,175,122,0.5)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='rgba(128,128,128,0.2)';this.style.transform='none'">
           <div style="display:flex;align-items:center;gap:12px;margin-bottom:1.1rem;flex-wrap:wrap;">
             <img src="/uploads/logos/the-logo.png" alt="Times Higher Education" style="height:76px;width:auto;">
