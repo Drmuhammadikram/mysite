@@ -1,3 +1,4 @@
+
 ---
 title: ''
 summary: ''
@@ -88,14 +89,6 @@ sections:
             Updated {{< scholar "updated" >}}
           </div>
         </div>
-    design:
-      columns: '1'
-  - block: markdown
-    content:
-      title: ''
-      subtitle: ''
-      text: |-
-        {{< pubprofile >}}
     design:
       columns: '1'
   - block: markdown
