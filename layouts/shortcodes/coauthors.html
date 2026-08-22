@@ -2,32 +2,42 @@
 {{- with $d -}}
 <script type="application/json" id="cn-data">{{ . | jsonify }}</script>
 
-<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin-bottom:1.3rem;" id="cn-cards"></div>
+<div id="cn-cards" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:10px;margin-bottom:1.15rem;"></div>
 
-<div style="display:grid;grid-template-columns:1fr 200px;gap:22px;align-items:start;" id="cn-wrap">
-  <div id="cn-map" style="width:100%;border:1px solid rgba(128,128,128,0.18);border-radius:12px;overflow:hidden;"></div>
+<div style="display:flex;flex-wrap:wrap;gap:18px;align-items:center;margin-bottom:0.9rem;">
+  <div id="cn-mode" style="display:inline-flex;border:1px solid rgba(128,128,128,0.28);border-radius:7px;overflow:hidden;"></div>
+  <label style="display:flex;align-items:center;gap:10px;font-size:0.74rem;opacity:0.8;">
+    <span>Minimum shared papers</span>
+    <input type="range" id="cn-min" min="2" max="6" step="1" value="2" style="width:96px;accent-color:#1d7a5f;">
+    <span id="cn-minv" style="font-family:ui-monospace,Menlo,monospace;font-weight:600;min-width:12px;">2</span>
+  </label>
+  <button type="button" id="cn-reset" style="font-size:0.72rem;padding:5px 12px;cursor:pointer;border:1px solid rgba(128,128,128,0.28);border-radius:6px;background:transparent;color:inherit;">Reset view</button>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 208px;gap:22px;align-items:start;" id="cn-wrap">
+  <div id="cn-map" style="width:100%;border:1px solid rgba(128,128,128,0.16);border-radius:12px;overflow:hidden;position:relative;"></div>
   <div>
-    <div style="font-size:0.66rem;letter-spacing:0.1em;text-transform:uppercase;opacity:0.5;font-weight:600;margin-bottom:0.7rem;">Research clusters</div>
+    <div id="cn-legend-t" style="font-size:0.63rem;letter-spacing:0.11em;text-transform:uppercase;opacity:0.45;font-weight:600;margin-bottom:0.75rem;">Research clusters</div>
     <div id="cn-legend"></div>
-    <div id="cn-readout" style="margin-top:1.2rem;padding-top:1rem;border-top:1px solid rgba(128,128,128,0.2);min-height:90px;">
-      <div style="font-size:0.75rem;opacity:0.5;">Hover a name</div>
-    </div>
+    <div id="cn-readout" style="margin-top:1.15rem;padding-top:1rem;border-top:1px solid rgba(128,128,128,0.18);min-height:118px;"></div>
   </div>
 </div>
 
-<p style="font-size:0.72rem;opacity:0.55;margin-top:1.2rem;line-height:1.6;">
-  Co-authorship network built from the author lists of {{ .papers }} publications. Each node is
-  a collaborator on two or more papers, sized by how many we have written together. Lines connect
-  co-authors who have appeared on the same paper, and clusters are detected from that structure
-  rather than assigned. I am omitted from the network, since I connect to every node and would
-  collapse the layout. {{ .total }} co-authors appear across the full corpus; those with a single
-  shared paper are not shown.
+<p style="font-size:0.71rem;opacity:0.52;margin-top:1.15rem;line-height:1.65;">
+  Co-authorship network across {{ .papers }} publications. Nodes are collaborators appearing on
+  two or more papers, sized by shared output; edges connect authors who have appeared on the same
+  paper. Clusters are detected from the link structure by label propagation rather than assigned.
+  I am excluded from the graph — every node connects to me, and including myself would collapse
+  the layout into a single hub. Of {{ .total }} co-authors in the corpus, those with one shared
+  paper are omitted.
 </p>
 
 <style>
-@media(max-width:760px){#cn-wrap{grid-template-columns:1fr!important}}
-.cn-n{cursor:pointer;}
-.cn-lbl{pointer-events:none;user-select:none;}
+@media(max-width:820px){#cn-wrap{grid-template-columns:1fr!important}}
+#cn-mode button{font-size:0.72rem;padding:6px 14px;cursor:pointer;border:none;background:transparent;color:inherit;transition:background .15s ease;}
+#cn-mode button+button{border-left:1px solid rgba(128,128,128,0.28);}
+.cn-lg{display:flex;gap:9px;margin-bottom:10px;font-size:0.71rem;line-height:1.45;cursor:pointer;transition:opacity .15s ease;}
+.cn-lg:hover{opacity:0.7;}
 </style>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
@@ -36,128 +46,244 @@
 var D=JSON.parse(document.getElementById('cn-data').textContent);
 if(typeof D==='string'){ D=JSON.parse(D); }
 var dark=matchMedia('(prefers-color-scheme: dark)').matches;
-var narrow=window.innerWidth<760;
-var CL=['#1d7a5f','#2a7fa8','#c25a2a','#7a4fa0','#b5761f','#3d6f96','#8a4a2c'];
-var ink=dark?'#e6e6e2':'#1a1a1a';
-var W=900,H=narrow?620:600;
+var CL=['#1d7a5f','#2a78d6','#d95926','#7a4fa0','#c98500','#199e70','#8a4a2c'];
+var ink=dark?'#eceae4':'#15201c';
+var sub=dark?'rgba(236,234,228,0.55)':'rgba(21,32,28,0.5)';
+var surf=dark?'#14181a':'#fbfaf7';
+var W=940,H=640;
 
-var nodes=D.nodes.map(function(n){return Object.assign({},n);});
-var links=D.links.map(function(l){return {source:l.s,target:l.t,w:l.w};});
-var maxw=d3.max(nodes,function(n){return n.w;});
-function rad(w){ return 6+Math.sqrt(w)*4.2; }
+var mode='cluster', minW=2, pinned=null;
+var yAll=D.nodes.filter(function(n){return n.y1;}).map(function(n){return n.y1;});
+var yMin=d3.min(yAll)||2019, yMax=d3.max(yAll)||2025;
+var recency=d3.scaleLinear().domain([yMin,yMax])
+  .range(dark?[0,1]:[0,1]);
+function recCol(y){
+  if(!y) return dark?'#3a3a38':'#c9c7bf';
+  var t=(y-yMin)/Math.max(1,(yMax-yMin));
+  return d3.interpolateRgb(dark?'#2c4a63':'#b8d4ea', dark?'#e8a23c':'#c25a2a')(t);
+}
+function nodeCol(n){ return mode==='cluster'?CL[n.c%CL.length]:recCol(n.y1); }
+function rad(w){ return 7+Math.sqrt(w)*4.6; }
 
 var svg=d3.select('#cn-map').append('svg')
   .attr('viewBox','0 0 '+W+' '+H).attr('width','100%')
-  .style('display','block').style('background',dark?'rgba(255,255,255,0.02)':'rgba(0,0,0,0.012)');
+  .style('display','block').style('background',surf);
 
-var g=svg.append('g');
-svg.call(d3.zoom().scaleExtent([0.5,4]).on('zoom',function(e){ g.attr('transform',e.transform); }));
+var defs=svg.append('defs');
+var halo=defs.append('radialGradient').attr('id','cn-halo');
+halo.append('stop').attr('offset','0%').attr('stop-color',dark?'#1d7a5f':'#1d7a5f').attr('stop-opacity',dark?0.30:0.16);
+halo.append('stop').attr('offset','100%').attr('stop-color',dark?'#1d7a5f':'#1d7a5f').attr('stop-opacity',0);
 
-var link=g.append('g').selectAll('line').data(links).join('line')
-  .attr('stroke',dark?'rgba(255,255,255,0.14)':'rgba(0,0,0,0.13)')
-  .attr('stroke-width',function(d){ return 0.6+Math.sqrt(d.w)*0.9; });
+var root=svg.append('g');
+var gHalo=root.append('g'), gLink=root.append('g'), gNode=root.append('g'), gLab=root.append('g');
 
-var node=g.append('g').selectAll('circle').data(nodes).join('circle')
-  .attr('class','cn-n')
-  .attr('r',function(d){ return rad(d.w); })
-  .attr('fill',function(d){ return CL[d.c%CL.length]; })
-  .attr('fill-opacity',0.85)
-  .attr('stroke',dark?'rgba(255,255,255,0.25)':'rgba(255,255,255,0.9)')
-  .attr('stroke-width',1.4);
+var zoom=d3.zoom().scaleExtent([0.45,5]).on('zoom',function(e){ root.attr('transform',e.transform); });
+svg.call(zoom);
 
-var label=g.append('g').selectAll('text').data(nodes).join('text')
-  .attr('class','cn-lbl')
+var nodes=D.nodes.map(function(n){return Object.assign({},n);});
+var links=D.links.map(function(l){return {source:l.s,target:l.t,w:l.w};});
+var byId={}; nodes.forEach(function(n){ byId[n.id]=n; });
+var nbr={};
+D.links.forEach(function(l){
+  (nbr[l.s]=nbr[l.s]||{})[l.t]=l.w; (nbr[l.t]=nbr[l.t]||{})[l.s]=l.w;
+});
+
+var vis=function(n){ return n.w>=minW; };
+var visL=function(l){
+  var s=l.source.id||l.source, t=l.target.id||l.target;
+  return byId[s].w>=minW && byId[t].w>=minW;
+};
+
+var haloSel=gHalo.selectAll('circle').data(nodes).join('circle')
+  .attr('fill','url(#cn-halo)').attr('pointer-events','none');
+
+var linkSel=gLink.selectAll('path').data(links).join('path')
+  .attr('fill','none')
+  .attr('stroke',dark?'rgba(255,255,255,0.13)':'rgba(20,30,26,0.12)')
+  .attr('stroke-linecap','round');
+
+var nodeSel=gNode.selectAll('circle').data(nodes).join('circle')
+  .style('cursor','pointer')
+  .attr('stroke-width',1.6);
+
+var labSel=gLab.selectAll('text').data(nodes).join('text')
   .attr('text-anchor','middle')
-  .attr('font-size',function(d){ return (9.5+d.w*0.42).toFixed(1); })
-  .attr('font-weight',function(d){ return d.w>=5?'600':'500'; })
-  .attr('fill',ink)
-  .attr('opacity',function(d){ return d.w>=3?0.92:0; })
+  .attr('paint-order','stroke')
+  .attr('stroke',surf).attr('stroke-width',3.4).attr('stroke-linejoin','round')
+  .style('pointer-events','none').style('user-select','none')
   .text(function(d){ return d.id; });
 
 var sim=d3.forceSimulation(nodes)
   .force('link',d3.forceLink(links).id(function(d){return d.id;})
-     .distance(function(d){ return 130-Math.min(d.w,5)*12; }).strength(0.55))
-  .force('charge',d3.forceManyBody().strength(-680))
+     .distance(function(d){ return 140-Math.min(d.w,5)*13; })
+     .strength(function(d){ return 0.30+Math.min(d.w,4)*0.09; }))
+  .force('charge',d3.forceManyBody().strength(-820).distanceMax(560))
   .force('center',d3.forceCenter(W/2,H/2))
-  .force('collide',d3.forceCollide().radius(function(d){ return rad(d.w)+26; }))
-  .force('x',d3.forceX(W/2).strength(0.045))
-  .force('y',d3.forceY(H/2).strength(0.065))
-  .on('tick',function(){
-    link.attr('x1',function(d){return d.source.x;}).attr('y1',function(d){return d.source.y;})
-        .attr('x2',function(d){return d.target.x;}).attr('y2',function(d){return d.target.y;});
-    node.attr('cx',function(d){return d.x;}).attr('cy',function(d){return d.y;});
-    label.attr('x',function(d){return d.x;})
-         .attr('y',function(d){return d.y+rad(d.w)+12;});
-  });
+  .force('collide',d3.forceCollide().radius(function(d){ return rad(d.w)+30; }).iterations(2))
+  .force('x',d3.forceX(W/2).strength(0.035))
+  .force('y',d3.forceY(H/2).strength(0.055))
+  .alphaDecay(0.021)
+  .on('tick',tick);
 
-node.call(d3.drag()
-  .on('start',function(e,d){ if(!e.active) sim.alphaTarget(0.25).restart(); d.fx=d.x; d.fy=d.y; })
+function tick(){
+  linkSel.attr('d',function(d){
+    var dx=d.target.x-d.source.x, dy=d.target.y-d.source.y;
+    var dr=Math.sqrt(dx*dx+dy*dy)*2.6;
+    return 'M'+d.source.x+','+d.source.y+'A'+dr+','+dr+' 0 0,1 '+d.target.x+','+d.target.y;
+  });
+  nodeSel.attr('cx',function(d){return d.x;}).attr('cy',function(d){return d.y;});
+  haloSel.attr('cx',function(d){return d.x;}).attr('cy',function(d){return d.y;});
+  labSel.attr('x',function(d){return d.x;})
+        .attr('y',function(d){return d.y+rad(d.w)+13;});
+}
+
+nodeSel.call(d3.drag()
+  .on('start',function(e,d){ if(!e.active) sim.alphaTarget(0.22).restart(); d.fx=d.x; d.fy=d.y; })
   .on('drag',function(e,d){ d.fx=e.x; d.fy=e.y; })
   .on('end',function(e,d){ if(!e.active) sim.alphaTarget(0); d.fx=null; d.fy=null; }));
 
-var nbr={};
-links.forEach(function(l){
-  var s=l.source.id||l.source, t=l.target.id||l.target;
-  (nbr[s]=nbr[s]||{})[t]=1; (nbr[t]=nbr[t]||{})[s]=1;
+function paint(focusId){
+  var f=focusId||pinned;
+  nodeSel
+    .attr('display',function(d){ return vis(d)?null:'none'; })
+    .attr('r',function(d){ return rad(d.w); })
+    .attr('fill',nodeCol)
+    .attr('stroke',dark?'rgba(255,255,255,0.30)':'rgba(255,255,255,0.95)')
+    .attr('fill-opacity',function(d){
+      if(!f) return 0.9;
+      return (d.id===f||(nbr[f]&&nbr[f][d.id]))?1:0.13; });
+  haloSel
+    .attr('display',function(d){ return (vis(d)&&!f)?null:'none'; })
+    .attr('r',function(d){ return rad(d.w)*3.4; });
+  linkSel
+    .attr('display',function(d){ return visL(d)?null:'none'; })
+    .attr('stroke-width',function(d){ return 0.7+Math.sqrt(d.w)*1.1; })
+    .attr('stroke-opacity',function(d){
+      if(!f) return 1;
+      return (d.source.id===f||d.target.id===f)?0.9:0.05; });
+  labSel
+    .attr('display',function(d){ return vis(d)?null:'none'; })
+    .attr('font-size',function(d){ return (10+Math.min(d.w,10)*0.55).toFixed(1); })
+    .attr('font-weight',function(d){ return d.w>=5?'600':'500'; })
+    .attr('fill',ink)
+    .attr('opacity',function(d){
+      if(f) return (d.id===f||(nbr[f]&&nbr[f][d.id]))?1:0.08;
+      return d.w>=3?0.95:0.42; });
+  cards();
+}
+
+function readout(d){
+  if(!d){
+    var top=nodes.filter(vis).sort(function(a,b){return b.w-a.w;})[0];
+    d3.select('#cn-readout').html(
+      '<div style="font-size:0.7rem;opacity:0.45;line-height:1.7;">Hover a node to isolate its'+
+      ' collaborations. Click to pin, drag to rearrange, scroll to zoom.</div>');
+    return;
+  }
+  var span=(d.y0&&d.y1)?(d.y0===d.y1?String(d.y0):d.y0+'–'+d.y1):'';
+  var co=nbr[d.id]?Object.keys(nbr[d.id]).filter(function(k){return byId[k]&&byId[k].w>=minW;}):[];
+  var strongest=co.sort(function(a,b){return nbr[d.id][b]-nbr[d.id][a];}).slice(0,3);
+  d3.select('#cn-readout').html(
+    '<div style="font-size:0.84rem;font-weight:600;line-height:1.35;margin-bottom:0.5rem;">'+d.id+'</div>'+
+    '<div style="display:flex;align-items:baseline;gap:7px;margin-bottom:0.5rem;">'+
+      '<span style="font-family:ui-monospace,Menlo,monospace;font-size:1.75rem;font-weight:600;line-height:1;color:'+nodeCol(d)+';">'+d.w+'</span>'+
+      '<span style="font-size:0.7rem;opacity:0.6;">shared paper'+(d.w===1?'':'s')+'</span>'+
+    '</div>'+
+    (span?'<div style="font-size:0.71rem;opacity:0.6;margin-bottom:0.55rem;">'+span+'</div>':'')+
+    (strongest.length?'<div style="font-size:0.69rem;opacity:0.55;line-height:1.65;padding-top:0.5rem;border-top:1px solid rgba(128,128,128,0.16);">'+
+      'Also with<br>'+strongest.map(function(k){
+        return '<span style="opacity:0.85;">'+k+'</span> <span style="opacity:0.5;">· '+nbr[d.id][k]+'</span>';
+      }).join('<br>')+'</div>':''));
+}
+
+nodeSel.on('mouseenter',function(e,d){ if(!pinned){ paint(d.id); readout(d); } })
+       .on('mouseleave',function(){ if(!pinned){ paint(null); readout(null); } })
+       .on('click',function(e,d){
+          e.stopPropagation();
+          pinned=(pinned===d.id)?null:d.id;
+          paint(); readout(pinned?d:null);
+       });
+svg.on('click',function(){ pinned=null; paint(); readout(null); });
+
+function legend(){
+  if(mode==='recency'){
+    d3.select('#cn-legend-t').text('Most recent paper');
+    var steps=[yMin,Math.round((yMin+yMax)/2),yMax];
+    d3.select('#cn-legend').html(
+      '<div style="height:11px;border-radius:6px;margin-bottom:7px;background:linear-gradient(90deg,'+
+      recCol(yMin)+','+recCol((yMin+yMax)/2)+','+recCol(yMax)+');"></div>'+
+      '<div style="display:flex;justify-content:space-between;font-size:0.68rem;opacity:0.55;font-family:ui-monospace,Menlo,monospace;">'+
+      steps.map(function(y){return '<span>'+y+'</span>';}).join('')+'</div>');
+    return;
+  }
+  d3.select('#cn-legend-t').text('Research clusters');
+  var sizes={};
+  nodes.filter(vis).forEach(function(n){ sizes[n.c]=(sizes[n.c]||0)+1; });
+  var ord=Object.keys(sizes).map(Number).sort(function(a,b){return sizes[b]-sizes[a];});
+  d3.select('#cn-legend').html(ord.map(function(c){
+    var mem=nodes.filter(function(n){return n.c===c&&vis(n);}).sort(function(a,b){return b.w-a.w;});
+    return '<div class="cn-lg" data-c="'+c+'">'+
+      '<span style="width:10px;height:10px;border-radius:50%;background:'+CL[c%CL.length]+';flex-shrink:0;margin-top:3px;"></span>'+
+      '<span><span style="font-weight:600;">'+sizes[c]+'</span> '+
+      '<span style="opacity:0.55;">author'+(sizes[c]===1?'':'s')+'</span><br>'+
+      '<span style="opacity:0.5;">'+mem.slice(0,2).map(function(n){return n.id;}).join(', ')+'</span></span></div>';
+  }).join(''));
+  d3.selectAll('.cn-lg').on('mouseenter',function(){
+    var c=+this.dataset.c;
+    nodeSel.attr('fill-opacity',function(d){ return d.c===c?1:0.12; });
+    labSel.attr('opacity',function(d){ return (d.c===c&&vis(d))?1:0.07; });
+    linkSel.attr('stroke-opacity',function(d){
+      return (d.source.c===c&&d.target.c===c)?0.9:0.04; });
+    haloSel.attr('display','none');
+  }).on('mouseleave',function(){ paint(); });
+}
+
+function cards(){
+  var v=nodes.filter(vis);
+  var top=v.sort(function(a,b){return b.w-a.w;})[0]||{id:'—',w:0};
+  var cl=new Set(v.map(function(n){return n.c;})).size;
+  function card(l,big,sub){
+    return '<div style="background:rgba(128,128,128,0.055);border-radius:9px;padding:0.9rem 1rem;">'+
+     '<div style="font-size:0.665rem;letter-spacing:0.07em;text-transform:uppercase;opacity:0.5;margin-bottom:0.4rem;">'+l+'</div>'+
+     '<div style="font-family:ui-monospace,Menlo,monospace;font-size:1.5rem;line-height:1;font-weight:600;">'+big+'</div>'+
+     '<div style="font-size:0.66rem;opacity:0.5;margin-top:0.32rem;line-height:1.35;">'+sub+'</div></div>';
+  }
+  d3.select('#cn-cards').html(
+    card('Publications',D.papers,'in the corpus')+
+    card('Co-authors',D.total,'across all papers')+
+    card('Shown',v.length,minW+'+ shared papers')+
+    card('Clusters',cl,'detected'));
+}
+
+d3.select('#cn-mode').html(
+  '<button data-m="cluster">Clusters</button><button data-m="recency">Recency</button>');
+function modeUI(){
+  d3.selectAll('#cn-mode button').style('background',function(){
+    return this.dataset.m===mode?(dark?'rgba(29,122,95,0.26)':'rgba(29,122,95,0.14)'):'transparent';
+  }).style('font-weight',function(){ return this.dataset.m===mode?'600':'400'; })
+    .style('opacity',function(){ return this.dataset.m===mode?1:0.62; });
+}
+d3.selectAll('#cn-mode button').on('click',function(){
+  mode=this.dataset.m; modeUI(); legend(); paint();
 });
 
-function focus(d){
-  node.attr('fill-opacity',function(n){
-    return (n.id===d.id||(nbr[d.id]&&nbr[d.id][n.id]))?0.95:0.16; });
-  label.attr('opacity',function(n){
-    return (n.id===d.id||(nbr[d.id]&&nbr[d.id][n.id]))?1:0.1; });
-  link.attr('stroke-opacity',function(l){
-    return (l.source.id===d.id||l.target.id===d.id)?0.85:0.07; });
-  var span=(d.y0&&d.y1)?(d.y0===d.y1?d.y0:d.y0+'–'+d.y1):'';
-  var co=nbr[d.id]?Object.keys(nbr[d.id]).length:0;
-  d3.select('#cn-readout').html(
-    '<div style="font-size:0.85rem;font-weight:600;margin-bottom:0.45rem;line-height:1.35;">'+d.id+'</div>'+
-    '<div style="font-size:1.7rem;font-weight:600;line-height:1;font-variant-numeric:tabular-nums;color:'+CL[d.c%CL.length]+';">'+d.w+'</div>'+
-    '<div style="font-size:0.72rem;opacity:0.7;margin-top:0.35rem;line-height:1.65;">'+
-    (d.w===1?'shared paper':'shared papers')+
-    (span?'<br>'+span:'')+
-    (co?'<br>'+co+' shared co-author'+(co===1?'':'s'):'')+'</div>');
-}
-function blur(){
-  node.attr('fill-opacity',0.85);
-  label.attr('opacity',function(n){ return n.w>=3?0.92:0; });
-  link.attr('stroke-opacity',1);
-  d3.select('#cn-readout').html('<div style="font-size:0.75rem;opacity:0.5;">Hover a name</div>');
-}
-node.on('mouseenter',function(e,d){ focus(d); }).on('mouseleave',blur);
-node.on('click',function(e,d){ focus(d); });
+d3.select('#cn-min').on('input',function(){
+  minW=+this.value;
+  d3.select('#cn-minv').text(minW);
+  pinned=null;
+  legend(); paint(); readout(null);
+  sim.alpha(0.45).restart();
+});
 
-var sizes={};
-nodes.forEach(function(n){ sizes[n.c]=(sizes[n.c]||0)+1; });
-var ord=Object.keys(sizes).map(Number).sort(function(a,b){ return sizes[b]-sizes[a]; });
-d3.select('#cn-legend').html(ord.map(function(c){
-  var top=nodes.filter(function(n){return n.c===c;})
-               .sort(function(a,b){return b.w-a.w;}).slice(0,2)
-               .map(function(n){return n.id;}).join(', ');
-  return '<div style="display:flex;gap:9px;margin-bottom:9px;font-size:0.72rem;line-height:1.45;">'+
-    '<span style="width:10px;height:10px;border-radius:50%;background:'+CL[c%CL.length]+
-    ';flex-shrink:0;margin-top:3px;"></span>'+
-    '<span><strong style="font-weight:600;">'+sizes[c]+' author'+(sizes[c]===1?'':'s')+
-    '</strong><br><span style="opacity:0.6;">'+top+'</span></span></div>';
-}).join(''));
+d3.select('#cn-reset').on('click',function(){
+  pinned=null; minW=2; mode='cluster';
+  d3.select('#cn-min').property('value',2); d3.select('#cn-minv').text(2);
+  svg.transition().duration(500).call(zoom.transform,d3.zoomIdentity);
+  modeUI(); legend(); paint(); readout(null);
+  sim.alpha(0.6).restart();
+});
 
-function card(l,big,sub){
-  return '<div style="background:rgba(128,128,128,0.06);border-radius:8px;padding:0.95rem;">'+
-   '<div style="font-size:0.72rem;opacity:0.7;margin-bottom:0.35rem;">'+l+'</div>'+
-   '<div style="font-size:1.6rem;line-height:1;font-weight:600;font-variant-numeric:tabular-nums;">'+big+'</div>'+
-   '<div style="font-size:0.66rem;opacity:0.55;margin-top:0.3rem;">'+sub+'</div></div>';
-}
-var top=nodes[0];
-d3.select('#cn-cards').html(
-  card('Publications',D.papers,'in the network')+
-  card('Co-authors',D.total,'across all papers')+
-  card('Recurring',nodes.length,'two or more papers')+
-  card('Closest',top.w,top.id));
-
-d3.select('#cn-map').append('div')
-  .style('font-size','0.68rem').style('opacity','0.45')
-  .style('text-align','center').style('padding','0 0 0.7rem')
-  .text('Drag to rearrange · scroll to zoom · hover for detail');
+modeUI(); legend(); paint(); readout(null);
 })();
 </script>
 {{- end -}}
