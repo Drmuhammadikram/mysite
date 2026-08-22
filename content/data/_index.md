@@ -1,6 +1,6 @@
 ---
 title: Sustainability Data
-summary: Twenty-one interactive datasets on planetary boundaries, ecological footprint, biocapacity, human development, poverty, economic indicators, governance, internet access, population and demography, ISO certifications, coal consumption, energy mix, oil refining, electric vehicles, water stress, air quality, forests and deforestation, food waste, natural disasters, life satisfaction, research output, and progress toward the Sustainable Development Goals.
+summary: Twenty-two interactive datasets on planetary boundaries, ecological footprint, biocapacity, human development, poverty, economic indicators, governance, internet access, population and demography, ISO certifications, coal consumption, energy mix, oil refining, electric vehicles, water stress, air quality, forests and deforestation, food waste, natural disasters, life satisfaction, research output, AI research, and progress toward the Sustainable Development Goals.
 type: landing
 sections:
   - block: markdown
@@ -293,6 +293,20 @@ sections:
         {{< scimago >}}
 
         [Full page: volume, impact, and what Scopus leaves out →](/data/research-output/)
+    design:
+      columns: '1'
+      spacing:
+        padding: ['1rem', '0', '1rem', '0']
+  - block: markdown
+    content:
+      title: '22. AI research output'
+      subtitle: ''
+      text: |-
+        Scholarly publications on artificial intelligence across 169 countries, 2016 to 2024. China leads on volume with 116,000 a year; Singapore leads on intensity at 765 per million, nine times China's rate. The map opens on per-capita, because the total view is largely a map of population.
+
+        {{< aipub >}}
+
+        [Full page: scale, intensity, and what publication counts miss →](/data/ai-research/)
     design:
       columns: '1'
       spacing:
