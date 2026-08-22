@@ -1,0 +1,107 @@
+name: Rebuild co-author network
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'content/publication/**/index.md'
+      - '.github/workflows/coauthors.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build network
+        run: |
+          python3 - <<'PYEOF'
+          import os,re,json,unicodedata,itertools
+          from collections import Counter,defaultdict
+
+          BASE="content/publication"
+          MERGE={"SAA Shah":"Syed Zulfiqar Ali Shah","Muhammad Ikram":"M Ikram"}
+          DROP={"others","et al","et al."}
+          ME="M Ikram"
+          MIN=2
+
+          def norm(a):
+              a=unicodedata.normalize('NFKC',a).replace('\u2019',"'").replace('\u2018',"'")
+              a=re.sub(r'\s+',' ',a).strip()
+              return MERGE.get(a,a)
+
+          papers=[]
+          for d in sorted(os.listdir(BASE)):
+              f=os.path.join(BASE,d,'index.md')
+              if not os.path.isfile(f): continue
+              txt=open(f,encoding='utf-8').read()
+              m=re.search(r'\nauthors:\n((?:\s+-\s+.*\n)+)',txt)
+              if not m: continue
+              au=[norm(re.sub(r'^\s*-\s*','',l).strip().strip('"').strip("'"))
+                  for l in m.group(1).rstrip().split('\n')]
+              au=[a for a in au if a and a.lower() not in DROP]
+              ym=re.search(r'\ndate:\s*"?(\d{4})',txt)
+              if au: papers.append({"a":au,"y":int(ym.group(1)) if ym else None})
+
+          cnt=Counter(); yrs=defaultdict(list)
+          for p in papers:
+              for a in set(p["a"]):
+                  cnt[a]+=1
+                  if p["y"]: yrs[a].append(p["y"])
+
+          keep={a for a,c in cnt.items() if c>=MIN and a!=ME}
+          edges=Counter()
+          for p in papers:
+              ks=sorted(set(a for a in p["a"] if a in keep))
+              for x,y in itertools.combinations(ks,2): edges[(x,y)]+=1
+
+          adj=defaultdict(set)
+          for (x,y),w in edges.items(): adj[x].add(y); adj[y].add(x)
+
+          lab={a:i for i,a in enumerate(sorted(keep))}
+          for _ in range(60):
+              ch=0
+              for a in sorted(keep,key=lambda z:(-cnt[z],z)):
+                  if not adj[a]: continue
+                  c=Counter(lab[n] for n in adj[a])
+                  best=max(c.items(),key=lambda kv:(kv[1],-kv[0]))[0]
+                  if lab[a]!=best: lab[a]=best; ch+=1
+              if not ch: break
+
+          groups=sorted(set(lab.values()),
+                        key=lambda g:(-sum(1 for a in lab if lab[a]==g),g))
+          gmap={g:i for i,g in enumerate(groups)}
+
+          nodes=[]
+          for a in sorted(keep,key=lambda z:(-cnt[z],z)):
+              ys=sorted(yrs[a])
+              nodes.append({"id":a,"w":cnt[a],"c":gmap[lab[a]],
+                            "y0":ys[0] if ys else None,"y1":ys[-1] if ys else None})
+
+          out={"papers":len(papers),"total":len(cnt)-(1 if ME in cnt else 0),
+               "nodes":nodes,
+               "links":[{"s":x,"t":y,"w":w} for (x,y),w in sorted(edges.items())]}
+
+          os.makedirs("data",exist_ok=True)
+          with open("data/coauthors.json","w") as f:
+              json.dump(out,f,separators=(",",":"),sort_keys=False)
+
+          print("papers %d | nodes %d | links %d | clusters %d"
+                % (len(papers),len(nodes),len(out["links"]),len(groups)))
+          PYEOF
+
+      - name: Commit if changed
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet data/coauthors.json; then
+            echo "No change"
+          else
+            git add data/coauthors.json
+            git commit -m "Rebuild co-author network"
+            git push
+          fi
