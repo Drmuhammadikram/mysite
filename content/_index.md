@@ -92,6 +92,16 @@ sections:
       columns: '1'
   - block: markdown
     content:
+      title: 'Collaboration network'
+      subtitle: ''
+      text: |-
+        Co-authorship across 74 publications. Each node is a recurring collaborator, sized by shared papers; the clusters emerge from who has worked with whom rather than being assigned.
+
+        {{< coauthors >}}
+    design:
+      columns: '1'
+  - block: markdown
+    content:
       title: ''
       subtitle: ''
       text: |-
