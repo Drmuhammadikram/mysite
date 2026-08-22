@@ -21,7 +21,7 @@ bio: |
   Educator (CMBE) of the Chartered Association of Business Schools, UK. He holds a PhD in
   Management Science and Engineering and previously served as a postdoctoral researcher at
   Shenzhen University. Dr. Ikram has published more than 70+ research articles in leading journals
-  and has completed over 580 peer reviews across some 80 journals. His research focuses on
+  and has reviewed over 500 articles for more than 200 journals. His research focuses on
   sustainability, corporate social responsibility, environmental management, circular economy,
   sustainable development goals, decision support systems, and green supply chain management.
 affiliations:
@@ -65,12 +65,8 @@ education:
     institution: University of Sargodha
     start: 2006-09-01
     end: 2010-07-29
-  - degree: Certificate, Future of Sustainable Business — Enterprise and the Environment
-    institution: University of Oxford
-    start: 2024-01-01
-    end: 2024-06-30
 experience:
-  - role: Professor of Strategy & Sustainability
+  - role: Assistant Professor
     org: Al Akhawayn University in Ifrane
     start: 2021-08-01
     summary: |
