@@ -1,0 +1,91 @@
+name: Fetch Scopus metrics
+
+on:
+  schedule:
+    - cron: '0 4 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch from Scopus
+        env:
+          SCOPUS_KEY: ${{ secrets.SCOPUS_KEY }}
+        run: |
+          python3 - <<'PYEOF'
+          import os,json,time,datetime
+          from urllib.request import urlopen,Request
+          from urllib.parse import quote
+          from collections import Counter
+
+          KEY=os.environ["SCOPUS_KEY"].strip()
+          AID="57207734288"
+          BASE="https://api.elsevier.com/content/search/scopus"
+          FIELDS="dc:title,citedby-count,prism:coverDate,prism:publicationName"
+
+          def page(start):
+              u=(BASE+"?query="+quote("AU-ID("+AID+")")+
+                 "&count=25&start="+str(start)+"&field="+quote(FIELDS))
+              r=Request(u,headers={"X-ELS-APIKey":KEY,"Accept":"application/json"})
+              return json.loads(urlopen(r,timeout=90).read().decode())
+
+          items=[]; start=0; total=None
+          while True:
+              d=page(start)["search-results"]
+              if total is None:
+                  total=int(d.get("opensearch:totalResults","0"))
+              for e in d.get("entry",[]):
+                  if "error" in e: continue
+                  items.append({
+                    "t":e.get("dc:title",""),
+                    "j":e.get("prism:publicationName",""),
+                    "d":(e.get("prism:coverDate") or "")[:4],
+                    "c":int(e.get("citedby-count") or 0)})
+              start+=25
+              if start>=total: break
+              time.sleep(0.4)
+
+          cites=sorted((i["c"] for i in items),reverse=True)
+          h=0
+          for n,c in enumerate(cites,1):
+              if c>=n: h=n
+              else: break
+          i10=sum(1 for c in cites if c>=10)
+          total_c=sum(cites)
+
+          byyear=Counter(i["d"] for i in items if i["d"])
+          journals=Counter(i["j"] for i in items if i["j"])
+          top=sorted(items,key=lambda x:-x["c"])[:5]
+
+          out={"authorId":AID,
+               "docs":len(items),
+               "citations":total_c,
+               "hIndex":h,
+               "i10":i10,
+               "byYear":dict(sorted(byyear.items())),
+               "topJournals":[{"n":n,"c":c} for n,c in journals.most_common(8)],
+               "topPapers":[{"t":p["t"],"j":p["j"],"y":p["d"],"c":p["c"]} for p in top],
+               "updated":datetime.date.today().isoformat()}
+
+          os.makedirs("data",exist_ok=True)
+          json.dump(out,open("data/scopus.json","w"),separators=(",",":"))
+          print("docs %d | citations %d | h %d | i10 %d"%(len(items),total_c,h,i10))
+          PYEOF
+
+      - name: Commit if changed
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet data/scopus.json; then
+            echo "No change"
+          else
+            git add data/scopus.json
+            git commit -m "Update Scopus metrics"
+            git push
+          fi
