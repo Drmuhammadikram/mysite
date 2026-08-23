@@ -82,10 +82,10 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          if git diff --quiet data/scopus.json; then
+          git add data/scopus.json
+          if git diff --cached --quiet; then
             echo "No change"
           else
-            git add data/scopus.json
             git commit -m "Update Scopus metrics"
             git push
           fi
