@@ -27,7 +27,7 @@ jobs:
           MERGE={"SAA Shah":"Syed Zulfiqar Ali Shah","Muhammad Ikram":"M Ikram"}
           DROP={"others","et al","et al."}
           ME="M Ikram"
-          MIN=2
+          MIN=1
 
           def norm(a):
               a=unicodedata.normalize('NFKC',a).replace('\u2019',"'").replace('\u2018',"'")
