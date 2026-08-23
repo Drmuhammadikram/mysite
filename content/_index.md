@@ -92,6 +92,14 @@ sections:
       columns: '1'
   - block: markdown
     content:
+      title: ''
+      subtitle: ''
+      text: |-
+        {{< scopus >}}
+    design:
+      columns: '1'
+  - block: markdown
+    content:
       title: 'Collaboration network'
       subtitle: ''
       text: |-
