@@ -6,10 +6,10 @@
 
 <div id="cn-ctl" style="display:flex;flex-wrap:wrap;gap:18px;align-items:center;margin-bottom:0.9rem;width:78vw;max-width:1200px;position:relative;left:50%;transform:translateX(-50%);">
   <div id="cn-mode" style="display:inline-flex;border:1px solid rgba(128,128,128,0.28);border-radius:7px;overflow:hidden;"></div>
-  <label style="display:flex;align-items:center;gap:10px;font-size:0.74rem;opacity:0.8;">
-    <span>Minimum shared papers</span>
-    <input type="range" id="cn-min" min="2" max="6" step="1" value="2" style="width:96px;accent-color:#1d7a5f;">
-    <span id="cn-minv" style="font-family:ui-monospace,Menlo,monospace;font-weight:600;min-width:12px;">2</span>
+  <label style="display:flex;align-items:center;gap:9px;font-size:0.74rem;opacity:0.8;">
+    <span>Show authors with</span>
+    <input type="range" id="cn-min" min="1" max="6" step="1" value="1" style="width:104px;accent-color:#1d7a5f;">
+    <span><span id="cn-minv" style="font-family:ui-monospace,Menlo,monospace;font-weight:600;">1</span>+ shared papers</span>
   </label>
   <button type="button" id="cn-reset" style="font-size:0.72rem;padding:5px 12px;cursor:pointer;border:1px solid rgba(128,128,128,0.28);border-radius:6px;background:transparent;color:inherit;">Reset view</button>
 </div>
@@ -24,12 +24,12 @@
 </div>
 
 <p style="font-size:0.71rem;opacity:0.52;margin-top:1.15rem;line-height:1.65;width:78vw;max-width:1200px;position:relative;left:50%;transform:translateX(-50%);">
-  Co-authorship network across {{ .papers }} publications. Nodes are collaborators appearing on
-  two or more papers, sized by shared output; edges connect authors who have appeared on the same
-  paper. Clusters are detected from the link structure by label propagation rather than assigned.
-  I am excluded from the graph — every node connects to me, and including myself would collapse
-  the layout into a single hub. Of {{ .total }} co-authors in the corpus, those with one shared
-  paper are omitted.
+  Co-authorship network across {{ .papers }} publications, showing all {{ .total }} collaborators.
+  Nodes are sized by shared output; edges connect authors who have appeared on the same paper.
+  Clusters are detected from the link structure by label propagation rather than assigned. Use the
+  slider to filter to more frequent collaborators — at three or more the core structure becomes
+  clearest. I am excluded from the graph, since every node connects to me and including myself
+  would collapse the layout into a single hub.
 </p>
 
 <style>
@@ -52,9 +52,9 @@ var dark=matchMedia('(prefers-color-scheme: dark)').matches;
 var CL=['#1d7a5f','#2a78d6','#d95926','#7a4fa0','#c98500','#199e70','#8a4a2c'];
 var ink=dark?'#eceae4':'#15201c';
 var surf=dark?'#14181a':'#fbfaf7';
-var W=1120,H=800;
+var W=1400,H=1060;
 
-var mode='cluster', minW=2, pinned=null;
+var mode='cluster', minW=1, pinned=null;
 var yAll=D.nodes.filter(function(n){return n.y1;}).map(function(n){return n.y1;});
 var yMin=d3.min(yAll)||2019, yMax=d3.max(yAll)||2025;
 function recCol(y){
@@ -63,7 +63,7 @@ function recCol(y){
   return d3.interpolateRgb(dark?'#2c4a63':'#b8d4ea', dark?'#e8a23c':'#c25a2a')(t);
 }
 function nodeCol(n){ return mode==='cluster'?CL[n.c%CL.length]:recCol(n.y1); }
-function rad(w){ return 8+Math.sqrt(w)*5.2; }
+function rad(w){ return 6+Math.sqrt(w)*5.4; }
 
 var svg=d3.select('#cn-map').append('svg')
   .attr('viewBox','0 0 '+W+' '+H).attr('width','100%')
@@ -71,13 +71,13 @@ var svg=d3.select('#cn-map').append('svg')
 
 var defs=svg.append('defs');
 var halo=defs.append('radialGradient').attr('id','cn-halo');
-halo.append('stop').attr('offset','0%').attr('stop-color','#1d7a5f').attr('stop-opacity',dark?0.30:0.16);
+halo.append('stop').attr('offset','0%').attr('stop-color','#1d7a5f').attr('stop-opacity',dark?0.28:0.14);
 halo.append('stop').attr('offset','100%').attr('stop-color','#1d7a5f').attr('stop-opacity',0);
 
 var root=svg.append('g');
 var gHalo=root.append('g'), gLink=root.append('g'), gNode=root.append('g'), gLab=root.append('g');
 
-var zoom=d3.zoom().scaleExtent([0.45,5]).on('zoom',function(e){ root.attr('transform',e.transform); });
+var zoom=d3.zoom().scaleExtent([0.4,6]).on('zoom',function(e){ root.attr('transform',e.transform); });
 svg.call(zoom);
 
 var nodes=D.nodes.map(function(n){return Object.assign({},n);});
@@ -91,7 +91,7 @@ D.links.forEach(function(l){
 var vis=function(n){ return n.w>=minW; };
 var visL=function(l){
   var s=l.source.id||l.source, t=l.target.id||l.target;
-  return byId[s].w>=minW && byId[t].w>=minW;
+  return byId[s] && byId[t] && byId[s].w>=minW && byId[t].w>=minW;
 };
 
 var haloSel=gHalo.selectAll('circle').data(nodes).join('circle')
@@ -99,17 +99,17 @@ var haloSel=gHalo.selectAll('circle').data(nodes).join('circle')
 
 var linkSel=gLink.selectAll('path').data(links).join('path')
   .attr('fill','none')
-  .attr('stroke',dark?'rgba(255,255,255,0.13)':'rgba(20,30,26,0.12)')
+  .attr('stroke',dark?'rgba(255,255,255,0.12)':'rgba(20,30,26,0.11)')
   .attr('stroke-linecap','round');
 
 var nodeSel=gNode.selectAll('circle').data(nodes).join('circle')
   .style('cursor','pointer')
-  .attr('stroke-width',1.7);
+  .attr('stroke-width',1.6);
 
 var labSel=gLab.selectAll('text').data(nodes).join('text')
   .attr('text-anchor','middle')
   .attr('paint-order','stroke')
-  .attr('stroke',surf).attr('stroke-width',3.6).attr('stroke-linejoin','round')
+  .attr('stroke',surf).attr('stroke-width',3.4).attr('stroke-linejoin','round')
   .style('pointer-events','none').style('user-select','none')
   .text(function(d){ return d.id; });
 
@@ -117,12 +117,12 @@ var sim=d3.forceSimulation(nodes)
   .force('link',d3.forceLink(links).id(function(d){return d.id;})
      .distance(function(d){ return 165-Math.min(d.w,5)*14; })
      .strength(function(d){ return 0.30+Math.min(d.w,4)*0.09; }))
-  .force('charge',d3.forceManyBody().strength(-1000).distanceMax(660))
+  .force('charge',d3.forceManyBody().strength(-760).distanceMax(720))
   .force('center',d3.forceCenter(W/2,H/2))
-  .force('collide',d3.forceCollide().radius(function(d){ return rad(d.w)+34; }).iterations(2))
+  .force('collide',d3.forceCollide().radius(function(d){ return rad(d.w)+38; }).iterations(3))
   .force('x',d3.forceX(W/2).strength(0.033))
   .force('y',d3.forceY(H/2).strength(0.05))
-  .alphaDecay(0.021)
+  .alphaDecay(0.019)
   .on('tick',tick);
 
 function tick(){
@@ -134,7 +134,7 @@ function tick(){
   nodeSel.attr('cx',function(d){return d.x;}).attr('cy',function(d){return d.y;});
   haloSel.attr('cx',function(d){return d.x;}).attr('cy',function(d){return d.y;});
   labSel.attr('x',function(d){return d.x;})
-        .attr('y',function(d){return d.y+rad(d.w)+14;});
+        .attr('y',function(d){return d.y+rad(d.w)+13;});
 }
 
 nodeSel.call(d3.drag()
@@ -148,27 +148,27 @@ function paint(focusId){
     .attr('display',function(d){ return vis(d)?null:'none'; })
     .attr('r',function(d){ return rad(d.w); })
     .attr('fill',nodeCol)
-    .attr('stroke',dark?'rgba(255,255,255,0.30)':'rgba(255,255,255,0.95)')
+    .attr('stroke',dark?'rgba(255,255,255,0.28)':'rgba(255,255,255,0.95)')
     .attr('fill-opacity',function(d){
       if(!f) return 0.9;
       return (d.id===f||(nbr[f]&&nbr[f][d.id]))?1:0.13; });
   haloSel
-    .attr('display',function(d){ return (vis(d)&&!f)?null:'none'; })
-    .attr('r',function(d){ return rad(d.w)*3.4; });
+    .attr('display',function(d){ return (vis(d)&&!f&&d.w>=2)?null:'none'; })
+    .attr('r',function(d){ return rad(d.w)*3.2; });
   linkSel
     .attr('display',function(d){ return visL(d)?null:'none'; })
-    .attr('stroke-width',function(d){ return 0.8+Math.sqrt(d.w)*1.2; })
+    .attr('stroke-width',function(d){ return 0.7+Math.sqrt(d.w)*1.1; })
     .attr('stroke-opacity',function(d){
       if(!f) return 1;
       return (d.source.id===f||d.target.id===f)?0.9:0.05; });
   labSel
     .attr('display',function(d){ return vis(d)?null:'none'; })
-    .attr('font-size',function(d){ return (11+Math.min(d.w,10)*0.6).toFixed(1); })
+    .attr('font-size',function(d){ return (8.6+Math.min(d.w,10)*0.85).toFixed(1); })
     .attr('font-weight',function(d){ return d.w>=5?'600':'500'; })
     .attr('fill',ink)
     .attr('opacity',function(d){
       if(f) return (d.id===f||(nbr[f]&&nbr[f][d.id]))?1:0.08;
-      return d.w>=3?0.95:0.42; });
+      return d.w>=4?0.95:(d.w>=2?0.72:0.5); });
   cards();
 }
 
@@ -219,7 +219,7 @@ function legend(){
   var sizes={};
   nodes.filter(vis).forEach(function(n){ sizes[n.c]=(sizes[n.c]||0)+1; });
   var ord=Object.keys(sizes).map(Number).sort(function(a,b){return sizes[b]-sizes[a];});
-  d3.select('#cn-legend').html(ord.map(function(c){
+  d3.select('#cn-legend').html(ord.slice(0,7).map(function(c){
     var mem=nodes.filter(function(n){return n.c===c&&vis(n);}).sort(function(a,b){return b.w-a.w;});
     return '<div class="cn-lg" data-c="'+c+'">'+
       '<span style="width:10px;height:10px;border-radius:50%;background:'+CL[c%CL.length]+';flex-shrink:0;margin-top:3px;"></span>'+
@@ -274,8 +274,8 @@ d3.select('#cn-min').on('input',function(){
 });
 
 d3.select('#cn-reset').on('click',function(){
-  pinned=null; minW=2; mode='cluster';
-  d3.select('#cn-min').property('value',2); d3.select('#cn-minv').text(2);
+  pinned=null; minW=1; mode='cluster';
+  d3.select('#cn-min').property('value',1); d3.select('#cn-minv').text(1);
   svg.transition().duration(500).call(zoom.transform,d3.zoomIdentity);
   modeUI(); legend(); paint(); readout(null);
   sim.alpha(0.6).restart();
