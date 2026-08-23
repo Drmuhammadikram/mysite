@@ -55,7 +55,8 @@ sections:
       title: ''
       subtitle: ''
       text: |-
-        <div style="background:rgba(128,128,128,0.06);border-radius:12px;padding:1.5rem 1.75rem;margin:1rem 0;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:1rem 0;align-items:stretch;" id="metrics-pair">
+        <div style="background:rgba(128,128,128,0.06);border-radius:12px;padding:1.5rem 1.75rem;">
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:1.5rem;flex-wrap:wrap;">
             <svg width="18" height="18" viewBox="0 0 512 512" aria-hidden="true" style="flex-shrink:0;">
               <path fill="#4285f4" d="M256 411.12L0 202.667 256 0z"/>
@@ -66,7 +67,7 @@ sections:
             <span style="font-size:0.75rem;letter-spacing:0.06em;text-transform:uppercase;opacity:0.7;">Google Scholar</span>
             <a href="https://scholar.google.com/citations?user=zD2p9JcAAAAJ" style="margin-left:auto;font-size:0.8rem;">View profile →</a>
           </div>
-          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:1.5rem;">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:1.5rem;">
             <div>
               <div style="font-size:2.5rem;line-height:1;font-weight:600;letter-spacing:-0.02em;font-variant-numeric:tabular-nums;">{{< scholar "citations" >}}</div>
               <div style="font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;opacity:0.7;margin-top:0.5rem;">Citations</div>
@@ -88,14 +89,13 @@ sections:
             Updated {{< scholar "updated" >}}
           </div>
         </div>
-    design:
-      columns: '1'
-  - block: markdown
-    content:
-      title: ''
-      subtitle: ''
-      text: |-
         {{< scopus >}}
+        </div>
+        <p style="font-size:0.71rem;opacity:0.5;line-height:1.6;margin-top:0.5rem;">
+          Scopus indexes a narrower set of journals than Google Scholar, so its citation count is
+          consistently lower. Neither figure is wrong; they cover different corpora.
+        </p>
+        <style>@media(max-width:820px){#metrics-pair{grid-template-columns:1fr!important}}</style>
     design:
       columns: '1'
   - block: markdown
