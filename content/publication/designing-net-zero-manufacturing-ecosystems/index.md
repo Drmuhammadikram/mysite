@@ -21,5 +21,5 @@ featured: true
 links:
   - name: Journal
     url: https://doi.org/10.1002/bsd2.70405
-url_pdf: "/uploads/net-zero-manufacturing-2026.pdf"
+url_pdf: "/uploads/Designing%20net%20zero%20manufacturing%20eco%20system.pdf"
 ---
