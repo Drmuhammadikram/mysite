@@ -1,0 +1,167 @@
+name: Refresh Our World in Data datasets
+
+on:
+  schedule:
+    - cron: '0 6 2 * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch
+        run: |
+          python3 - <<'PYEOF'
+          import csv,io,json,os,time
+          from urllib.request import urlopen,Request
+
+          A3=json.load(open('.github/iso.json'))
+
+          def grab(slug,col,lo=1960,hi=2026):
+              u="https://ourworldindata.org/grapher/"+slug+".csv"
+              for a in range(4):
+                  try:
+                      txt=urlopen(Request(u,headers={"User-Agent":"site/1.0"}),
+                                  timeout=180).read().decode()
+                      break
+                  except Exception as e:
+                      print("   retry",a+1,type(e).__name__); time.sleep(4)
+              else:
+                  return {},{}
+              if txt.lstrip().startswith('{'):
+                  print("   MISSING",slug); return {},{}
+              rd=csv.DictReader(io.StringIO(txt)); out={}; nm={}
+              for r in rd:
+                  iso=A3.get((r.get("Code") or "").strip())
+                  if not iso: continue
+                  y=(r.get("Year") or "").strip()
+                  if not y.lstrip('-').isdigit(): continue
+                  yi=int(y)
+                  if yi<lo or yi>hi: continue
+                  v=(r.get(col) or "").strip()
+                  if not v: continue
+                  try: v=float(v)
+                  except: continue
+                  out.setdefault(iso,{})[y]=v
+                  nm[iso]=r["Entity"]
+              print("   %-46s %6d"%(slug[:44],sum(len(x) for x in out.values())))
+              return out,nm
+
+          def build(path,spec,src,keep,dp=2,derive=None,extra=None):
+              NAME={}; M={}
+              for key,slug,col in spec:
+                  d,nm=grab(slug,col); M[key]=d; NAME.update(nm)
+              if derive: derive(M)
+              rows={}
+              for m,d in M.items():
+                  for iso,ys in d.items():
+                      t={y:round(v,dp) for y,v in ys.items() if y in keep}
+                      if t: rows.setdefault(iso,{"n":NAME.get(iso,iso),"d":{}})["d"][m]=t
+              rows={k:v for k,v in rows.items() if v["d"]}
+              years=sorted({y for c in rows.values() for m in c["d"] for y in c["d"][m]})
+              out={"source":src,"years":years,"countries":rows}
+              if extra: out.update(extra)
+              json.dump(out,open(path,"w"),separators=(",",":"))
+              print("  -> %s  %d countries, %d years"%(path,len(rows),len(years)))
+
+          Y5=lambda a,b,s=5: set(str(y) for y in range(a,b,s))
+          YR=lambda a,b: set(str(y) for y in range(a,b))
+
+          print("coal");
+          build("data/coal.json",
+            [("t","coal-consumption-by-country-terawatt-hours","Coal consumption - TWh"),
+             ("p","per-capita-coal","Coal per capita - kWh"),
+             ("s","coal-share-energy","Coal (% equivalent primary energy)")],
+            "Energy Institute Statistical Review, via Our World in Data",
+            Y5(1990,2026)|YR(2020,2026))
+
+          print("population")
+          def popshares(M):
+              for a,b in [("u15","kid"),("o65","old")]:
+                  M[a]={}
+              kid=M.pop("kid",{}); wrk=M.pop("wrk",{}); old=M.pop("old",{})
+              for iso in kid:
+                  for y in kid[iso]:
+                      t=kid[iso][y]+wrk.get(iso,{}).get(y,0)+old.get(iso,{}).get(y,0)
+                      if t>0:
+                          M["u15"].setdefault(iso,{})[y]=kid[iso][y]/t*100
+                          if iso in old and y in old[iso]:
+                              M["o65"].setdefault(iso,{})[y]=old[iso][y]/t*100
+          build("data/population.json",
+            [("pop","population","Population"),
+             ("growth","population-growth-rates","Population growth rate"),
+             ("median","median-age","Median age"),
+             ("fert","children-per-woman-un","Fertility rate"),
+             ("life","life-expectancy","Life expectancy"),
+             ("urban","share-of-population-urban","Urban"),
+             ("dens","population-density","Population density"),
+             ("oldep","age-dependency-ratio-old",'Age dependency ratio, old (% of working-age population)'),
+             ("sexb","sex-ratio-at-birth","Sex ratio at birth (male births per female births)"),
+             ("kid","population-young-working-elderly-with-projections","Children (Under-15s)"),
+             ("wrk","population-young-working-elderly-with-projections","Working-age adults (15-64 years)"),
+             ("old","population-young-working-elderly-with-projections","Older people (65+ years)")],
+            "UN World Population Prospects and World Bank, via Our World in Data",
+            Y5(1960,2024)|YR(2020,2024),derive=popshares)
+
+          print("HDI")
+          build("data/hdi.json",
+            [("y","human-development-index","Human Development Index")],
+            "UNDP Human Development Report, via Our World in Data",
+            Y5(1990,2024)|YR(2019,2024),dp=3)
+
+          print("life satisfaction")
+          build("data/happy.json",
+            [("y","happiness-cantril-ladder","Cantril ladder score")],
+            "World Happiness Report, via Our World in Data",
+            YR(2011,2026),dp=2)
+
+          print("energy mix")
+          build("data/energy.json",
+            [("coal","coal-share-energy","Coal (% equivalent primary energy)"),
+             ("oil","oil-share-energy","Oil (% equivalent primary energy)"),
+             ("gas","gas-share-energy","Gas (% equivalent primary energy)"),
+             ("hydro","hydro-share-energy","Hydro (% equivalent primary energy)"),
+             ("wind","wind-share-energy","Wind (% equivalent primary energy)"),
+             ("solar","solar-share-energy","Solar (% equivalent primary energy)"),
+             ("fossil","fossil-fuels-share-energy","Fossil fuels (% equivalent primary energy)"),
+             ("renew","renewable-share-energy","Renewables (% equivalent primary energy)"),
+             ("lowc","low-carbon-share-energy","Low-carbon energy (% equivalent primary energy)")],
+            "Energy Institute Statistical Review, via Our World in Data",
+            Y5(1990,2026)|YR(2020,2026))
+
+          print("electric vehicles")
+          build("data/ev.json",
+            [("share","electric-car-sales-share","Share of new cars that are electric"),
+             ("stockshare","share-car-stocks-electric","Share of car stocks that are electric"),
+             ("sales","electric-car-sales","Electric cars sold"),
+             ("stock","electric-car-stocks","Electric car stocks")],
+            "IEA Global EV Outlook, via Our World in Data",
+            YR(2010,2027))
+
+          print("AI research")
+          build("data/aipub.json",
+            [("total","annual-scholarly-publications-on-artificial-intelligence",
+              "AI scholarly publications - Field: All"),
+             ("pc","scholarly-publications-on-artificial-intelligence-per-million-people",
+              "AI scholarly publications per million people - Field: All")],
+            "Stanford AI Index Report, via Our World in Data",
+            YR(2016,2026),dp=3)
+          PYEOF
+
+      - name: Commit if changed
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/coal.json data/population.json data/hdi.json data/happy.json \
+                  data/energy.json data/ev.json data/aipub.json
+          if git diff --cached --quiet; then
+            echo "No change"
+          else
+            git commit -m "Refresh OWID datasets"
+            git push
+          fi
