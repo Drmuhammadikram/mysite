@@ -1,7 +1,7 @@
 ---
 title: "Designing Net-Zero Manufacturing Ecosystems by Integrating Industry 5.0 and Circular Product Lifecycle Management: A Systematic and a Bibliometric Review"
 authors:
-  - "M Ikram"
+  - "Muhammad Ikram"
 date: "2026-08-24T00:00:00Z"
 publishDate: "2026-08-24T00:00:00Z"
 publication_types: ['article-journal']
