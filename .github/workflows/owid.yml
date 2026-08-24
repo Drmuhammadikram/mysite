@@ -17,25 +17,29 @@ jobs:
       - name: Fetch
         run: |
           python3 - <<'PYEOF'
-          import csv,io,json,os,time
+          import csv,io,json,os,time,sys
           from urllib.request import urlopen,Request
 
           A3=json.load(open('.github/iso.json'))
+          FAILED=[]
 
-          def grab(slug,col,lo=1960,hi=2026):
+          def grab(slug,col,lo=1960,hi=2027):
               u="https://ourworldindata.org/grapher/"+slug+".csv"
+              txt=None
               for a in range(4):
                   try:
-                      txt=urlopen(Request(u,headers={"User-Agent":"site/1.0"}),
+                      txt=urlopen(Request(u,headers={"User-Agent":"Mozilla/5.0 site/1.0"}),
                                   timeout=180).read().decode()
                       break
                   except Exception as e:
-                      print("   retry",a+1,type(e).__name__); time.sleep(4)
-              else:
+                      time.sleep(4)
+              if txt is None or txt.lstrip().startswith('{'):
+                  print("   FETCH FAILED  %s"%slug); return {},{}
+              rd=csv.DictReader(io.StringIO(txt))
+              if col not in (rd.fieldnames or []):
+                  print("   BAD COLUMN    %s  wanted '%s', have %s"%(slug,col,rd.fieldnames))
                   return {},{}
-              if txt.lstrip().startswith('{'):
-                  print("   MISSING",slug); return {},{}
-              rd=csv.DictReader(io.StringIO(txt)); out={}; nm={}
+              out={}; nm={}
               for r in rd:
                   iso=A3.get((r.get("Code") or "").strip())
                   if not iso: continue
@@ -52,7 +56,15 @@ jobs:
               print("   %-46s %6d"%(slug[:44],sum(len(x) for x in out.values())))
               return out,nm
 
-          def build(path,spec,src,keep,dp=2,derive=None,extra=None):
+          def existing_count(path):
+              try:
+                  d=json.load(open(path))
+                  return len(d.get("countries",{}))
+              except Exception:
+                  return 0
+
+          def build(name,path,spec,src,keep,dp=2,derive=None):
+              print(name)
               NAME={}; M={}
               for key,slug,col in spec:
                   d,nm=grab(slug,col); M[key]=d; NAME.update(nm)
@@ -63,28 +75,30 @@ jobs:
                       t={y:round(v,dp) for y,v in ys.items() if y in keep}
                       if t: rows.setdefault(iso,{"n":NAME.get(iso,iso),"d":{}})["d"][m]=t
               rows={k:v for k,v in rows.items() if v["d"]}
+              old=existing_count(path)
+              if len(rows) < old*0.9:
+                  print("  !! REFUSED  %s  new %d countries vs existing %d — file untouched"
+                        %(path,len(rows),old))
+                  FAILED.append(path)
+                  return
               years=sorted({y for c in rows.values() for m in c["d"] for y in c["d"][m]})
-              out={"source":src,"years":years,"countries":rows}
-              if extra: out.update(extra)
-              json.dump(out,open(path,"w"),separators=(",",":"))
-              print("  -> %s  %d countries, %d years"%(path,len(rows),len(years)))
+              json.dump({"source":src,"years":years,"countries":rows},
+                        open(path,"w"),separators=(",",":"))
+              print("  -> %s  %d countries (was %d), %d years"%(path,len(rows),old,len(years)))
 
           Y5=lambda a,b,s=5: set(str(y) for y in range(a,b,s))
           YR=lambda a,b: set(str(y) for y in range(a,b))
 
-          print("coal");
-          build("data/coal.json",
-            [("t","coal-consumption-by-country-terawatt-hours","Coal consumption - TWh"),
-             ("p","per-capita-coal","Coal per capita - kWh"),
-             ("s","coal-share-energy","Coal (% equivalent primary energy)")],
+          build("coal","data/coal.json",
+            [("t","energy-consumption-by-source-and-country","Coal"),
+             ("p","per-capita-coal","Coal"),
+             ("s","share-of-primary-energy-consumption-by-source","Coal")],
             "Energy Institute Statistical Review, via Our World in Data",
-            Y5(1990,2026)|YR(2020,2026))
+            Y5(1990,2027)|YR(2020,2027))
 
-          print("population")
           def popshares(M):
-              for a,b in [("u15","kid"),("o65","old")]:
-                  M[a]={}
               kid=M.pop("kid",{}); wrk=M.pop("wrk",{}); old=M.pop("old",{})
+              M["u15"]={}; M["o65"]={}
               for iso in kid:
                   for y in kid[iso]:
                       t=kid[iso][y]+wrk.get(iso,{}).get(y,0)+old.get(iso,{}).get(y,0)
@@ -92,7 +106,8 @@ jobs:
                           M["u15"].setdefault(iso,{})[y]=kid[iso][y]/t*100
                           if iso in old and y in old[iso]:
                               M["o65"].setdefault(iso,{})[y]=old[iso][y]/t*100
-          build("data/population.json",
+
+          build("population","data/population.json",
             [("pop","population","Population"),
              ("growth","population-growth-rates","Population growth rate"),
              ("median","median-age","Median age"),
@@ -108,57 +123,47 @@ jobs:
             "UN World Population Prospects and World Bank, via Our World in Data",
             Y5(1960,2024)|YR(2020,2024),derive=popshares)
 
-          print("HDI")
-          build("data/hdi.json",
-            [("y","human-development-index","Human Development Index")],
-            "UNDP Human Development Report, via Our World in Data",
-            Y5(1990,2024)|YR(2019,2024),dp=3)
-
-          print("life satisfaction")
-          build("data/happy.json",
-            [("y","happiness-cantril-ladder","Cantril ladder score")],
-            "World Happiness Report, via Our World in Data",
-            YR(2011,2026),dp=2)
-
-          print("energy mix")
-          build("data/energy.json",
-            [("coal","coal-share-energy","Coal (% equivalent primary energy)"),
-             ("oil","oil-share-energy","Oil (% equivalent primary energy)"),
-             ("gas","gas-share-energy","Gas (% equivalent primary energy)"),
-             ("hydro","hydro-share-energy","Hydro (% equivalent primary energy)"),
-             ("wind","wind-share-energy","Wind (% equivalent primary energy)"),
-             ("solar","solar-share-energy","Solar (% equivalent primary energy)"),
-             ("fossil","fossil-fuels-share-energy","Fossil fuels (% equivalent primary energy)"),
-             ("renew","renewable-share-energy","Renewables (% equivalent primary energy)"),
-             ("lowc","low-carbon-share-energy","Low-carbon energy (% equivalent primary energy)")],
+          build("energy mix","data/energy.json",
+            [("coal","share-of-primary-energy-consumption-by-source","Coal"),
+             ("oil","share-of-primary-energy-consumption-by-source","Oil"),
+             ("gas","share-of-primary-energy-consumption-by-source","Gas"),
+             ("hydro","share-of-primary-energy-consumption-by-source","Hydropower"),
+             ("wind","share-of-primary-energy-consumption-by-source","Wind"),
+             ("solar","share-of-primary-energy-consumption-by-source","Solar"),
+             ("nuclear","share-of-primary-energy-consumption-by-source","Nuclear"),
+             ("fossil","fossil-fuel-primary-energy","Fossil fuels"),
+             ("renew","renewable-share-energy","Renewables"),
+             ("lowc","low-carbon-share-energy","Low-carbon energy")],
             "Energy Institute Statistical Review, via Our World in Data",
-            Y5(1990,2026)|YR(2020,2026))
+            Y5(1990,2027)|YR(2020,2027))
 
-          print("electric vehicles")
-          build("data/ev.json",
+          build("electric vehicles","data/ev.json",
             [("share","electric-car-sales-share","Share of new cars that are electric"),
              ("stockshare","share-car-stocks-electric","Share of car stocks that are electric"),
              ("sales","electric-car-sales","Electric cars sold"),
              ("stock","electric-car-stocks","Electric car stocks")],
             "IEA Global EV Outlook, via Our World in Data",
-            YR(2010,2027))
+            YR(2010,2028))
 
-          print("AI research")
-          build("data/aipub.json",
+          build("AI research","data/aipub.json",
             [("total","annual-scholarly-publications-on-artificial-intelligence",
               "AI scholarly publications - Field: All"),
              ("pc","scholarly-publications-on-artificial-intelligence-per-million-people",
               "AI scholarly publications per million people - Field: All")],
             "Stanford AI Index Report, via Our World in Data",
-            YR(2016,2026),dp=3)
+            YR(2016,2027),dp=3)
+
+          if FAILED:
+              print()
+              print("Refused to overwrite: "+", ".join(FAILED))
+              sys.exit(1)
           PYEOF
 
       - name: Commit if changed
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/coal.json data/population.json data/hdi.json data/happy.json \
-                  data/energy.json data/ev.json data/aipub.json
+          git add data/coal.json data/population.json data/energy.json data/ev.json data/aipub.json
           if git diff --cached --quiet; then
             echo "No change"
           else
