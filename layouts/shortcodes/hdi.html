@@ -49,7 +49,7 @@ function colorFor(v){
   return COLS[COLS.length-1];
 }
 function key(f){ return ('00'+String(f.id)).slice(-3); }
-function val(k,y){ var c=DATA[k]; if(!c) return null; var v=c.y[y]; return (v===undefined)?null:v; }
+function val(k,y){ var c=DATA[k]; if(!c) return null;   var g=(c.d&&c.d.y)?c.d.y:c.y; if(!g) return null;   var v=g[y]; return (v===undefined)?null:v; }
 
 var W=globe?420:960, H=globe?420:440;
 var svg=d3.select('#hd-map').append('svg')
