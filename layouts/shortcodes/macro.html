@@ -1,0 +1,220 @@
+{{- $d := site.Data.macro -}}
+{{- with $d -}}
+<script type="application/json" id="mc-data">{{ .countries | jsonify }}</script>
+<script type="application/json" id="mc-years">{{ .years | jsonify }}</script>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:1.5rem;width:70vw;max-width:1100px;position:relative;left:50%;transform:translateX(-50%);" id="mc-cards"></div>
+
+<div id="mc-metric" style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:0.7rem;align-items:center;width:70vw;max-width:1100px;position:relative;left:50%;transform:translateX(-50%);z-index:6;"></div>
+<div id="mc-tabs" style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:1.25rem;align-items:center;width:70vw;max-width:1100px;position:relative;left:50%;transform:translateX(-50%);z-index:6;"></div>
+
+<div style="display:grid;grid-template-columns:1fr 190px;gap:24px;align-items:start;width:70vw;max-width:1100px;position:relative;left:50%;transform:translateX(-50%);" id="mc-wrap">
+  <div id="mc-map" style="width:100%;margin-top:-3.5rem;"></div>
+  <div>
+    <div id="mc-legend-title" style="font-size:0.78rem;opacity:0.75;margin-bottom:0.7rem;line-height:1.45;"></div>
+    <div id="mc-legend"></div>
+    <div id="mc-readout" style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid rgba(128,128,128,0.2);min-height:84px;">
+      <div style="font-size:0.75rem;opacity:0.5;">Hover a country</div>
+    </div>
+  </div>
+</div>
+
+<p style="font-size:0.72rem;opacity:0.55;margin-top:1.25rem;line-height:1.6;">
+  Source: {{ .source }}. Coverage varies by measure: GDP growth and inflation reach most
+  countries, while fiscal balance and real interest rates are reported by fewer than half,
+  since not every government publishes them on a comparable basis. Currency change is calculated
+  against the US dollar, where positive means the currency strengthened. Reserves are expressed
+  in months of import cover, which is the standard adequacy measure — three months is the
+  conventional floor.
+</p>
+
+<style>@media(max-width:760px){#mc-wrap{grid-template-columns:1fr!important}}</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+<script>
+(function(){
+var DATA=JSON.parse(document.getElementById('mc-data').textContent);
+if(typeof DATA==='string'){ DATA=JSON.parse(DATA); }
+var YEARS=JSON.parse(document.getElementById('mc-years').textContent);
+if(typeof YEARS==='string'){ YEARS=JSON.parse(YEARS); }
+var dark=matchMedia('(prefers-color-scheme: dark)').matches;
+var globe=window.innerWidth<820;
+var noData=dark?'#2c2c2a':'#eceae4';
+
+var DIV=['#7a1f10','#c25a2a','#e0b878','#a8c48a','#1d7a5f'];
+var SEQ=['#123f63','#2a7fa8','#6fb3c9','#b4d3e0','#e2eef4'];
+var HOT=['#5c1a10','#a83b1c','#d9803c','#e8bd8a','#1d7a5f'];
+
+var M=[
+ {k:'gdpg',l:'GDP growth',u:'% change on previous year',dp:1,suf:'%',
+  b:[[6,'over 6%'],[3.5,'3.5 - 6%'],[1.5,'1.5 - 3.5%'],[0,'0 - 1.5%'],[-99,'contracting']],
+  c:['#0d5c46','#1d7a5f','#5dab8a','#d9c07a','#a8351f']},
+ {k:'infl',l:'Inflation',u:'% annual change in consumer prices',dp:1,suf:'%',
+  b:[[20,'over 20%'],[8,'8 - 20%'],[4,'4 - 8%'],[1,'1 - 4%'],[-99,'under 1%']],
+  c:['#5c1a10','#a83b1c','#d9803c','#8fbf9e','#3d8fa8']},
+ {k:'rate',l:'Real interest rate',u:'%, lending rate less inflation',dp:1,suf:'%',
+  b:[[12,'over 12%'],[7,'7 - 12%'],[3,'3 - 7%'],[0,'0 - 3%'],[-99,'negative']],
+  c:['#5c1a10','#a83b1c','#d9803c','#a8c48a','#2a7fa8']},
+ {k:'ca',l:'Current account',u:'% of GDP',dp:1,suf:'%',
+  b:[[5,'surplus over 5%'],[0,'surplus 0 - 5%'],[-3,'deficit 0 - 3%'],[-8,'deficit 3 - 8%'],[-99,'deficit over 8%']],
+  c:['#0d5c46','#5dab8a','#e0b878','#c25a2a','#7a1f10']},
+ {k:'fisc',l:'Fiscal balance',u:'% of GDP, net lending or borrowing',dp:1,suf:'%',
+  b:[[1,'surplus'],[-2,'deficit under 2%'],[-4,'deficit 2 - 4%'],[-7,'deficit 4 - 7%'],[-99,'deficit over 7%']],
+  c:['#0d5c46','#5dab8a','#e0b878','#c25a2a','#7a1f10']},
+ {k:'res',l:'Reserves',u:'months of import cover',dp:1,suf:'',
+  b:[[12,'over 12 months'],[7,'7 - 12'],[4,'4 - 7'],[3,'3 - 4'],[0,'under 3 months']],
+  c:['#0d5c46','#1d7a5f','#5dab8a','#e0b878','#a8351f']},
+ {k:'fxch',l:'Currency change',u:'% against the US dollar',dp:1,suf:'%',
+  b:[[3,'strengthened over 3%'],[0,'strengthened 0 - 3%'],[-5,'weakened 0 - 5%'],[-15,'weakened 5 - 15%'],[-99,'weakened over 15%']],
+  c:['#0d5c46','#5dab8a','#e0b878','#c25a2a','#7a1f10']}
+];
+var mi=0, year=YEARS[YEARS.length-1], paths=null;
+
+function colorFor(v){
+  var S=M[mi];
+  if(v===null||v===undefined) return noData;
+  for(var j=0;j<S.b.length;j++){ if(v>=S.b[j][0]) return S.c[j]; }
+  return S.c[S.c.length-1];
+}
+function key(f){ return ('00'+String(f.id)).slice(-3); }
+function val(k,m,y){ var c=DATA[k]; if(!c) return null; var g=c.d[m]; if(!g) return null;
+  var v=g[y]; return (v===undefined)?null:v; }
+function sgn(v,S){
+  if(v===null||v===undefined) return '-';
+  return (v>0&&(S.k==='ca'||S.k==='fisc'||S.k==='fxch')?'+':'')+v.toFixed(S.dp)+S.suf;
+}
+
+var W=globe?420:960, H=globe?420:440;
+var svg=d3.select('#mc-map').append('svg')
+  .attr('viewBox','0 0 '+W+' '+H).attr('width','100%')
+  .style('min-height',globe?'0':'700px').style('display','block')
+  .style('touch-action',globe?'none':'auto')
+  .attr('role','img').attr('aria-label','World map of macroeconomic indicators');
+var proj=globe
+  ? d3.geoOrthographic().scale(165).translate([210,210]).rotate([-10,-18,0]).clipAngle(90)
+  : d3.geoNaturalEarth1().scale(200).translate([460,205]);
+var path=d3.geoPath(proj);
+
+function show(k){
+  var c=DATA[k];
+  if(!c){ d3.select('#mc-readout').html('<div style="font-size:0.75rem;opacity:0.5;">No data</div>'); return; }
+  function row(S,strong){
+    var v=val(k,S.k,year);
+    return '<div style="display:flex;justify-content:space-between;gap:10px;'+
+      (strong?'font-weight:600;':'opacity:0.72;')+'"><span>'+S.l+'</span>'+
+      '<span style="font-variant-numeric:tabular-nums;">'+sgn(v,S)+'</span></div>';
+  }
+  var fxv=val(k,'fx',year), fxline='';
+  if(fxv!==null) fxline='<div style="margin-top:0.45rem;padding-top:0.4rem;border-top:1px solid rgba(128,128,128,0.2);opacity:0.6;">'+
+    fxv.toFixed(2)+' per US dollar</div>';
+  d3.select('#mc-readout').html(
+    '<div style="font-size:0.85rem;font-weight:600;margin-bottom:0.5rem;">'+c.n+'</div>'+
+    '<div style="font-size:0.72rem;line-height:1.75;">'+
+    M.map(function(S){ return row(S,S.k===M[mi].k); }).join('')+
+    fxline+'</div>');
+}
+
+function cards(){
+  var S=M[mi], vals=[], n=0, sum=0;
+  for(var k in DATA){ var v=val(k,S.k,year); if(v!==null){ vals.push([DATA[k].n,v]); n++; sum+=v; } }
+  vals.sort(function(a,b){ return b[1]-a[1]; });
+  var top=vals[0]||['-',0], bot=vals[vals.length-1]||['-',0];
+  function card(l,big,sub){
+    return '<div style="background:rgba(128,128,128,0.06);border-radius:8px;padding:1rem;">'+
+     '<div style="font-size:0.75rem;opacity:0.7;margin-bottom:0.4rem;">'+l+'</div>'+
+     '<div style="font-size:1.55rem;line-height:1.1;font-weight:600;font-variant-numeric:tabular-nums;">'+big+'</div>'+
+     '<div style="font-size:0.68rem;opacity:0.55;margin-top:0.3rem;">'+sub+'</div></div>';
+  }
+  d3.select('#mc-cards').html(
+    card('Year',year,'reporting year')+
+    card('Highest',sgn(top[1],S),top[0])+
+    card('Lowest',sgn(bot[1],S),bot[0])+
+    card('Reporting',n,'countries'));
+}
+
+function render(){
+  var S=M[mi];
+  d3.select('#mc-legend-title').html('<strong style="font-weight:600;opacity:1">'+S.l+', '+year+
+    '</strong><br>Measured in '+S.u+'.');
+  d3.select('#mc-legend').html(S.b.map(function(b,j){
+    return '<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;font-size:0.72rem;opacity:0.75;">'+
+      '<span style="width:16px;height:11px;border-radius:2px;background:'+S.c[j]+';flex-shrink:0;border:1px solid rgba(128,128,128,0.2);"></span>'+b[1]+'</div>';
+  }).join('')+'<div style="display:flex;align-items:center;gap:8px;margin-top:8px;font-size:0.72rem;opacity:0.5;">'+
+    '<span style="width:16px;height:11px;border-radius:2px;background:'+noData+';flex-shrink:0;"></span>No data</div>');
+  d3.selectAll('#mc-metric button')
+    .style('background',function(d,j){return j===mi?'rgba(29,122,95,0.18)':'transparent';})
+    .style('border-color',function(d,j){return j===mi?'rgba(29,122,95,0.6)':'rgba(128,128,128,0.3)';})
+    .style('font-weight',function(d,j){return j===mi?'600':'400';})
+    .style('opacity',function(d,j){return j===mi?1:0.65;});
+  d3.selectAll('#mc-tabs button')
+    .style('background',function(d){return d===year?'rgba(29,122,95,0.18)':'transparent';})
+    .style('border-color',function(d){return d===year?'rgba(29,122,95,0.6)':'rgba(128,128,128,0.3)';})
+    .style('font-weight',function(d){return d===year?'600':'400';})
+    .style('opacity',function(d){return d===year?1:0.65;});
+  if(paths) paths.attr('fill',function(f){ return colorFor(val(key(f),M[mi].k,year)); });
+  cards();
+}
+
+d3.select('#mc-metric').selectAll('button').data(M).join('button')
+  .attr('type','button')
+  .style('font-size','0.75rem').style('padding','6px 11px').style('cursor','pointer')
+  .style('border','1px solid rgba(128,128,128,0.3)').style('border-radius','6px')
+  .style('color','inherit')
+  .text(function(d){return d.l;})
+  .on('click',function(e,d){ mi=M.indexOf(d); render(); });
+
+d3.select('#mc-tabs').selectAll('button').data(YEARS).join('button')
+  .attr('type','button')
+  .style('font-size','0.75rem').style('padding','6px 10px').style('cursor','pointer')
+  .style('border','1px solid rgba(128,128,128,0.3)').style('border-radius','6px')
+  .style('color','inherit')
+  .text(function(d){return d;})
+  .on('click',function(e,d){ year=d; render(); });
+
+d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(function(w){
+  var mor=w.objects.countries.geometries.filter(function(g){
+    var id=String(+g.id); return id==='504'||id==='732'; });
+  var feats=topojson.feature(w,w.objects.countries).features
+    .filter(function(f){var id=String(+f.id); return id!=='504'&&id!=='732'&&id!=='010';});
+  if(mor.length) feats.push({type:'Feature',id:504,geometry:topojson.merge(w,mor)});
+
+  if(globe){
+    svg.append('circle').attr('cx',210).attr('cy',210).attr('r',165)
+      .attr('fill',dark?'#101a20':'#dbe8ef');
+    svg.append('path').datum(d3.geoGraticule10())
+      .attr('class','mc-grat').attr('d',path).attr('fill','none')
+      .attr('stroke',dark?'rgba(255,255,255,.10)':'rgba(0,0,0,.09)').attr('stroke-width',0.5);
+  }
+
+  paths=svg.selectAll('path.mc-c').data(feats).join('path')
+    .attr('class','mc-c')
+    .attr('d',path)
+    .attr('fill',function(f){ return colorFor(val(key(f),M[mi].k,year)); })
+    .attr('stroke',dark?'rgba(255,255,255,.14)':'#fff').attr('stroke-width',0.4)
+    .style('cursor','pointer')
+    .on('mouseenter',function(e,f){ if(!globe) show(key(f)); })
+    .on('click',function(e,f){ show(key(f)); });
+
+  if(globe){
+    svg.append('circle').attr('cx',210).attr('cy',210).attr('r',165)
+      .attr('fill','none').attr('stroke',dark?'rgba(255,255,255,.22)':'rgba(0,0,0,.18)')
+      .attr('stroke-width',1).style('pointer-events','none');
+    var x0,y0,r0;
+    svg.call(d3.drag()
+      .on('start',function(e){ x0=e.x; y0=e.y; r0=proj.rotate(); })
+      .on('drag',function(e){
+        var kk=0.32;
+        proj.rotate([r0[0]+(e.x-x0)*kk, Math.max(-88,Math.min(88,r0[1]-(e.y-y0)*kk)), 0]);
+        paths.attr('d',path); svg.select('.mc-grat').attr('d',path);
+      }));
+    d3.select('#mc-map').append('div')
+      .style('font-size','0.7rem').style('opacity','0.5')
+      .style('text-align','center').style('margin-top','0.4rem')
+      .text('Drag to rotate · tap a country for detail');
+  }
+  render();
+});
+})();
+</script>
+{{- end -}}
