@@ -50,7 +50,7 @@ sections:
       title: '4 · Human Development Index worldwide'
       subtitle: ''
       text: |-
-        Health, education, and income combined into a single value between 0 and 1, across 193 countries from 1990 to 2023. Read alongside the ecological footprint map, it shows what each country's development has cost in resource terms.
+        Health, education, and income combined into a single value between 0 and 1, across 184 countries from 1990 to 2023. Read alongside the ecological footprint map, it shows what each country's development has cost in resource terms.
 
         {{< hdi >}}
 
