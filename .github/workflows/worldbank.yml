@@ -117,13 +117,23 @@ jobs:
                 "International Labour Organization modelled estimates, via the World Bank",
                 K5|set(str(y) for y in range(2021,2025)),derive=gap)
 
+                    def fxchange(M):
+              fx=M.get("fx",{}); ch={}
+              for iso,ys in fx.items():
+                  for y,v in ys.items():
+                      p=ys.get(str(int(y)-1))
+                      if p and v and p>0:
+                          ch.setdefault(iso,{})[y]=round((p/v-1)*100,2)
+              M["fxch"]=ch
+
           build("macro outlook","data/macro.json",
                 [("gdpg","NY.GDP.MKTP.KD.ZG"),("infl","FP.CPI.TOTL.ZG"),
                  ("res","FI.RES.TOTL.MO"),("fx","PA.NUS.FCRF"),
                  ("ca","BN.CAB.XOKA.GD.ZS"),("fisc","GC.NLD.TOTL.GD.ZS"),
                  ("rate","FR.INR.RINR")],
                 "World Bank World Development Indicators and IMF International Financial Statistics",
-                set(str(y) for y in range(2000,2025,5))|set(str(y) for y in range(2019,2025)),dp=3)
+                set(str(y) for y in range(2000,2025,5))|set(str(y) for y in range(2019,2025)),
+                derive=fxchange,dp=3)
 
           if FAILED:
               print()
