@@ -95,6 +95,8 @@ sections:
         Seven macro indicators across 186 countries from 2000 — GDP growth, inflation, real interest rates, current account, fiscal balance, reserves, and currency movement against the dollar. Hovering any country shows all seven at once, which is the point: a single indicator rarely tells you much, and the combination is what analysts actually read.
 
         {{< macro >}}
+
+        [Full page: why seven measures rather than one →](/data/macro/)
     design:
       columns: '1'
       spacing:
