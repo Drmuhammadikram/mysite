@@ -117,7 +117,7 @@ jobs:
                 "International Labour Organization modelled estimates, via the World Bank",
                 K5|set(str(y) for y in range(2021,2025)),derive=gap)
 
-                    def fxchange(M):
+          def fxchange(M):
               fx=M.get("fx",{}); ch={}
               for iso,ys in fx.items():
                   for y,v in ys.items():
@@ -150,5 +150,6 @@ jobs:
             echo "No change"
           else
             git commit -m "Refresh World Bank datasets"
+            git pull --rebase --autostash
             git push
           fi
