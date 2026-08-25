@@ -17,26 +17,26 @@ jobs:
       - name: Fetch
         run: |
           python3 - <<'PYEOF'
-          import json,os,time
+          import json,os,time,sys
           from urllib.request import urlopen,Request
 
-          A3=json.load(open('.github/iso.json')) if os.path.exists('.github/iso.json') else None
-          if A3 is None:
-              raise SystemExit("missing .github/iso.json")
+          A3=json.load(open('.github/iso.json'))
+          FAILED=[]
 
           def wb(code,lo=1990,hi=2025):
               u=("https://api.worldbank.org/v2/country/all/indicator/"+code+
                  "?format=json&per_page=22000&date=%d:%d"%(lo,hi))
+              js=None
               for a in range(4):
                   try:
                       js=json.loads(urlopen(Request(u,headers={"User-Agent":"site/1.0"}),
                                             timeout=240).read().decode())
                       break
                   except Exception as e:
-                      print("  retry",a+1,type(e).__name__); time.sleep(4)
-              else:
+                      time.sleep(4)
+              if js is None or len(js)<2 or not js[1]:
+                  print("   FETCH FAILED  %s"%code)
                   return {},{}
-              if len(js)<2 or not js[1]: return {},{}
               out={}; nm={}
               for r in js[1]:
                   iso=A3.get((r.get("countryiso3code") or "").strip())
@@ -47,7 +47,14 @@ jobs:
                   nm[iso]=r["country"]["value"]
               return out,nm
 
-          def build(path,spec,src,keep,derive=None,dp=2):
+          def existing_count(path):
+              try:
+                  return len(json.load(open(path)).get("countries",{}))
+              except Exception:
+                  return 0
+
+          def build(name,path,spec,src,keep,derive=None,dp=2):
+              print(name)
               NAME={}; M={}
               for key,code in spec:
                   d,nm=wb(code); M[key]=d; NAME.update(nm)
@@ -56,42 +63,42 @@ jobs:
               rows={}
               for m,d in M.items():
                   for iso,ys in d.items():
-                      rows.setdefault(iso,{"n":NAME.get(iso,iso),"d":{}})["d"][m]={
-                          y:round(v,dp) for y,v in ys.items() if y in keep}
-              for iso in list(rows):
-                  rows[iso]["d"]={k:v for k,v in rows[iso]["d"].items() if v}
-                  if not rows[iso]["d"]: del rows[iso]
+                      t={y:round(v,dp) for y,v in ys.items() if y in keep}
+                      if t: rows.setdefault(iso,{"n":NAME.get(iso,iso),"d":{}})["d"][m]=t
+              rows={k:v for k,v in rows.items() if v["d"]}
+              old=existing_count(path)
+              if len(rows) < old*0.9:
+                  print("  !! REFUSED  %s  new %d countries vs existing %d — file untouched"
+                        %(path,len(rows),old))
+                  FAILED.append(path)
+                  return
               years=sorted({y for c in rows.values() for m in c["d"] for y in c["d"][m]})
               json.dump({"source":src,"years":years,"countries":rows},
                         open(path,"w"),separators=(",",":"))
-              print("  -> %s  %d countries, %d years"%(path,len(rows),len(years)))
+              print("  -> %s  %d countries (was %d), %d years"%(path,len(rows),old,len(years)))
 
           K5=set(str(y) for y in range(1990,2026,5))
           KR=set(str(y) for y in range(2019,2026))
 
-          print("economy")
-          build("data/econ.json",
+          build("economy","data/econ.json",
                 [("gdppc","NY.GDP.PCAP.PP.CD"),("gdp","NY.GDP.MKTP.PP.CD"),
                  ("trade","NE.TRD.GNFS.ZS"),("infl","FP.CPI.TOTL.ZG"),
                  ("unemp","SL.UEM.TOTL.ZS")],
                 "World Bank World Development Indicators, via Our World in Data",
                 K5|KR)
 
-          print("governance")
-          build("data/wgi.json",
+          build("governance","data/wgi.json",
                 [("ge","GOV_WGI_GE.EST"),("rq","GOV_WGI_RQ.EST"),("rl","GOV_WGI_RL.EST"),
                  ("cc","GOV_WGI_CC.EST"),("va","GOV_WGI_VA.EST"),("ps","GOV_WGI_PV.EST")],
                 "Worldwide Governance Indicators, World Bank",
                 set(str(y) for y in range(1996,2025,4))|{"2022","2023","2024"},dp=3)
 
-          print("air quality")
-          build("data/air.json",
+          build("air quality","data/air.json",
                 [("pm25","EN.ATM.PM25.MC.M3")],
                 "World Bank World Development Indicators",
                 K5|set(str(y) for y in range(2019,2024)))
 
-          print("internet")
-          build("data/internet.json",
+          build("internet","data/internet.json",
                 [("net","IT.NET.USER.ZS"),("mob","IT.CEL.SETS.P2"),("bb","IT.NET.BBND.P2")],
                 "International Telecommunication Union and World Bank, via Our World in Data",
                 set(str(y) for y in range(1995,2025,5))|set(str(y) for y in range(2019,2025)))
@@ -104,12 +111,16 @@ jobs:
                       if mv is not None: g.setdefault(iso,{})[y]=round(mv-fv,2)
               M["gap"]=g
 
-          print("women's employment")
-          build("data/women.json",
+          build("women's employment","data/women.json",
                 [("f","SL.TLF.CACT.FE.ZS"),("m","SL.TLF.CACT.MA.ZS"),
                  ("sh","SL.TLF.TOTL.FE.ZS"),("vul","SL.EMP.VULN.FE.ZS")],
                 "International Labour Organization modelled estimates, via the World Bank",
                 K5|set(str(y) for y in range(2021,2025)),derive=gap)
+
+          if FAILED:
+              print()
+              print("Refused to overwrite: "+", ".join(FAILED))
+              sys.exit(1)
           PYEOF
 
       - name: Commit if changed
