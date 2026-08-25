@@ -1,6 +1,6 @@
 ---
 title: 'Energy mix by source'
-summary: 'Each energy source as a share of primary energy consumption, 79 countries from 1990 to 2024. Coal, oil, gas, nuclear, hydro, wind and solar.'
+summary: 'Each energy source as a share of primary energy consumption, 188 countries from 1990 to 2024. Coal, oil, gas, nuclear, hydro, wind and solar.'
 type: landing
 sections:
   - block: markdown
@@ -8,7 +8,7 @@ sections:
       title: 'Energy mix worldwide'
       subtitle: ''
       text: |-
-        Each source as a share of primary energy consumption, across 79 countries from 1990 to 2024. Switch between individual sources and the fossil and low-carbon aggregates.
+        Each source as a share of primary energy consumption, across 188 countries from 1990 to 2024. Switch between individual sources and the fossil and low-carbon aggregates.
 
         {{< energymix >}}
     design:
