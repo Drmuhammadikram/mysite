@@ -117,6 +117,14 @@ jobs:
                 "International Labour Organization modelled estimates, via the World Bank",
                 K5|set(str(y) for y in range(2021,2025)),derive=gap)
 
+          build("macro outlook","data/macro.json",
+                [("gdpg","NY.GDP.MKTP.KD.ZG"),("infl","FP.CPI.TOTL.ZG"),
+                 ("res","FI.RES.TOTL.MO"),("fx","PA.NUS.FCRF"),
+                 ("ca","BN.CAB.XOKA.GD.ZS"),("fisc","GC.NLD.TOTL.GD.ZS"),
+                 ("rate","FR.INR.RINR")],
+                "World Bank World Development Indicators and IMF International Financial Statistics",
+                set(str(y) for y in range(2000,2025,5))|set(str(y) for y in range(2019,2025)),dp=3)
+
           if FAILED:
               print()
               print("Refused to overwrite: "+", ".join(FAILED))
@@ -127,7 +135,7 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/econ.json data/wgi.json data/air.json data/internet.json data/women.json
+          git add data/econ.json data/wgi.json data/air.json data/internet.json data/women.json data/macro.json
           if git diff --cached --quiet; then
             echo "No change"
           else
