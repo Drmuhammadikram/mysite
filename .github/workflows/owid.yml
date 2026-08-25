@@ -131,7 +131,7 @@ jobs:
              ("wind","share-of-primary-energy-consumption-by-source","Wind"),
              ("solar","share-of-primary-energy-consumption-by-source","Solar"),
              ("nuclear","share-of-primary-energy-consumption-by-source","Nuclear"),
-             ("fossil","fossil-fuel-primary-energy","Fossil fuels"),
+             ("fossil","fossil-fuels-share-energy","Fossil fuels"),
              ("renew","renewable-share-energy","Renewables"),
              ("lowc","low-carbon-share-energy","Low-carbon energy")],
             "Energy Institute Statistical Review, via Our World in Data",
