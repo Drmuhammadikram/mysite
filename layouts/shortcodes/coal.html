@@ -58,7 +58,7 @@ function colorFor(v){
   return COLS[COLS.length-1];
 }
 function key(f){ return ('00'+String(f.id)).slice(-3); }
-function val(k,m,y){ var c=DATA[k]; if(!c) return null; var g=c[m]; if(!g) return null;
+function val(k,m,y){ var c=DATA[k]; if(!c) return null; var g=c.d?c.d[m]:c[m]; if(!g) return null;
   var v=g[y]; return (v===undefined)?null:v; }
 function fmt(n){
   if(n>=1000) return n.toLocaleString('en-GB',{maximumFractionDigits:0});
