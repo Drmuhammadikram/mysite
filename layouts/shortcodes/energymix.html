@@ -149,7 +149,7 @@ d3.select('#en-src').selectAll('button').data(SRC).join('button')
   .text(function(d){return d.l;})
   .on('click',function(e,d){ si=SRC.indexOf(d); render(); });
 
-var SHOW=YEARS.filter(function(y,i){ return i%5===0 || i===YEARS.length-1; });
+var SHOW=YEARS;
 d3.select('#en-tabs').selectAll('button').data(SHOW).join('button')
   .attr('type','button')
   .style('font-size','0.75rem').style('padding','6px 11px').style('cursor','pointer')
