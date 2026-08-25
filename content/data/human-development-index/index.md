@@ -8,7 +8,7 @@ sections:
       title: 'Human Development Index worldwide'
       subtitle: ''
       text: |-
-        The Human Development Index across 193 countries, tracked from 1990 to 2023.
+        The Human Development Index across 184 countries, tracked from 1990 to 2023.
 
         {{< hdi >}}
     design:
