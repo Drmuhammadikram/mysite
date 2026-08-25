@@ -162,7 +162,7 @@ sections:
       title: '12 · Coal consumption worldwide'
       subtitle: ''
       text: |-
-        Coal consumption across 79 countries from 1990 to 2024. Switch between total consumption, consumption per person, and coal's share of primary energy — each answers a different question about dependence and responsibility.
+        Coal consumption across 188 countries from 1990 to 2024. Switch between total consumption, consumption per person, and coal's share of primary energy — each answers a different question about dependence and responsibility.
 
         {{< coal >}}
 
@@ -176,7 +176,7 @@ sections:
       title: '13 · Energy mix by source'
       subtitle: ''
       text: |-
-        Each source as a share of primary energy consumption — coal, oil, gas, nuclear, hydro, wind and solar — across 79 countries from 1990 to 2024. Primary energy covers transport and heating as well as electricity, which is why renewable shares look smaller here than in the headlines.
+        Each source as a share of primary energy consumption — coal, oil, gas, nuclear, hydro, wind and solar — across 188 countries from 1990 to 2024. Primary energy covers transport and heating as well as electricity, which is why renewable shares look smaller here than in the headlines.
 
         {{< energymix >}}
 
