@@ -1,6 +1,6 @@
 ---
 title: 'Human Development Index'
-summary: 'HDI by country from 1990 to 2023 across 193 countries, from the UNDP Human Development Report.'
+summary: 'HDI by country from 1990 to 2023 across 184 countries, from the UNDP Human Development Report.'
 type: landing
 sections:
   - block: markdown
