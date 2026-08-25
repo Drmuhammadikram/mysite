@@ -1,6 +1,6 @@
 ---
 title: Sustainability Data
-summary: Twenty-three interactive datasets on planetary boundaries, ecological footprint, biocapacity, human development, poverty, economic indicators, governance, internet access, population and demography, women's employment, ISO certifications, coal consumption, energy mix, oil refining, electric vehicles, water stress, air quality, forests and deforestation, food waste, natural disasters, life satisfaction, research output, AI research, and progress toward the Sustainable Development Goals.
+summary: Twenty-four interactive datasets on planetary boundaries, ecological footprint, biocapacity, human development, poverty, economic indicators, macroeconomic outlook, governance, internet access, population and demography, women's employment, ISO certifications, coal consumption, energy mix, oil refining, electric vehicles, water stress, air quality, forests and deforestation, food waste, natural disasters, life satisfaction, research output, AI research, and progress toward the Sustainable Development Goals.
 type: landing
 sections:
   - block: markdown
@@ -89,7 +89,19 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '7 · Governance indicators'
+      title: '7 · Macroeconomic outlook'
+      subtitle: ''
+      text: |-
+        Seven macro indicators across 186 countries from 2000 — GDP growth, inflation, real interest rates, current account, fiscal balance, reserves, and currency movement against the dollar. Hovering any country shows all seven at once, which is the point: a single indicator rarely tells you much, and the combination is what analysts actually read.
+
+        {{< macro >}}
+    design:
+      columns: '1'
+      spacing:
+        padding: ['1rem', '0', '1rem', '0']
+  - block: markdown
+    content:
+      title: '8 · Governance indicators'
       subtitle: ''
       text: |-
         Six dimensions of institutional quality — government effectiveness, regulatory quality, rule of law, control of corruption, voice and accountability, and political stability — across 188 countries from 1996. Environmental policy does not implement itself, and these are the closest available proxy for the institutional capacity it requires.
@@ -103,7 +115,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '8 · Internet access worldwide'
+      title: '9 · Internet access worldwide'
       subtitle: ''
       text: |-
         Internet use, mobile subscriptions and fixed broadband across 188 countries from 1995. Switching between mobile and broadband reorders the map substantially — much of the world came online without ever building fixed-line infrastructure, and that difference shapes what connectivity is actually good for.
@@ -117,7 +129,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '9 · Population and demography'
+      title: '10 · Population and demography'
       subtitle: ''
       text: |-
         Eleven demographic indicators across 182 countries from 1960 to 2023 — population, growth rate, median age, fertility, age structure, life expectancy, urbanisation and density. Demography sits underneath most of the other datasets here, since population is the multiplier on every per-capita figure.
@@ -131,7 +143,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: "10 · Women's employment"
+      title: "11 · Women's employment"
       subtitle: ''
       text: |-
         Female labour force participation and the gender participation gap across 174 countries from 1990. The map opens on the gap rather than the female rate, because participation is often highest in the poorest countries — where subsistence work counts as employment and not working is not an option. Morocco records a gap of 48.5 percentage points; Norway 7.1.
@@ -145,7 +157,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '11 · ISO management system certifications worldwide'
+      title: '12 · ISO management system certifications worldwide'
       subtitle: ''
       text: |-
         The number of valid certificates to ISO management system standards, reported by country. Switch between quality, environmental, occupational health and safety, food safety, and energy management standards.
@@ -159,10 +171,10 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '12 · Coal consumption worldwide'
+      title: '13 · Coal consumption worldwide'
       subtitle: ''
       text: |-
-        Coal consumption across 79 countries from 1990 to 2024. Switch between total consumption, consumption per person, and coal's share of primary energy — each answers a different question about dependence and responsibility.
+        Coal consumption across 79 countries from 1990 to 2025. Switch between total consumption, consumption per person, and coal's share of primary energy — each answers a different question about dependence and responsibility.
 
         {{< coal >}}
 
@@ -173,10 +185,10 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '13 · Energy mix by source'
+      title: '14 · Energy mix by source'
       subtitle: ''
       text: |-
-        Each source as a share of primary energy consumption — coal, oil, gas, nuclear, hydro, wind and solar — across 79 countries from 1990 to 2024. Primary energy covers transport and heating as well as electricity, which is why renewable shares look smaller here than in the headlines.
+        Each source as a share of primary energy consumption — coal, oil, gas, nuclear, hydro, wind and solar — across 79 countries from 1990 to 2025. Primary energy covers transport and heating as well as electricity, which is why renewable shares look smaller here than in the headlines.
 
         {{< energymix >}}
 
@@ -187,7 +199,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '14 · Oil refining'
+      title: '15 · Oil refining'
       subtitle: ''
       text: |-
         Refining capacity, throughput and utilisation across 74 countries from 1980. Crude oil is not a usable fuel — refining capacity determines whether a country can meet its own fuel demand or must import refined products. Morocco has reported none since its Mohammedia refinery closed in 2015.
@@ -201,7 +213,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '15 · Electric vehicle adoption'
+      title: '16 · Electric vehicle adoption'
       subtitle: ''
       text: |-
         Electric car sales and stock across 56 markets from 2010. Norway sells 97% electric but only 36% of its cars on the road are — the gap between those two figures is how long a vehicle fleet takes to turn over, and it is the number that matters for emissions.
@@ -215,7 +227,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '16 · Water stress worldwide'
+      title: '17 · Water stress worldwide'
       subtitle: ''
       text: |-
         Freshwater withdrawal as a share of available renewable resources, from 2000 to 2023. Values above 100% mean a country withdraws more than its renewable supply, drawing down aquifers or relying on desalination.
@@ -229,7 +241,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '17 · Air quality worldwide'
+      title: '18 · Air quality worldwide'
       subtitle: ''
       text: |-
         Mean annual exposure to PM2.5 across 171 countries from 1990. The WHO guideline is 5 micrograms per cubic metre; Morocco sits at 18.7, China at 32, India at 54. Almost no country meets the standard, which is why the WHO publishes four interim targets rather than one.
@@ -243,7 +255,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '18 · Forests and deforestation'
+      title: '19 · Forests and deforestation'
       subtitle: ''
       text: |-
         Forest cover, net change, deforestation and satellite-observed tree cover loss across 168 countries. These four measure different things and are routinely conflated — a country can show net forest gain while deforestation continues, if planting outpaces clearance.
@@ -257,7 +269,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '19 · Food waste per capita'
+      title: '20 · Food waste per capita'
       subtitle: ''
       text: |-
         Kilograms of food wasted per person per year across household, food service, and retail, in 184 countries. Read the full page before drawing country comparisons — most of these figures are modelled rather than measured.
@@ -271,7 +283,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '20 · Natural disasters worldwide'
+      title: '21 · Natural disasters worldwide'
       subtitle: ''
       text: |-
         Recorded natural hazard events from 2000 to 2025 across 180 countries, from the EM-DAT international disaster database. Switch between hazard types and between events, deaths, and people affected.
@@ -285,7 +297,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '21 · Life satisfaction worldwide'
+      title: '22 · Life satisfaction worldwide'
       subtitle: ''
       text: |-
         How people rate their own lives on a scale from 0 to 10, across 162 countries from 2011 to 2025. Drawn from the Gallup World Poll and published annually in the World Happiness Report.
@@ -299,7 +311,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '22 · Research output by country'
+      title: '23 · Research output by country'
       subtitle: ''
       text: |-
         Documents, citations, h-index and self-citation rates across 204 countries, cumulative 1996 to 2025. Switching between volume and citations per document reorders the map almost entirely — the first measures scale, the second measures reception, and they are routinely conflated.
@@ -313,7 +325,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '23 · AI research output'
+      title: '24 · AI research output'
       subtitle: ''
       text: |-
         Scholarly publications on artificial intelligence across 169 countries, 2016 to 2024. China leads on volume with 116,000 a year; Singapore leads on intensity at 765 per million, nine times China's rate. The map opens on per-capita, because the total view is largely a map of population.
