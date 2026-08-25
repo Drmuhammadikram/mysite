@@ -94,7 +94,7 @@ jobs:
           build("data/internet.json",
                 [("net","IT.NET.USER.ZS"),("mob","IT.CEL.SETS.P2"),("bb","IT.NET.BBND.P2")],
                 "International Telecommunication Union and World Bank, via Our World in Data",
-                set(str(y) for y in range(1995,2026,5))|set(str(y) for y in range(2019,2025)))
+                set(str(y) for y in range(1995,2025,5))|set(str(y) for y in range(2019,2025)))
 
           def gap(M):
               g={}
