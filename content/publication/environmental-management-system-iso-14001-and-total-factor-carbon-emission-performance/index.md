@@ -22,5 +22,5 @@ featured: true
 links:
   - name: Journal
     url: https://doi.org/10.1002/bse.71460
-url_pdf: "/uploads/iso14001-carbon-performance-2026.pdf"
+url_pdf: "/uploads/Environmental%20management%20system%20and%20total-factor%20carbon%20emissions%20performance.pdf"
 ---
