@@ -123,6 +123,8 @@ sections:
         Recorded deaths in armed conflicts across 185 countries, 1989 to 2025, by where the fighting occurred. These are documented deaths — UCDP counts only what it can verify from reported sources, so the real figures are higher. The hover panel shows UCDP's own low and high estimates alongside the central figure, and the distance between them says a good deal about how contested the reporting is.
 
         {{< conflict >}}
+
+        [Full page: documented deaths, and the uncertainty range →](/data/armed-conflict/)
     design:
       columns: '1'
       spacing:
