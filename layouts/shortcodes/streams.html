@@ -1,0 +1,96 @@
+{{- $d := site.Data.streams -}}
+{{- with $d -}}
+<div id="st-root">
+  <div id="st-live"></div>
+  <div id="st-up"></div>
+  <div id="st-past"></div>
+</div>
+
+<script type="application/json" id="st-data">{{ .events | jsonify }}</script>
+
+<style>
+.st-card{border:1px solid rgba(128,128,128,0.2);border-radius:13px;padding:1.5rem 1.7rem;margin-bottom:1rem;}
+.st-card.live{border-color:rgba(194,58,42,0.5);}
+.st-sec{font-size:0.66rem;letter-spacing:0.11em;text-transform:uppercase;opacity:0.5;font-weight:600;margin:2rem 0 0.9rem;}
+.st-sec:first-child{margin-top:0;}
+.st-t{font-size:1.15rem;font-weight:600;line-height:1.32;margin-bottom:0.35rem;letter-spacing:-0.01em;}
+.st-h{font-size:0.78rem;opacity:0.62;margin-bottom:0.85rem;line-height:1.5;}
+.st-n{font-size:0.86rem;opacity:0.78;line-height:1.65;margin-bottom:1rem;}
+.st-when{display:flex;align-items:center;gap:9px;font-size:0.76rem;margin-bottom:0.9rem;flex-wrap:wrap;}
+.st-pill{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:20px;font-size:0.7rem;font-weight:600;}
+.st-a{display:inline-flex;align-items:center;gap:7px;font-size:0.8rem;font-weight:500;padding:7px 15px;border-radius:7px;text-decoration:none;border:1px solid rgba(128,128,128,0.3);color:inherit;margin-right:8px;}
+.st-a:hover{border-color:rgba(29,122,95,0.6);}
+.st-a.p{background:rgba(29,122,95,0.12);border-color:rgba(29,122,95,0.45);}
+.st-em{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:10px;margin-bottom:1rem;}
+.st-em iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0;}
+@keyframes stp{0%,100%{opacity:1}50%{opacity:0.35}}
+.st-dot{width:7px;height:7px;border-radius:50%;background:#c23a2a;animation:stp 1.6s infinite;}
+.st-none{font-size:0.85rem;opacity:0.5;padding:1.3rem 0;}
+</style>
+
+<script>
+(function(){
+var E=JSON.parse(document.getElementById('st-data').textContent);
+if(typeof E==='string'){ E=JSON.parse(E); }
+var now=new Date();
+
+function fmt(a,b){
+  var o={weekday:'short',day:'numeric',month:'long',year:'numeric'};
+  var t={hour:'2-digit',minute:'2-digit'};
+  var sa=a.toLocaleDateString('en-GB',o);
+  if(!b) return sa;
+  var sb=b.toLocaleDateString('en-GB',o);
+  if(sa===sb) return sa+', '+a.toLocaleTimeString('en-GB',t)+'–'+b.toLocaleTimeString('en-GB',t);
+  return sa+' to '+sb;
+}
+function days(a){
+  var d=Math.ceil((a-now)/86400000);
+  if(d<0) return '';
+  if(d===0) return 'today';
+  if(d===1) return 'tomorrow';
+  if(d<30) return 'in '+d+' days';
+  return 'in '+Math.round(d/30)+' month'+(Math.round(d/30)===1?'':'s');
+}
+function card(e,state){
+  var a=new Date(e.start), b=e.end?new Date(e.end):null;
+  var h='<div class="st-card'+(state==='live'?' live':'')+'">';
+  if((state==='live'||state==='past')&&e.embed)
+    h+='<div class="st-em"><iframe src="https://www.youtube.com/embed/'+e.embed+
+       '" title="'+e.title+'" allow="accelerometer; clipboard-write; encrypted-media; picture-in-picture" allowfullscreen></iframe></div>';
+  h+='<div class="st-when">';
+  if(state==='live') h+='<span class="st-pill" style="background:rgba(194,58,42,0.14);color:#c23a2a;"><span class="st-dot"></span>Live now</span>';
+  else if(state==='up'&&days(a)) h+='<span class="st-pill" style="background:rgba(29,122,95,0.13);color:#1d7a5f;">'+days(a)+'</span>';
+  if(e.topic) h+='<span style="opacity:0.5;">'+e.topic+'</span>';
+  h+='</div>';
+  h+='<div class="st-t">'+e.title+'</div>';
+  h+='<div class="st-h">'+e.host+'<br><span style="opacity:0.75;">'+fmt(a,b)+'</span></div>';
+  if(e.note) h+='<div class="st-n">'+e.note+'</div>';
+  if(state!=='past'){
+    if(e.url) h+='<a class="st-a p" href="'+e.url+'" target="_blank" rel="noopener">'+
+      (state==='live'?'Join':'Register')+' &rarr;</a>';
+    if(e.watch) h+='<a class="st-a" href="'+e.watch+'" target="_blank" rel="noopener">Watch stream &rarr;</a>';
+  } else if(e.watch&&!e.embed){
+    h+='<a class="st-a" href="'+e.watch+'" target="_blank" rel="noopener">Recording &rarr;</a>';
+  }
+  return h+'</div>';
+}
+
+var live=[],up=[],past=[];
+E.forEach(function(e){
+  var a=new Date(e.start), b=e.end?new Date(e.end):new Date(a.getTime()+7200000);
+  if(now>=a&&now<=b) live.push(e);
+  else if(now<a) up.push(e);
+  else past.push(e);
+});
+up.sort(function(x,y){ return new Date(x.start)-new Date(y.start); });
+past.sort(function(x,y){ return new Date(y.start)-new Date(x.start); });
+
+var H=document.getElementById('st-live'), U=document.getElementById('st-up'), P=document.getElementById('st-past');
+if(live.length) H.innerHTML='<div class="st-sec">Live now</div>'+live.map(function(e){return card(e,'live');}).join('');
+U.innerHTML='<div class="st-sec">Upcoming</div>'+
+  (up.length?up.map(function(e){return card(e,'up');}).join('')
+           :'<div class="st-none">Nothing scheduled at the moment. The series listed below run regularly and are worth following directly.</div>');
+if(past.length) P.innerHTML='<div class="st-sec">Past sessions</div>'+past.map(function(e){return card(e,'past');}).join('');
+})();
+</script>
+{{- end -}}
