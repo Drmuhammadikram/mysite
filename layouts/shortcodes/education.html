@@ -1,0 +1,234 @@
+{{- $d := site.Data.education -}}
+{{- with $d -}}
+<script type="application/json" id="ed-data">{{ .countries | jsonify }}</script>
+<script type="application/json" id="ed-years">{{ .years | jsonify }}</script>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:1.5rem;width:70vw;max-width:1100px;position:relative;left:50%;transform:translateX(-50%);" id="ed-cards"></div>
+
+<div id="ed-metric" style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:0.7rem;align-items:center;width:70vw;max-width:1100px;position:relative;left:50%;transform:translateX(-50%);z-index:6;"></div>
+<div id="ed-tabs" style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:1.25rem;align-items:center;width:70vw;max-width:1100px;position:relative;left:50%;transform:translateX(-50%);z-index:6;"></div>
+
+<div style="display:grid;grid-template-columns:1fr 190px;gap:24px;align-items:start;width:70vw;max-width:1100px;position:relative;left:50%;transform:translateX(-50%);" id="ed-wrap">
+  <div id="ed-map" style="width:100%;margin-top:-3.5rem;"></div>
+  <div>
+    <div id="ed-legend-title" style="font-size:0.78rem;opacity:0.75;margin-bottom:0.7rem;line-height:1.45;"></div>
+    <div id="ed-legend"></div>
+    <div id="ed-readout" style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid rgba(128,128,128,0.2);min-height:84px;">
+      <div style="font-size:0.75rem;opacity:0.5;">Hover a country</div>
+    </div>
+  </div>
+</div>
+
+<p style="font-size:0.72rem;opacity:0.55;margin-top:1.25rem;line-height:1.6;">
+  Source: {{ .source }}. Literacy is measured by census or household survey rather than annually,
+  so each country shows its most recent reading with the year given on hover — some are a decade
+  old. High-income countries stop reporting literacy once it approaches universal, which is why
+  much of Europe, North America and Japan is blank on those views rather than at 100%. Enrolment
+  ratios are gross, counting all enrolled pupils against the population of the relevant age group,
+  so they can exceed 100% where students repeat years or enrol late.
+</p>
+
+<style>@media(max-width:760px){#ed-wrap{grid-template-columns:1fr!important}}</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+<script>
+(function(){
+var DATA=JSON.parse(document.getElementById('ed-data').textContent);
+if(typeof DATA==='string'){ DATA=JSON.parse(DATA); }
+var YEARS=JSON.parse(document.getElementById('ed-years').textContent);
+if(typeof YEARS==='string'){ YEARS=JSON.parse(YEARS); }
+var dark=matchMedia('(prefers-color-scheme: dark)').matches;
+var globe=window.innerWidth<820;
+var noData=dark?'#2c2c2a':'#eceae4';
+
+var LIT=[[95,'over 95%'],[85,'85 - 95%'],[70,'70 - 85%'],[55,'55 - 70%'],[0,'under 55%']];
+var LC=['#0d5c46','#1d7a5f','#5dab8a','#d9b878','#a8351f'];
+
+var M=[
+ {k:'lit',l:'Adult literacy',u:'% of adults aged 15+',dp:1,suf:'%',latest:true,b:LIT,c:LC},
+ {k:'litf',l:'Female literacy',u:'% of women aged 15+',dp:1,suf:'%',latest:true,b:LIT,c:LC},
+ {k:'lity',l:'Youth literacy',u:'% of people aged 15-24',dp:1,suf:'%',latest:true,b:LIT,c:LC},
+ {k:'sec',l:'Secondary enrolment',u:'gross enrolment ratio, %',dp:1,suf:'%',
+  b:[[100,'over 100%'],[85,'85 - 100%'],[65,'65 - 85%'],[40,'40 - 65%'],[0,'under 40%']],
+  c:['#123f63','#2a7fa8','#6fb3c9','#c9a86a','#a8613b']},
+ {k:'ter',l:'Tertiary enrolment',u:'gross enrolment ratio, %',dp:1,suf:'%',
+  b:[[70,'over 70%'],[45,'45 - 70%'],[25,'45 - 25%'],[10,'10 - 25%'],[0,'under 10%']],
+  c:['#2d1b4e','#5c4079','#8a6ba8','#c2a8d0','#e8dcec']},
+ {k:'spend',l:'Public spending',u:'% of GDP',dp:2,suf:'%',
+  b:[[6,'over 6%'],[4.5,'4.5 - 6%'],[3.5,'3.5 - 4.5%'],[2.5,'2.5 - 3.5%'],[0,'under 2.5%']],
+  c:['#0d5c46','#1d7a5f','#5dab8a','#d9b878','#a8351f']}
+];
+var mi=0, year=null, paths=null;
+
+function yearsFor(S){
+  if(S.latest) return null;
+  return YEARS.filter(function(y){ return y!=='LATEST'&&y!=='YR'; });
+}
+function colorFor(v){
+  var S=M[mi];
+  if(v===null||v===undefined) return noData;
+  for(var j=0;j<S.b.length;j++){ if(v>=S.b[j][0]) return S.c[j]; }
+  return S.c[S.c.length-1];
+}
+function key(f){ return ('00'+String(f.id)).slice(-3); }
+function val(k,m){
+  var c=DATA[k]; if(!c) return null;
+  var g=c.d[m]; if(!g) return null;
+  var S=null; for(var i=0;i<M.length;i++){ if(M[i].k===m) S=M[i]; }
+  if(S&&S.latest){ var v=g['LATEST']; return (v===undefined)?null:v; }
+  var v2=g[year]; return (v2===undefined)?null:v2;
+}
+function litYear(k,m){
+  var c=DATA[k]; if(!c) return null;
+  var g=c.d[m]; if(!g) return null;
+  var y=g['YR']; return (y===undefined)?null:Math.round(y);
+}
+
+var W=globe?420:960, H=globe?420:440;
+var svg=d3.select('#ed-map').append('svg')
+  .attr('viewBox','0 0 '+W+' '+H).attr('width','100%')
+  .style('min-height',globe?'0':'700px').style('display','block')
+  .style('touch-action',globe?'none':'auto')
+  .attr('role','img').attr('aria-label','World map of literacy and education');
+var proj=globe
+  ? d3.geoOrthographic().scale(165).translate([210,210]).rotate([-10,-18,0]).clipAngle(90)
+  : d3.geoNaturalEarth1().scale(200).translate([460,205]);
+var path=d3.geoPath(proj);
+
+function show(k){
+  var c=DATA[k];
+  if(!c){ d3.select('#ed-readout').html('<div style="font-size:0.75rem;opacity:0.5;">No data</div>'); return; }
+  function row(S,strong){
+    var v=val(k,S.k), yr=S.latest?litYear(k,S.k):null;
+    return '<div style="display:flex;justify-content:space-between;gap:10px;'+
+      (strong?'font-weight:600;':'opacity:0.72;')+'"><span>'+S.l+'</span>'+
+      '<span style="font-variant-numeric:tabular-nums;">'+
+      (v===null?'-':v.toFixed(S.dp)+S.suf)+
+      (yr?' <span style="opacity:0.5;font-weight:400;">'+yr+'</span>':'')+'</span></div>';
+  }
+  var lf=val(k,'litf'), lm=(DATA[k].d.litm&&DATA[k].d.litm.LATEST!==undefined)?DATA[k].d.litm.LATEST:null;
+  var gap='';
+  if(lf!==null&&lm!==null){
+    var g=lm-lf;
+    gap='<div style="margin-top:0.45rem;padding-top:0.4rem;border-top:1px solid rgba(128,128,128,0.2);opacity:0.62;">'+
+      (Math.abs(g)<0.5?'No gender gap in literacy':
+       (g>0?g.toFixed(1)+' point gap, men ahead':Math.abs(g).toFixed(1)+' point gap, women ahead'))+'</div>';
+  }
+  d3.select('#ed-readout').html(
+    '<div style="font-size:0.85rem;font-weight:600;margin-bottom:0.5rem;">'+c.n+'</div>'+
+    '<div style="font-size:0.72rem;line-height:1.8;">'+
+    M.map(function(S){ return row(S,S.k===M[mi].k); }).join('')+
+    gap+'</div>');
+}
+
+function cards(){
+  var S=M[mi], vals=[], n=0, sum=0;
+  for(var k in DATA){ var v=val(k,S.k); if(v!==null){ vals.push([DATA[k].n,v]); n++; sum+=v; } }
+  vals.sort(function(a,b){ return b[1]-a[1]; });
+  var top=vals[0]||['-',0], bot=vals[vals.length-1]||['-',0];
+  function card(l,big,sub){
+    return '<div style="background:rgba(128,128,128,0.06);border-radius:8px;padding:1rem;">'+
+     '<div style="font-size:0.75rem;opacity:0.7;margin-bottom:0.4rem;">'+l+'</div>'+
+     '<div style="font-size:1.55rem;line-height:1.1;font-weight:600;font-variant-numeric:tabular-nums;">'+big+'</div>'+
+     '<div style="font-size:0.68rem;opacity:0.55;margin-top:0.3rem;">'+sub+'</div></div>';
+  }
+  d3.select('#ed-cards').html(
+    card(S.latest?'Reading':'Year',S.latest?'Latest':year,S.latest?'most recent survey':'reporting year')+
+    card('Highest',top[1].toFixed(S.dp)+S.suf,top[0])+
+    card('Lowest',bot[1].toFixed(S.dp)+S.suf,bot[0])+
+    card('Reporting',n,'countries'));
+}
+
+function render(){
+  var S=M[mi];
+  var ys=yearsFor(S);
+  var tabs=d3.select('#ed-tabs');
+  if(!ys){
+    tabs.style('display','none');
+  } else {
+    tabs.style('display','flex');
+    if(!year||ys.indexOf(year)<0) year=ys[ys.length-1];
+    tabs.selectAll('button').data(ys).join('button')
+      .attr('type','button')
+      .style('font-size','0.75rem').style('padding','6px 10px').style('cursor','pointer')
+      .style('border','1px solid rgba(128,128,128,0.3)').style('border-radius','6px')
+      .style('color','inherit')
+      .text(function(d){return d;})
+      .on('click',function(e,d){ year=d; render(); })
+      .style('background',function(d){return d===year?'rgba(29,122,95,0.18)':'transparent';})
+      .style('border-color',function(d){return d===year?'rgba(29,122,95,0.6)':'rgba(128,128,128,0.3)';})
+      .style('font-weight',function(d){return d===year?'600':'400';})
+      .style('opacity',function(d){return d===year?1:0.65;});
+  }
+  d3.select('#ed-legend-title').html('<strong style="font-weight:600;opacity:1">'+S.l+
+    (S.latest?', most recent reading':', '+year)+'</strong><br>Measured in '+S.u+'.');
+  d3.select('#ed-legend').html(S.b.map(function(b,j){
+    return '<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;font-size:0.72rem;opacity:0.75;">'+
+      '<span style="width:16px;height:11px;border-radius:2px;background:'+S.c[j]+';flex-shrink:0;border:1px solid rgba(128,128,128,0.2);"></span>'+b[1]+'</div>';
+  }).join('')+'<div style="display:flex;align-items:center;gap:8px;margin-top:8px;font-size:0.72rem;opacity:0.5;">'+
+    '<span style="width:16px;height:11px;border-radius:2px;background:'+noData+';flex-shrink:0;"></span>'+
+    (S.latest?'Not reported':'No data')+'</div>');
+  d3.selectAll('#ed-metric button')
+    .style('background',function(d,j){return j===mi?'rgba(29,122,95,0.18)':'transparent';})
+    .style('border-color',function(d,j){return j===mi?'rgba(29,122,95,0.6)':'rgba(128,128,128,0.3)';})
+    .style('font-weight',function(d,j){return j===mi?'600':'400';})
+    .style('opacity',function(d,j){return j===mi?1:0.65;});
+  if(paths) paths.attr('fill',function(f){ return colorFor(val(key(f),M[mi].k)); });
+  cards();
+}
+
+d3.select('#ed-metric').selectAll('button').data(M).join('button')
+  .attr('type','button')
+  .style('font-size','0.75rem').style('padding','6px 11px').style('cursor','pointer')
+  .style('border','1px solid rgba(128,128,128,0.3)').style('border-radius','6px')
+  .style('color','inherit')
+  .text(function(d){return d.l;})
+  .on('click',function(e,d){ mi=M.indexOf(d); render(); });
+
+d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(function(w){
+  var mor=w.objects.countries.geometries.filter(function(g){
+    var id=String(+g.id); return id==='504'||id==='732'; });
+  var feats=topojson.feature(w,w.objects.countries).features
+    .filter(function(f){var id=String(+f.id); return id!=='504'&&id!=='732'&&id!=='010';});
+  if(mor.length) feats.push({type:'Feature',id:504,geometry:topojson.merge(w,mor)});
+
+  if(globe){
+    svg.append('circle').attr('cx',210).attr('cy',210).attr('r',165)
+      .attr('fill',dark?'#101a20':'#dbe8ef');
+    svg.append('path').datum(d3.geoGraticule10())
+      .attr('class','ed-grat').attr('d',path).attr('fill','none')
+      .attr('stroke',dark?'rgba(255,255,255,.10)':'rgba(0,0,0,.09)').attr('stroke-width',0.5);
+  }
+
+  paths=svg.selectAll('path.ed-c').data(feats).join('path')
+    .attr('class','ed-c')
+    .attr('d',path)
+    .attr('fill',function(f){ return colorFor(val(key(f),M[mi].k)); })
+    .attr('stroke',dark?'rgba(255,255,255,.14)':'#fff').attr('stroke-width',0.4)
+    .style('cursor','pointer')
+    .on('mouseenter',function(e,f){ if(!globe) show(key(f)); })
+    .on('click',function(e,f){ show(key(f)); });
+
+  if(globe){
+    svg.append('circle').attr('cx',210).attr('cy',210).attr('r',165)
+      .attr('fill','none').attr('stroke',dark?'rgba(255,255,255,.22)':'rgba(0,0,0,.18)')
+      .attr('stroke-width',1).style('pointer-events','none');
+    var x0,y0,r0;
+    svg.call(d3.drag()
+      .on('start',function(e){ x0=e.x; y0=e.y; r0=proj.rotate(); })
+      .on('drag',function(e){
+        var kk=0.32;
+        proj.rotate([r0[0]+(e.x-x0)*kk, Math.max(-88,Math.min(88,r0[1]-(e.y-y0)*kk)), 0]);
+        paths.attr('d',path); svg.select('.ed-grat').attr('d',path);
+      }));
+    d3.select('#ed-map').append('div')
+      .style('font-size','0.7rem').style('opacity','0.5')
+      .style('text-align','center').style('margin-top','0.4rem')
+      .text('Drag to rotate · tap a country for detail');
+  }
+  render();
+});
+})();
+</script>
+{{- end -}}
