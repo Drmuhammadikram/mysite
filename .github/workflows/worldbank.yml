@@ -136,6 +136,25 @@ jobs:
                 set(str(y) for y in range(2000,2025,5))|set(str(y) for y in range(2019,2025)),
                 derive=fxchange,dp=3)
 
+          def latest(M):
+              for k in ["lit","litf","litm","lity"]:
+                  src=M.get(k,{}); out={}
+                  for iso,ys in src.items():
+                      if not ys: continue
+                      y=max(ys)
+                      out[iso]={"LATEST":ys[y],"YR":float(y)}
+                  M[k]=out
+                  print("   %-6s latest reading for %d countries"%(k,len(out)))
+
+          build("education","data/education.json",
+                [("lit","SE.ADT.LITR.ZS"),("litf","SE.ADT.LITR.FE.ZS"),
+                 ("litm","SE.ADT.LITR.MA.ZS"),("lity","SE.ADT.1524.LT.ZS"),
+                 ("sec","SE.SEC.ENRR"),("ter","SE.TER.ENRR"),
+                 ("spend","SE.XPD.TOTL.GD.ZS")],
+                "UNESCO Institute for Statistics and World Bank",
+                set(str(y) for y in range(2000,2025,5))|set(str(y) for y in range(2019,2025))
+                |{"LATEST","YR"},derive=latest,dp=2)
+
           if FAILED:
               print()
               print("Refused to overwrite: "+", ".join(FAILED))
@@ -146,7 +165,7 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/econ.json data/wgi.json data/air.json data/internet.json data/women.json data/macro.json
+          git add data/econ.json data/wgi.json data/air.json data/internet.json data/women.json data/macro.json data/education.json
           if git diff --cached --quiet; then
             echo "No change"
           else
