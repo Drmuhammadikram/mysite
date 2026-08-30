@@ -162,6 +162,16 @@ jobs:
             "Uppsala Conflict Data Program, via Our World in Data",
             Y5(1989,2026)|YR(2019,2026),dp=2)
 
+          build("food security","data/foodsec.json",
+            [("under","prevalence-of-undernourishment",
+              "2.1.1 prevalence of undernourishment - Value (percent)"),
+             ("insec","share-of-population-with-severe-food-insecurity",
+              "Prevalence of severe food insecurity in the total population"),
+             ("cost","cost-healthy-diet","Cost of a healthy diet"),
+             ("kcal","food-supply-kcal","Daily calorie supply per person")],
+            "FAO Suite of Food Security Indicators, via Our World in Data",
+            Y5(2000,2026)|YR(2019,2026),dp=2)
+
           if FAILED:
               print()
               print("Refused to overwrite: "+", ".join(FAILED))
@@ -172,7 +182,7 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/coal.json data/population.json data/energy.json data/ev.json data/aipub.json data/conflict.json
+          git add data/coal.json data/population.json data/energy.json data/ev.json data/aipub.json data/conflict.json data/foodsec.json
           if git diff --cached --quiet; then
             echo "No change"
           else
