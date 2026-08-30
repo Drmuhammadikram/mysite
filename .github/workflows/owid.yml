@@ -170,7 +170,7 @@ jobs:
              ("cost","cost-healthy-diet","Cost of a healthy diet"),
              ("kcal","food-supply-kcal","Daily calorie supply per person")],
             "FAO Suite of Food Security Indicators, via Our World in Data",
-            Y5(2000,2026)|YR(2019,2026),dp=2)
+            Y5(2000,2025)|YR(2019,2024),dp=2)
 
           if FAILED:
               print()
