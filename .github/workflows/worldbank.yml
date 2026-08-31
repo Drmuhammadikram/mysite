@@ -155,12 +155,26 @@ jobs:
                 set(str(y) for y in range(2000,2025,5))|set(str(y) for y in range(2019,2025))
                 |{"LATEST","YR"},derive=latest,dp=2)
 
-          build("water resources","data/water-use.json",
+          def wclean(M):
+              bad=0
+              for iso in list(M.get("ag",{})):
+                  for y in list(M["ag"][iso]):
+                      s=(M["ag"].get(iso,{}).get(y,0)
+                        +M.get("ind",{}).get(iso,{}).get(y,0)
+                        +M.get("dom",{}).get(iso,{}).get(y,0))
+                      if s>105:
+                          for k in ["ag","ind","dom"]:
+                              M.get(k,{}).get(iso,{}).pop(y,None)
+                          bad+=1
+              print("   dropped %d country-years with shares summing over 105 percent"%bad)
+
+          build("water resources","data/wateruse.json",
                 [("ag","ER.H2O.FWAG.ZS"),("ind","ER.H2O.FWIN.ZS"),
                  ("dom","ER.H2O.FWDM.ZS"),("pc","ER.H2O.INTR.PC"),
                  ("total","ER.H2O.FWTL.K3")],
                 "FAO AQUASTAT, via the World Bank",
-                set(str(y) for y in range(2000,2023,5))|set(str(y) for y in range(2019,2023)),dp=2)
+                set(str(y) for y in range(2000,2023,5))|set(str(y) for y in range(2019,2023)),
+                derive=wclean,dp=2)
 
           if FAILED:
               print()
@@ -172,7 +186,7 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/econ.json data/wgi.json data/air.json data/internet.json data/women.json data/macro.json data/education.json data/water-use.json
+          git add data/econ.json data/wgi.json data/air.json data/internet.json data/women.json data/macro.json data/education.json data/wateruse.json
           if git diff --cached --quiet; then
             echo "No change"
           else
