@@ -1,4 +1,4 @@
-{{- $d := site.Data.water_use -}}
+{{- $d := site.Data.wateruse -}}
 {{- with $d -}}
 <script type="application/json" id="wu-data">{{ .countries | jsonify }}</script>
 <script type="application/json" id="wu-years">{{ .years | jsonify }}</script>
