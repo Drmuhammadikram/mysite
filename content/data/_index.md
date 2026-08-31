@@ -1,6 +1,6 @@
 ---
 title: Sustainability Data
-summary: Twenty-seven interactive datasets on planetary boundaries, ecological footprint, biocapacity, human development, poverty, food security, economic indicators, macroeconomic outlook, governance, internet access, population and demography, women's employment, literacy and education, ISO certifications, coal consumption, energy mix, oil refining, electric vehicles, water stress, air quality, forests and deforestation, food waste, natural disasters, armed conflict, life satisfaction, research output, AI research, and progress toward the Sustainable Development Goals.
+summary: Twenty-eight interactive datasets on planetary boundaries, ecological footprint, biocapacity, human development, poverty, food security, economic indicators, macroeconomic outlook, governance, internet access, population and demography, women's employment, literacy and education, ISO certifications, coal consumption, energy mix, oil refining, electric vehicles, water stress, water use, air quality, forests and deforestation, food waste, natural disasters, armed conflict, life satisfaction, research output, AI research, and progress toward the Sustainable Development Goals.
 type: landing
 sections:
   - block: markdown
@@ -92,7 +92,7 @@ sections:
       title: '7 · Food security'
       subtitle: ''
       text: |-
-        Undernourishment, severe food insecurity, the cost of a healthy diet and calorie supply across 186 countries. The diet cost is the striking one: it sets the price of adequate nutrition against the $3 a day extreme poverty line, and in much of the world eating well would consume a poor household's entire income. The food exists; it costs more than people have.
+        Undernourishment, severe food insecurity, the cost of a healthy diet and calorie supply across 186 countries. Severe food insecurity is the measure that asks people directly whether they have gone without food — South Sudan records 63.1%, Italy 0.5%. Adequate nutrition costs between $2.50 and $7.29 a day depending on local prices; what varies far more is the income available to pay it.
 
         {{< foodsec >}}
 
@@ -285,7 +285,21 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '21 · Air quality worldwide'
+      title: '21 · Water use and resources'
+      subtitle: ''
+      text: |-
+        Withdrawal split between agriculture, industry and households, alongside renewable resources per person, across 183 countries. Agriculture takes roughly 70% of the world's freshwater and above 85% across South Asia and North Africa — which means water policy is mostly agricultural policy, however much the public campaigns focus on household use.
+
+        {{< wateruse >}}
+
+        [Full page: why water policy is agricultural policy →](/data/water-use/)
+    design:
+      columns: '1'
+      spacing:
+        padding: ['1rem', '0', '1rem', '0']
+  - block: markdown
+    content:
+      title: '22 · Air quality worldwide'
       subtitle: ''
       text: |-
         Mean annual exposure to PM2.5 across 171 countries from 1990. The WHO guideline is 5 micrograms per cubic metre; Morocco sits at 18.7, China at 32, India at 54. Almost no country meets the standard, which is why the WHO publishes four interim targets rather than one.
@@ -299,7 +313,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '22 · Forests and deforestation'
+      title: '23 · Forests and deforestation'
       subtitle: ''
       text: |-
         Forest cover, net change, deforestation and satellite-observed tree cover loss across 168 countries. These four measure different things and are routinely conflated — a country can show net forest gain while deforestation continues, if planting outpaces clearance.
@@ -313,7 +327,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '23 · Food waste per capita'
+      title: '24 · Food waste per capita'
       subtitle: ''
       text: |-
         Kilograms of food wasted per person per year across household, food service, and retail, in 184 countries. Read the full page before drawing country comparisons — most of these figures are modelled rather than measured.
@@ -327,7 +341,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '24 · Natural disasters worldwide'
+      title: '25 · Natural disasters worldwide'
       subtitle: ''
       text: |-
         Recorded natural hazard events from 2000 to 2025 across 180 countries, from the EM-DAT international disaster database. Switch between hazard types and between events, deaths, and people affected.
@@ -341,7 +355,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '25 · Life satisfaction worldwide'
+      title: '26 · Life satisfaction worldwide'
       subtitle: ''
       text: |-
         How people rate their own lives on a scale from 0 to 10, across 162 countries from 2011 to 2025. Drawn from the Gallup World Poll and published annually in the World Happiness Report.
@@ -355,7 +369,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '26 · Research output by country'
+      title: '27 · Research output by country'
       subtitle: ''
       text: |-
         Documents, citations, h-index and self-citation rates across 204 countries, cumulative 1996 to 2025. Switching between volume and citations per document reorders the map almost entirely — the first measures scale, the second measures reception, and they are routinely conflated.
@@ -369,7 +383,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '27 · AI research output'
+      title: '28 · AI research output'
       subtitle: ''
       text: |-
         Scholarly publications on artificial intelligence across 169 countries, 2016 to 2024. China leads on volume with 116,000 a year; Singapore leads on intensity at 765 per million, nine times China's rate. The map opens on per-capita, because the total view is largely a map of population.
