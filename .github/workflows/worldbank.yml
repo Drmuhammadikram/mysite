@@ -155,6 +155,13 @@ jobs:
                 set(str(y) for y in range(2000,2025,5))|set(str(y) for y in range(2019,2025))
                 |{"LATEST","YR"},derive=latest,dp=2)
 
+          build("water resources","data/water-use.json",
+                [("ag","ER.H2O.FWAG.ZS"),("ind","ER.H2O.FWIN.ZS"),
+                 ("dom","ER.H2O.FWDM.ZS"),("pc","ER.H2O.INTR.PC"),
+                 ("total","ER.H2O.FWTL.K3")],
+                "FAO AQUASTAT, via the World Bank",
+                set(str(y) for y in range(2000,2023,5))|set(str(y) for y in range(2019,2023)),dp=2)
+
           if FAILED:
               print()
               print("Refused to overwrite: "+", ".join(FAILED))
@@ -165,7 +172,7 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/econ.json data/wgi.json data/air.json data/internet.json data/women.json data/macro.json data/education.json
+          git add data/econ.json data/wgi.json data/air.json data/internet.json data/women.json data/macro.json data/education.json data/water-use.json
           if git diff --cached --quiet; then
             echo "No change"
           else
