@@ -172,13 +172,22 @@ jobs:
             "FAO Suite of Food Security Indicators, via Our World in Data",
             Y5(2000,2025)|YR(2019,2024),dp=2)
 
+          def hmlatest(M):
+              src=M.get("prison",{}); out={}
+              for iso,ys in src.items():
+                  if not ys: continue
+                  y=max(ys)
+                  out[iso]={"LATEST":ys[y],"YR":float(y)}
+              M["prison"]=out
+              print("   prison: latest reading for %d countries"%len(out))
+
           build("homicide","data/homicide.json",
             [("rate","homicide-rate-unodc","Homicide rate per 100,000 population"),
              ("female","female-homicide-rate",
               "Homicide rate per 100,000 population of female victims"),
              ("prison","prison-population-rate","Prison population rate")],
             "UNODC and the World Prison Brief, via Our World in Data",
-            Y5(1990,2026)|YR(2019,2026),dp=2)
+            Y5(1990,2024)|YR(2019,2024)|{"LATEST","YR"},derive=hmlatest,dp=2)
 
           if FAILED:
               print()
