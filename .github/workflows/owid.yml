@@ -172,6 +172,14 @@ jobs:
             "FAO Suite of Food Security Indicators, via Our World in Data",
             Y5(2000,2025)|YR(2019,2024),dp=2)
 
+          build("homicide","data/homicide.json",
+            [("rate","homicide-rate-unodc","Homicide rate per 100,000 population"),
+             ("female","female-homicide-rate",
+              "Homicide rate per 100,000 population of female victims"),
+             ("prison","prison-population-rate","Prison population rate")],
+            "UNODC and the World Prison Brief, via Our World in Data",
+            Y5(1990,2026)|YR(2019,2026),dp=2)
+
           if FAILED:
               print()
               print("Refused to overwrite: "+", ".join(FAILED))
@@ -182,7 +190,7 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/coal.json data/population.json data/energy.json data/ev.json data/aipub.json data/conflict.json data/foodsec.json
+          git add data/coal.json data/population.json data/energy.json data/ev.json data/aipub.json data/conflict.json data/foodsec.json data/homicide.json
           if git diff --cached --quiet; then
             echo "No change"
           else
