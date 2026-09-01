@@ -25,8 +25,11 @@
   figures track willingness to report and police recording practice at least as much as
   underlying incidence. That is why no general crime rate appears here: recorded crime is not
   comparable between countries, and a map of it would produce confident colour where no
-  comparison exists. Prison population measures state action rather than criminality, and the
-  two are less related than intuition suggests.
+  comparison exists. UNODC reports with a two to three year lag, so the most recent years are
+  thinly covered. Prison population has no common reporting year at all — each country is
+  updated whenever its national statistics appear — so that view shows each country's most
+  recent reading, with the year given on hover. It measures state action rather than
+  criminality, and the two are less related than intuition suggests.
 </p>
 
 <style>@media(max-width:760px){#hm-wrap{grid-template-columns:1fr!important}}</style>
@@ -46,14 +49,16 @@ var M=[
  {k:'rate',l:'Homicide rate',u:'per 100,000 people per year',dp:2,
   b:[[30,'over 30'],[10,'10 - 30'],[4,'4 - 10'],[1.5,'1.5 - 4'],[0,'under 1.5']],
   c:['#3d0a06','#8a1f10','#c25a2a','#d9b878','#1d7a5f']},
- {k:'female',l:'Female victims',u:'per 100,000 women per year',dp:2,
+ {k:'female',l:'Female victims',u:'per 100,000 people per year',dp:2,
   b:[[6,'over 6'],[3,'3 - 6'],[1.5,'1.5 - 3'],[0.7,'0.7 - 1.5'],[0,'under 0.7']],
   c:['#4a1030','#8a1f4a','#c25a6a','#d9a8b0','#5dab8a']},
- {k:'prison',l:'Prison population',u:'per 100,000 people',dp:0,
+ {k:'prison',l:'Prison population',u:'per 100,000 people',dp:0,latest:true,
   b:[[400,'over 400'],[250,'250 - 400'],[150,'150 - 250'],[80,'80 - 150'],[0,'under 80']],
   c:['#2d2a4e','#4a4079','#7a6ba8','#b0a8cd','#e0dcec']}
 ];
-var mi=0, year=YEARS[YEARS.length-1], paths=null;
+var mi=0, paths=null;
+var YRS=YEARS.filter(function(y){ return y!=='LATEST'&&y!=='YR'; });
+var year=YRS[YRS.length-1];
 
 function colorFor(v){
   var S=M[mi];
@@ -62,10 +67,25 @@ function colorFor(v){
   return S.c[S.c.length-1];
 }
 function key(f){ return ('00'+String(f.id)).slice(-3); }
-function val(k,m,y){ var c=DATA[k]; if(!c) return null; var g=c.d[m]; if(!g) return null;
-  var v=g[y]; return (v===undefined)?null:v; }
-function latest(k,m){ var c=DATA[k]; if(!c) return null; var g=c.d[m]; if(!g) return null;
-  var ys=Object.keys(g).sort(); return ys.length?[ys[ys.length-1],g[ys[ys.length-1]]]:null; }
+function spec(m){ for(var i=0;i<M.length;i++){ if(M[i].k===m) return M[i]; } return null; }
+function val(k,m,y){
+  var c=DATA[k]; if(!c) return null;
+  var g=c.d[m]; if(!g) return null;
+  var S=spec(m);
+  if(S&&S.latest){ var lv=g['LATEST']; return (lv===undefined)?null:lv; }
+  var v=g[y]; return (v===undefined)?null:v;
+}
+function latest(k,m){
+  var c=DATA[k]; if(!c) return null;
+  var g=c.d[m]; if(!g) return null;
+  var S=spec(m);
+  if(S&&S.latest){
+    if(g['LATEST']===undefined) return null;
+    return [String(Math.round(g['YR']||0)),g['LATEST']];
+  }
+  var ys=Object.keys(g).filter(function(y){return /^\d+$/.test(y);}).sort();
+  return ys.length?[ys[ys.length-1],g[ys[ys.length-1]]]:null;
+}
 function num(v,S){
   if(v===null||v===undefined) return '-';
   if(S.dp===0) return Math.round(v).toLocaleString('en-GB');
@@ -87,18 +107,22 @@ function show(k){
   var c=DATA[k];
   if(!c){ d3.select('#hm-readout').html('<div style="font-size:0.75rem;opacity:0.5;">No data</div>'); return; }
   function row(S,strong){
-    var v=val(k,S.k,year), L=(v===null)?latest(k,S.k):[year,v];
+    var L=latest(k,S.k);
+    if(!S.latest){
+      var v=val(k,S.k,year);
+      if(v!==null) L=[year,v];
+    }
     return '<div style="display:flex;justify-content:space-between;gap:10px;'+
       (strong?'font-weight:600;':'opacity:0.72;')+'"><span>'+S.l+'</span>'+
       '<span style="font-variant-numeric:tabular-nums;">'+
-      (L?num(L[1],S)+(L[0]!==year?' <span style="opacity:0.5;font-weight:400;">'+L[0]+'</span>':''):'-')+
+      (L?num(L[1],S)+((S.latest||L[0]!==year)?' <span style="opacity:0.5;font-weight:400;">'+L[0]+'</span>':''):'-')+
       '</span></div>';
   }
-  var r0=val(k,'rate',YEARS[0]), r1=val(k,'rate',year), trend='';
+  var r0=val(k,'rate',YRS[0]), r1=val(k,'rate',year), trend='';
   if(r0!==null&&r1!==null&&r0>0){
     var pc=(r1-r0)/r0*100;
     trend='<div style="margin-top:0.45rem;padding-top:0.4rem;border-top:1px solid rgba(128,128,128,0.2);opacity:0.62;">'+
-      (pc<0?'Down ':'Up ')+Math.abs(pc).toFixed(0)+'% since '+YEARS[0]+'</div>';
+      (pc<0?'Down ':'Up ')+Math.abs(pc).toFixed(0)+'% since '+YRS[0]+'</div>';
   }
   d3.select('#hm-readout').html(
     '<div style="font-size:0.85rem;font-weight:600;margin-bottom:0.5rem;">'+c.n+'</div>'+
@@ -119,21 +143,24 @@ function cards(){
      '<div style="font-size:0.68rem;opacity:0.55;margin-top:0.3rem;">'+sub+'</div></div>';
   }
   d3.select('#hm-cards').html(
-    card('Year',year,'reporting year')+
+    card(S.latest?'Reading':'Year',S.latest?'Latest':year,S.latest?'most recent available':'reporting year')+
     card('Highest',num(top[1],S),top[0])+
     card('Lowest',num(bot[1],S),bot[0])+
-    card('Average',num(n?sum/n:0,S),'across '+n+' countries'));
+    card('Reporting',n,'countries'));
 }
 
 function render(){
   var S=M[mi];
-  d3.select('#hm-legend-title').html('<strong style="font-weight:600;opacity:1">'+S.l+', '+year+
-    '</strong><br>Measured '+S.u+'.');
+  var tabs=d3.select('#hm-tabs');
+  tabs.style('display',S.latest?'none':'flex');
+  d3.select('#hm-legend-title').html('<strong style="font-weight:600;opacity:1">'+S.l+
+    (S.latest?', most recent reading':', '+year)+'</strong><br>Measured '+S.u+'.');
   d3.select('#hm-legend').html(S.b.map(function(b,j){
     return '<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;font-size:0.72rem;opacity:0.75;">'+
       '<span style="width:16px;height:11px;border-radius:2px;background:'+S.c[j]+';flex-shrink:0;border:1px solid rgba(128,128,128,0.2);"></span>'+b[1]+'</div>';
   }).join('')+'<div style="display:flex;align-items:center;gap:8px;margin-top:8px;font-size:0.72rem;opacity:0.5;">'+
-    '<span style="width:16px;height:11px;border-radius:2px;background:'+noData+';flex-shrink:0;"></span>No data</div>');
+    '<span style="width:16px;height:11px;border-radius:2px;background:'+noData+';flex-shrink:0;"></span>'+
+    (S.latest?'Not reported':'No data')+'</div>');
   d3.selectAll('#hm-metric button')
     .style('background',function(d,j){return j===mi?'rgba(138,31,16,0.16)':'transparent';})
     .style('border-color',function(d,j){return j===mi?'rgba(138,31,16,0.55)':'rgba(128,128,128,0.3)';})
@@ -156,7 +183,7 @@ d3.select('#hm-metric').selectAll('button').data(M).join('button')
   .text(function(d){return d.l;})
   .on('click',function(e,d){ mi=M.indexOf(d); render(); });
 
-d3.select('#hm-tabs').selectAll('button').data(YEARS).join('button')
+d3.select('#hm-tabs').selectAll('button').data(YRS).join('button')
   .attr('type','button')
   .style('font-size','0.75rem').style('padding','6px 9px').style('cursor','pointer')
   .style('border','1px solid rgba(128,128,128,0.3)').style('border-radius','6px')
