@@ -1,0 +1,210 @@
+{{- $d := site.Data.rents -}}
+{{- with $d -}}
+<script type="application/json" id="rt-data">{{ .countries | jsonify }}</script>
+<script type="application/json" id="rt-years">{{ .years | jsonify }}</script>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:1.5rem;width:70vw;max-width:1100px;position:relative;left:50%;transform:translateX(-50%);" id="rt-cards"></div>
+
+<div id="rt-metric" style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:0.7rem;align-items:center;width:70vw;max-width:1100px;position:relative;left:50%;transform:translateX(-50%);z-index:6;"></div>
+<div id="rt-tabs" style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:1.25rem;align-items:center;width:70vw;max-width:1100px;position:relative;left:50%;transform:translateX(-50%);z-index:6;"></div>
+
+<div style="display:grid;grid-template-columns:1fr 190px;gap:24px;align-items:start;width:70vw;max-width:1100px;position:relative;left:50%;transform:translateX(-50%);" id="rt-wrap">
+  <div id="rt-map" style="width:100%;margin-top:-3.5rem;"></div>
+  <div>
+    <div id="rt-legend-title" style="font-size:0.78rem;opacity:0.75;margin-bottom:0.7rem;line-height:1.45;"></div>
+    <div id="rt-legend"></div>
+    <div id="rt-readout" style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid rgba(128,128,128,0.2);min-height:84px;">
+      <div style="font-size:0.75rem;opacity:0.5;">Hover a country</div>
+    </div>
+  </div>
+</div>
+
+<p style="font-size:0.72rem;opacity:0.55;margin-top:1.25rem;line-height:1.6;">
+  Source: {{ .source }}. A resource rent is the difference between what a commodity sells for
+  and what it costs to extract — the surplus available to whoever controls the resource. Expressed
+  as a share of GDP, it measures how much of an economy consists of drawing down natural capital
+  rather than producing goods and services. The five components sum to the total. Figures track
+  commodity prices as much as extraction volumes, so a country's rents can halve in a year
+  without a single well closing. The series ends in 2021.
+</p>
+
+<style>@media(max-width:760px){#rt-wrap{grid-template-columns:1fr!important}}</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+<script>
+(function(){
+var DATA=JSON.parse(document.getElementById('rt-data').textContent);
+if(typeof DATA==='string'){ DATA=JSON.parse(DATA); }
+var YEARS=JSON.parse(document.getElementById('rt-years').textContent);
+if(typeof YEARS==='string'){ YEARS=JSON.parse(YEARS); }
+var dark=matchMedia('(prefers-color-scheme: dark)').matches;
+var globe=window.innerWidth<820;
+var noData=dark?'#2c2c2a':'#eceae4';
+var B=[[25,'over 25%'],[10,'10 - 25%'],[3,'3 - 10%'],[0.5,'0.5 - 3%'],[0,'under 0.5%']];
+var M=[
+ {k:'total',l:'All resources',u:'% of GDP',b:B,
+  c:['#5c1a10','#a83b1c','#d9803c','#d9c896','#eae7dc']},
+ {k:'oil',l:'Oil',u:'% of GDP',b:B,
+  c:['#1a1a1f','#3d3528','#7a6a45','#c2b088','#e8e2d2']},
+ {k:'gas',l:'Natural gas',u:'% of GDP',b:B,
+  c:['#123f63','#2a7fa8','#6fb3c9','#b4d3e0','#e2eef4']},
+ {k:'coal',l:'Coal',u:'% of GDP',b:B,
+  c:['#231a12','#4d3520','#8a5c33','#c29257','#e8d3b6']},
+ {k:'min',l:'Minerals',u:'% of GDP',b:B,
+  c:['#2d2a4e','#4a4079','#7a6ba8','#b0a8cd','#e0dcec']},
+ {k:'forest',l:'Forest',u:'% of GDP',b:B,
+  c:['#0d5c46','#1d7a5f','#5dab8a','#a8cfbc','#dfeee7']}
+];
+var mi=0, year=YEARS[YEARS.length-1], paths=null;
+
+function colorFor(v){
+  var S=M[mi];
+  if(v===null||v===undefined) return noData;
+  for(var j=0;j<S.b.length;j++){ if(v>=S.b[j][0]) return S.c[j]; }
+  return S.c[S.c.length-1];
+}
+function key(f){ return ('00'+String(f.id)).slice(-3); }
+function val(k,m,y){ var c=DATA[k]; if(!c) return null; var g=c.d[m]; if(!g) return null;
+  var v=g[y]; return (v===undefined)?null:v; }
+
+var W=globe?420:960, H=globe?420:440;
+var svg=d3.select('#rt-map').append('svg')
+  .attr('viewBox','0 0 '+W+' '+H).attr('width','100%')
+  .style('min-height',globe?'0':'700px').style('display','block')
+  .style('touch-action',globe?'none':'auto')
+  .attr('role','img').attr('aria-label','World map of natural resource rents');
+var proj=globe
+  ? d3.geoOrthographic().scale(165).translate([210,210]).rotate([-10,-18,0]).clipAngle(90)
+  : d3.geoNaturalEarth1().scale(200).translate([460,205]);
+var path=d3.geoPath(proj);
+
+function show(k){
+  var c=DATA[k];
+  if(!c){ d3.select('#rt-readout').html('<div style="font-size:0.75rem;opacity:0.5;">No data</div>'); return; }
+  var tot=val(k,'total',year);
+  function row(S,strong){
+    var v=val(k,S.k,year);
+    if(S.k!=='total'&&(v===null||v<0.05)) return '';
+    return '<div style="display:flex;justify-content:space-between;gap:10px;'+
+      (strong?'font-weight:600;':'opacity:0.72;')+'"><span>'+S.l+'</span>'+
+      '<span style="font-variant-numeric:tabular-nums;">'+(v===null?'-':v.toFixed(2)+'%')+'</span></div>';
+  }
+  var t0=val(k,'total',YEARS[0]), trend='';
+  if(t0!==null&&tot!==null){
+    var d0=tot-t0;
+    trend='<div style="margin-top:0.45rem;padding-top:0.4rem;border-top:1px solid rgba(128,128,128,0.2);opacity:0.62;">'+
+      (d0>0?'+':'')+d0.toFixed(1)+' points since '+YEARS[0]+'</div>';
+  }
+  var rows=M.map(function(S){ return row(S,S.k===M[mi].k); }).filter(Boolean).join('');
+  if(tot!==null&&tot<0.05)
+    rows='<div style="opacity:0.6;">Negligible resource rents</div>';
+  d3.select('#rt-readout').html(
+    '<div style="font-size:0.85rem;font-weight:600;margin-bottom:0.5rem;">'+c.n+'</div>'+
+    '<div style="font-size:0.73rem;line-height:1.8;">'+rows+trend+'</div>');
+}
+
+function cards(){
+  var S=M[mi], vals=[], n=0, sum=0;
+  for(var k in DATA){ var v=val(k,S.k,year); if(v!==null){ vals.push([DATA[k].n,v]); n++; sum+=v; } }
+  vals.sort(function(a,b){ return b[1]-a[1]; });
+  var top=vals[0]||['-',0];
+  var over10=vals.filter(function(x){return x[1]>=10;}).length;
+  function card(l,big,sub){
+    return '<div style="background:rgba(128,128,128,0.06);border-radius:8px;padding:1rem;">'+
+     '<div style="font-size:0.75rem;opacity:0.7;margin-bottom:0.4rem;">'+l+'</div>'+
+     '<div style="font-size:1.55rem;line-height:1.1;font-weight:600;font-variant-numeric:tabular-nums;">'+big+'</div>'+
+     '<div style="font-size:0.68rem;opacity:0.55;margin-top:0.3rem;">'+sub+'</div></div>';
+  }
+  d3.select('#rt-cards').html(
+    card('Year',year,'reporting year')+
+    card('Highest',top[1].toFixed(1)+'%',top[0])+
+    card('Above 10%',over10,'of '+n+' countries')+
+    card('Average',(n?sum/n:0).toFixed(2)+'%','across '+n+' countries'));
+}
+
+function render(){
+  var S=M[mi];
+  d3.select('#rt-legend-title').html('<strong style="font-weight:600;opacity:1">'+S.l+' rents, '+year+
+    '</strong><br>Measured as '+S.u+'.');
+  d3.select('#rt-legend').html(S.b.map(function(b,j){
+    return '<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;font-size:0.72rem;opacity:0.75;">'+
+      '<span style="width:16px;height:11px;border-radius:2px;background:'+S.c[j]+';flex-shrink:0;border:1px solid rgba(128,128,128,0.2);"></span>'+b[1]+'</div>';
+  }).join('')+'<div style="display:flex;align-items:center;gap:8px;margin-top:8px;font-size:0.72rem;opacity:0.5;">'+
+    '<span style="width:16px;height:11px;border-radius:2px;background:'+noData+';flex-shrink:0;"></span>No data</div>');
+  d3.selectAll('#rt-metric button')
+    .style('background',function(d,j){return j===mi?'rgba(168,59,28,0.16)':'transparent';})
+    .style('border-color',function(d,j){return j===mi?'rgba(168,59,28,0.55)':'rgba(128,128,128,0.3)';})
+    .style('font-weight',function(d,j){return j===mi?'600':'400';})
+    .style('opacity',function(d,j){return j===mi?1:0.65;});
+  d3.selectAll('#rt-tabs button')
+    .style('background',function(d){return d===year?'rgba(168,59,28,0.16)':'transparent';})
+    .style('border-color',function(d){return d===year?'rgba(168,59,28,0.55)':'rgba(128,128,128,0.3)';})
+    .style('font-weight',function(d){return d===year?'600':'400';})
+    .style('opacity',function(d){return d===year?1:0.65;});
+  if(paths) paths.attr('fill',function(f){ return colorFor(val(key(f),M[mi].k,year)); });
+  cards();
+}
+
+d3.select('#rt-metric').selectAll('button').data(M).join('button')
+  .attr('type','button')
+  .style('font-size','0.75rem').style('padding','6px 11px').style('cursor','pointer')
+  .style('border','1px solid rgba(128,128,128,0.3)').style('border-radius','6px')
+  .style('color','inherit')
+  .text(function(d){return d.l;})
+  .on('click',function(e,d){ mi=M.indexOf(d); render(); });
+
+d3.select('#rt-tabs').selectAll('button').data(YEARS).join('button')
+  .attr('type','button')
+  .style('font-size','0.75rem').style('padding','6px 10px').style('cursor','pointer')
+  .style('border','1px solid rgba(128,128,128,0.3)').style('border-radius','6px')
+  .style('color','inherit')
+  .text(function(d){return d;})
+  .on('click',function(e,d){ year=d; render(); });
+
+d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(function(w){
+  var mor=w.objects.countries.geometries.filter(function(g){
+    var id=String(+g.id); return id==='504'||id==='732'; });
+  var feats=topojson.feature(w,w.objects.countries).features
+    .filter(function(f){var id=String(+f.id); return id!=='504'&&id!=='732'&&id!=='010';});
+  if(mor.length) feats.push({type:'Feature',id:504,geometry:topojson.merge(w,mor)});
+
+  if(globe){
+    svg.append('circle').attr('cx',210).attr('cy',210).attr('r',165)
+      .attr('fill',dark?'#101a20':'#dbe8ef');
+    svg.append('path').datum(d3.geoGraticule10())
+      .attr('class','rt-grat').attr('d',path).attr('fill','none')
+      .attr('stroke',dark?'rgba(255,255,255,.10)':'rgba(0,0,0,.09)').attr('stroke-width',0.5);
+  }
+
+  paths=svg.selectAll('path.rt-c').data(feats).join('path')
+    .attr('class','rt-c')
+    .attr('d',path)
+    .attr('fill',function(f){ return colorFor(val(key(f),M[mi].k,year)); })
+    .attr('stroke',dark?'rgba(255,255,255,.14)':'#fff').attr('stroke-width',0.4)
+    .style('cursor','pointer')
+    .on('mouseenter',function(e,f){ if(!globe) show(key(f)); })
+    .on('click',function(e,f){ show(key(f)); });
+
+  if(globe){
+    svg.append('circle').attr('cx',210).attr('cy',210).attr('r',165)
+      .attr('fill','none').attr('stroke',dark?'rgba(255,255,255,.22)':'rgba(0,0,0,.18)')
+      .attr('stroke-width',1).style('pointer-events','none');
+    var x0,y0,r0;
+    svg.call(d3.drag()
+      .on('start',function(e){ x0=e.x; y0=e.y; r0=proj.rotate(); })
+      .on('drag',function(e){
+        var kk=0.32;
+        proj.rotate([r0[0]+(e.x-x0)*kk, Math.max(-88,Math.min(88,r0[1]-(e.y-y0)*kk)), 0]);
+        paths.attr('d',path); svg.select('.rt-grat').attr('d',path);
+      }));
+    d3.select('#rt-map').append('div')
+      .style('font-size','0.7rem').style('opacity','0.5')
+      .style('text-align','center').style('margin-top','0.4rem')
+      .text('Drag to rotate · tap a country for detail');
+  }
+  render();
+});
+})();
+</script>
+{{- end -}}
