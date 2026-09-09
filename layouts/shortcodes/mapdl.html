@@ -1,0 +1,215 @@
+{{- $id := .Get "id" -}}
+{{- $name := .Get "name" -}}
+{{- $src := .Get "source" -}}
+{{- $file := .Get "file" | default $id -}}
+<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:1.3rem;padding:1rem 1.2rem;border:1px solid rgba(128,128,128,0.2);border-radius:11px;width:70vw;max-width:1100px;position:relative;left:50%;transform:translateX(-50%);">
+  <button type="button" class="mdl-b" data-a="png" data-id="{{ $id }}" data-file="{{ $file }}" data-name="{{ $name }}" data-src="{{ $src }}">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+    Download image
+  </button>
+  <button type="button" class="mdl-b" data-a="csv" data-id="{{ $id }}" data-file="{{ $file }}" data-name="{{ $name }}" data-src="{{ $src }}">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+    Download data
+  </button>
+  <div style="font-size:0.71rem;opacity:0.58;line-height:1.55;flex:1;min-width:230px;">
+    Free to use. Please cite <strong>{{ $src }}</strong> as the original source and
+    <em>M. Ikram, drmuhammadikram.com</em> for the compilation.
+  </div>
+</div>
+
+<style>
+.mdl-b{display:inline-flex;align-items:center;gap:7px;font-size:0.78rem;font-weight:500;
+padding:7px 14px;cursor:pointer;border:1px solid rgba(29,122,95,0.4);border-radius:7px;
+background:rgba(29,122,95,0.09);color:inherit;flex-shrink:0;}
+.mdl-b:hover{background:rgba(29,122,95,0.16);}
+.mdl-b:disabled{opacity:0.5;cursor:wait;}
+</style>
+
+<script>
+(function(){
+if(window.__mdlInit) return; window.__mdlInit=true;
+
+function dataEl(id){ return document.getElementById(id+'-data'); }
+function yearsEl(id){ return document.getElementById(id+'-years'); }
+function parse(el){
+  if(!el) return null;
+  var v=JSON.parse(el.textContent);
+  return (typeof v==='string')?JSON.parse(v):v;
+}
+
+function csv(btn){
+  var id=btn.dataset.id;
+  var D=parse(dataEl(id));
+  if(!D){ alert('Data not found on this page.'); return; }
+  var metrics={}, years={};
+  for(var iso in D){
+    var c=D[iso], g=c.d||c;
+    for(var m in g){
+      if(m==='n') continue;
+      if(typeof g[m]!=='object') continue;
+      metrics[m]=1;
+      for(var y in g[m]) years[y]=1;
+    }
+  }
+  var MS=Object.keys(metrics).sort();
+  var YS=Object.keys(years).filter(function(y){return /^\d{4}$/.test(y);}).sort();
+  var hasLatest=Object.keys(years).indexOf('LATEST')>=0;
+
+  var head='# '+btn.dataset.name+'\n'+
+    '# Original source: '+btn.dataset.src+'\n'+
+    '# Compiled by Muhammad Ikram, https://drmuhammadikram.com/data/\n'+
+    '# Free to use. Please cite the original source and this compilation.\n'+
+    '# Downloaded '+new Date().toISOString().slice(0,10)+'\n';
+  if(hasLatest) head+='# Some measures are published at intervals; those rows use the year given in the year column.\n';
+
+  var rows=['iso_numeric,country,year,'+MS.join(',')];
+  for(var iso2 in D){
+    var cc=D[iso2], gg=cc.d||cc;
+    var nm=(cc.n||'').replace(/"/g,'""');
+    var seen={};
+    YS.forEach(function(y){
+      var vals=[],any=false;
+      MS.forEach(function(m){
+        var v=null;
+        if(gg[m]){
+          if(gg[m][y]!==undefined) v=gg[m][y];
+          else if(gg[m]['LATEST']!==undefined&&String(Math.round(gg[m]['YR']||0))===y) v=gg[m]['LATEST'];
+        }
+        if(v!==null&&v!==undefined) any=true; else v='';
+        vals.push(v);
+      });
+      if(any){ rows.push(iso2+',"'+nm+'",'+y+','+vals.join(',')); seen[y]=1; }
+    });
+    if(hasLatest){
+      MS.forEach(function(m){
+        if(!gg[m]||gg[m]['LATEST']===undefined) return;
+        var y=String(Math.round(gg[m]['YR']||0));
+        if(seen[y]) return;
+        var vals=MS.map(function(mm){
+          if(mm!==m) return '';
+          return gg[mm]['LATEST'];
+        });
+        rows.push(iso2+',"'+nm+'",'+y+','+vals.join(','));
+        seen[y]=1;
+      });
+    }
+  }
+  save(new Blob([head+rows.join('\n')+'\n'],{type:'text/csv;charset=utf-8;'}),
+       btn.dataset.file+'.csv');
+}
+
+function png(btn){
+  var id=btn.dataset.id;
+  var host=document.getElementById(id+'-map');
+  var svg=host?host.querySelector('svg'):null;
+  if(!svg){ alert('Map not found on this page.'); return; }
+  btn.disabled=true;
+
+  var clone=svg.cloneNode(true);
+  var vb=(svg.getAttribute('viewBox')||'0 0 960 440').split(/\s+/).map(Number);
+  var W=vb[2], H=vb[3];
+  var pad=26, capH=118;
+  var dark=matchMedia('(prefers-color-scheme: dark)').matches;
+  var bg=dark?'#14181a':'#ffffff';
+  var ink=dark?'#e8e6e0':'#16211d';
+
+  var wrap=document.createElementNS('http://www.w3.org/2000/svg','svg');
+  wrap.setAttribute('xmlns','http://www.w3.org/2000/svg');
+  wrap.setAttribute('width',W+pad*2);
+  wrap.setAttribute('height',H+pad*2+capH);
+  wrap.setAttribute('viewBox','0 0 '+(W+pad*2)+' '+(H+pad*2+capH));
+
+  var r=document.createElementNS('http://www.w3.org/2000/svg','rect');
+  r.setAttribute('width','100%'); r.setAttribute('height','100%'); r.setAttribute('fill',bg);
+  wrap.appendChild(r);
+
+  var t=document.createElementNS('http://www.w3.org/2000/svg','text');
+  t.setAttribute('x',pad); t.setAttribute('y',pad+16);
+  t.setAttribute('font-family','system-ui,-apple-system,Segoe UI,sans-serif');
+  t.setAttribute('font-size','19'); t.setAttribute('font-weight','600');
+  t.setAttribute('fill',ink);
+  t.textContent=btn.dataset.name;
+  wrap.appendChild(t);
+
+  var sub=document.createElementNS('http://www.w3.org/2000/svg','text');
+  sub.setAttribute('x',pad); sub.setAttribute('y',pad+36);
+  sub.setAttribute('font-family','system-ui,-apple-system,Segoe UI,sans-serif');
+  sub.setAttribute('font-size','12.5'); sub.setAttribute('fill',ink);
+  sub.setAttribute('opacity','0.6');
+  var lt=document.querySelector('#'+id+'-legend-title');
+  sub.textContent=lt?lt.textContent.replace(/\s+/g,' ').trim().slice(0,110):'';
+  wrap.appendChild(sub);
+
+  var g=document.createElementNS('http://www.w3.org/2000/svg','g');
+  g.setAttribute('transform','translate('+pad+','+(pad+50)+')');
+  clone.removeAttribute('style');
+  clone.setAttribute('width',W); clone.setAttribute('height',H);
+  g.appendChild(clone);
+  wrap.appendChild(g);
+
+  var lg=document.getElementById(id+'-legend');
+  if(lg){
+    var items=lg.querySelectorAll('div');
+    var lx=pad, ly=pad+50+H+22, cx=lx;
+    items.forEach(function(it){
+      var sw=it.querySelector('span');
+      if(!sw) return;
+      var col=getComputedStyle(sw).backgroundColor;
+      var lab=it.textContent.replace(/\s+/g,' ').trim();
+      if(!lab) return;
+      var sq=document.createElementNS('http://www.w3.org/2000/svg','rect');
+      sq.setAttribute('x',cx); sq.setAttribute('y',ly-9);
+      sq.setAttribute('width',15); sq.setAttribute('height',11);
+      sq.setAttribute('rx','2'); sq.setAttribute('fill',col);
+      wrap.appendChild(sq);
+      var tx=document.createElementNS('http://www.w3.org/2000/svg','text');
+      tx.setAttribute('x',cx+21); tx.setAttribute('y',ly);
+      tx.setAttribute('font-family','system-ui,-apple-system,Segoe UI,sans-serif');
+      tx.setAttribute('font-size','12'); tx.setAttribute('fill',ink);
+      tx.setAttribute('opacity','0.82');
+      tx.textContent=lab;
+      wrap.appendChild(tx);
+      cx+=21+lab.length*6.6+22;
+      if(cx>W-140){ cx=lx; ly+=21; }
+    });
+  }
+
+  var cred=document.createElementNS('http://www.w3.org/2000/svg','text');
+  cred.setAttribute('x',pad); cred.setAttribute('y',H+pad*2+capH-14);
+  cred.setAttribute('font-family','system-ui,-apple-system,Segoe UI,sans-serif');
+  cred.setAttribute('font-size','11.5'); cred.setAttribute('fill',ink);
+  cred.setAttribute('opacity','0.55');
+  cred.textContent='Source: '+btn.dataset.src+'.  Compiled by M. Ikram, drmuhammadikram.com';
+  wrap.appendChild(cred);
+
+  var xml=new XMLSerializer().serializeToString(wrap);
+  var img=new Image();
+  var scale=2;
+  img.onload=function(){
+    var cv=document.createElement('canvas');
+    cv.width=(W+pad*2)*scale; cv.height=(H+pad*2+capH)*scale;
+    var ctx=cv.getContext('2d');
+    ctx.fillStyle=bg; ctx.fillRect(0,0,cv.width,cv.height);
+    ctx.drawImage(img,0,0,cv.width,cv.height);
+    cv.toBlob(function(b){ save(b,btn.dataset.file+'.png'); btn.disabled=false; });
+  };
+  img.onerror=function(){ alert('Could not render the image.'); btn.disabled=false; };
+  img.src='data:image/svg+xml;base64,'+btoa(unescape(encodeURIComponent(xml)));
+}
+
+function save(blob,fn){
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=fn;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(function(){ URL.revokeObjectURL(a.href); },1000);
+}
+
+document.addEventListener('click',function(e){
+  var b=e.target.closest('.mdl-b');
+  if(!b) return;
+  e.preventDefault();
+  if(b.dataset.a==='png') png(b); else csv(b);
+});
+})();
+</script>
