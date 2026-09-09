@@ -189,6 +189,16 @@ jobs:
             "UNODC and the World Prison Brief, via Our World in Data",
             Y5(1990,2024)|YR(2019,2024)|{"LATEST","YR"},derive=hmlatest,dp=2)
 
+          def hlatest(M):
+              for k in ["diab","sugar"]:
+                  src=M.get(k,{}); out={}
+                  for iso,ys in src.items():
+                      if not ys: continue
+                      y=max(ys)
+                      out[iso]={"LATEST":ys[y],"YR":float(y)}
+                  M[k]=out
+                  print("   %-6s latest reading for %d countries"%(k,len(out)))
+
           build("metabolic health","data/health.json",
             [("diab","diabetes-prevalence",
               "Diabetes prevalence (% of population ages 20 to 79)"),
@@ -196,7 +206,7 @@ jobs:
               "Obesity among adults, BMI >= 30 kg/m2 (crude estimate) (%) - Sex: both sexes - Age group: 18+  years of age"),
              ("sugar","dietary-composition-by-country","Sugar and sweeteners")],
             "IDF Diabetes Atlas, WHO Global Health Observatory and FAO food balance sheets, via Our World in Data",
-            Y5(1980,2025)|YR(2019,2025),dp=2)
+            Y5(1980,2025)|YR(2019,2025)|{"LATEST","YR"},derive=hlatest,dp=2)
 
           if FAILED:
               print()
