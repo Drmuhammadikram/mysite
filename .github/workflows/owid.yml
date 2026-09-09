@@ -189,6 +189,15 @@ jobs:
             "UNODC and the World Prison Brief, via Our World in Data",
             Y5(1990,2024)|YR(2019,2024)|{"LATEST","YR"},derive=hmlatest,dp=2)
 
+          build("metabolic health","data/health.json",
+            [("diab","diabetes-prevalence",
+              "Diabetes prevalence (% of population ages 20 to 79)"),
+             ("obes","share-of-adults-defined-as-obese",
+              "Obesity among adults, BMI >= 30 kg/m2 (crude estimate) (%) - Sex: both sexes - Age group: 18+  years of age"),
+             ("sugar","dietary-composition-by-country","Sugar and sweeteners")],
+            "IDF Diabetes Atlas, WHO Global Health Observatory and FAO food balance sheets, via Our World in Data",
+            Y5(1980,2025)|YR(2019,2025),dp=2)
+
           if FAILED:
               print()
               print("Refused to overwrite: "+", ".join(FAILED))
@@ -199,7 +208,7 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/coal.json data/population.json data/energy.json data/ev.json data/aipub.json data/conflict.json data/foodsec.json data/homicide.json
+          git add data/coal.json data/population.json data/energy.json data/ev.json data/aipub.json data/conflict.json data/foodsec.json data/homicide.json data/health.json
           if git diff --cached --quiet; then
             echo "No change"
           else
