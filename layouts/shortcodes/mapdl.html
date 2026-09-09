@@ -31,8 +31,35 @@ if(window.__mdlInit) return; window.__mdlInit=true;
 
 function parse(el){
   if(!el) return null;
-  var v=JSON.parse(el.textContent);
-  return (typeof v==='string')?JSON.parse(v):v;
+  try{
+    var v=JSON.parse(el.textContent);
+    return (typeof v==='string')?JSON.parse(v):v;
+  }catch(e){ return null; }
+}
+
+function findData(id){
+  var el=document.getElementById(id+'-data');
+  var D=parse(el);
+  if(D) return D;
+  var alt=['data','json','countries','src'];
+  for(var i=0;i<alt.length;i++){
+    D=parse(document.getElementById(id+'-'+alt[i]));
+    if(D) return D;
+  }
+  var host=document.getElementById(id+'-map');
+  var sec=host?host.closest('section'):null;
+  if(sec){
+    var s=sec.querySelectorAll('script[type="application/json"]');
+    for(var j=0;j<s.length;j++){
+      D=parse(s[j]);
+      if(D&&typeof D==='object'){
+        if(D.countries) return D.countries;
+        var k=Object.keys(D)[0];
+        if(k&&D[k]&&(D[k].n||D[k].d)) return D;
+      }
+    }
+  }
+  return null;
 }
 
 function save(blob,fn){
@@ -45,18 +72,26 @@ function save(blob,fn){
 
 function csv(btn){
   var id=btn.dataset.id;
-  var D=parse(document.getElementById(id+'-data'));
-  if(!D){ alert('Data not found on this page.'); return; }
-  var metrics={}, years={};
+  var D=findData(id);
+  if(!D){ alert('The data for this map could not be read. Please report this.'); return; }
+  var metrics={}, years={}, flat=false;
   for(var iso in D){
     var c=D[iso], g=c.d||c;
     for(var m in g){
-      if(m==='n'||typeof g[m]!=='object') continue;
+      if(m==='n'||g[m]===null||typeof g[m]!=='object') continue;
       metrics[m]=1;
       for(var y in g[m]) years[y]=1;
     }
+    if(!c.d) flat=true;
+  }
+  if(!Object.keys(metrics).length){
+    for(var iso3 in D){
+      var cy=D[iso3].y||D[iso3].values;
+      if(cy&&typeof cy==='object'){ metrics['value']=1; for(var yy in cy) years[yy]=1; }
+    }
   }
   var MS=Object.keys(metrics).sort();
+  if(!MS.length){ alert('No values found for this map.'); return; }
   var YS=Object.keys(years).filter(function(y){return /^\d{4}$/.test(y);}).sort();
   var hasLatest=Object.keys(years).indexOf('LATEST')>=0;
 
@@ -67,16 +102,23 @@ function csv(btn){
     '# Downloaded '+new Date().toISOString().slice(0,10)+'\n';
   if(hasLatest) head+='# Some measures are published at intervals; those rows carry the year of the reading.\n';
 
+  function group(c){
+    if(c.d) return c.d;
+    if(c.y) return {value:c.y};
+    if(c.values) return {value:c.values};
+    return c;
+  }
+
   var rows=['iso_numeric,country,year,'+MS.join(',')];
   for(var iso2 in D){
-    var cc=D[iso2], gg=cc.d||cc;
+    var cc=D[iso2], gg=group(cc);
     var nm=(cc.n||'').replace(/"/g,'""');
     var seen={};
     YS.forEach(function(y){
       var vals=[],any=false;
       MS.forEach(function(m){
         var v=null;
-        if(gg[m]){
+        if(gg[m]&&typeof gg[m]==='object'){
           if(gg[m][y]!==undefined) v=gg[m][y];
           else if(gg[m]['LATEST']!==undefined&&String(Math.round(gg[m]['YR']||0))===y) v=gg[m]['LATEST'];
         }
@@ -96,6 +138,7 @@ function csv(btn){
       });
     }
   }
+  if(rows.length<2){ alert('No rows to export for this map.'); return; }
   save(new Blob([head+rows.join('\n')+'\n'],{type:'text/csv;charset=utf-8;'}),
        btn.dataset.file+'.csv');
 }
@@ -109,57 +152,62 @@ function png(btn){
 
   var clone=svg.cloneNode(true);
   var vb=(svg.getAttribute('viewBox')||'0 0 960 440').split(/\s+/).map(Number);
-  var W=vb[2], H=vb[3];
-  var pad=26, capH=118;
+  var VX=vb[0]||0, VY=vb[1]||0, W=vb[2], H=vb[3];
+  var pad=26, capH=118, topGap=62;
   var dark=matchMedia('(prefers-color-scheme: dark)').matches;
   var bg=dark?'#14181a':'#ffffff';
   var ink=dark?'#e8e6e0':'#16211d';
   var NS='http://www.w3.org/2000/svg';
+  var totH=H+pad*2+capH+topGap;
 
   var wrap=document.createElementNS(NS,'svg');
   wrap.setAttribute('xmlns',NS);
   wrap.setAttribute('width',W+pad*2);
-  wrap.setAttribute('height',H+pad*2+capH);
-  wrap.setAttribute('viewBox','0 0 '+(W+pad*2)+' '+(H+pad*2+capH));
+  wrap.setAttribute('height',totH);
+  wrap.setAttribute('viewBox','0 0 '+(W+pad*2)+' '+totH);
 
   var r=document.createElementNS(NS,'rect');
   r.setAttribute('width','100%'); r.setAttribute('height','100%'); r.setAttribute('fill',bg);
   wrap.appendChild(r);
 
   var t=document.createElementNS(NS,'text');
-  t.setAttribute('x',pad); t.setAttribute('y',pad+16);
+  t.setAttribute('x',pad); t.setAttribute('y',pad+18);
   t.setAttribute('font-family','system-ui,-apple-system,Segoe UI,sans-serif');
-  t.setAttribute('font-size','19'); t.setAttribute('font-weight','600');
+  t.setAttribute('font-size','20'); t.setAttribute('font-weight','600');
   t.setAttribute('fill',ink);
   t.textContent=btn.dataset.name;
   wrap.appendChild(t);
 
   var sub=document.createElementNS(NS,'text');
-  sub.setAttribute('x',pad); sub.setAttribute('y',pad+36);
+  sub.setAttribute('x',pad); sub.setAttribute('y',pad+40);
   sub.setAttribute('font-family','system-ui,-apple-system,Segoe UI,sans-serif');
-  sub.setAttribute('font-size','12.5'); sub.setAttribute('fill',ink);
-  sub.setAttribute('opacity','0.6');
+  sub.setAttribute('font-size','13'); sub.setAttribute('fill',ink);
+  sub.setAttribute('opacity','0.62');
   var lt=document.getElementById(id+'-legend-title');
-  sub.textContent=lt?lt.textContent.replace(/\s+/g,' ').trim().slice(0,110):'';
+  sub.textContent=lt?lt.textContent.replace(/\s+/g,' ').trim().slice(0,120):'';
   wrap.appendChild(sub);
 
-  var g=document.createElementNS(NS,'g');
-  g.setAttribute('transform','translate('+pad+','+(pad+50)+')');
-  clone.removeAttribute('style');
-  clone.setAttribute('width',W); clone.setAttribute('height',H);
-  g.appendChild(clone);
-  wrap.appendChild(g);
+  var inner=document.createElementNS(NS,'svg');
+  inner.setAttribute('x',pad);
+  inner.setAttribute('y',pad+topGap);
+  inner.setAttribute('width',W);
+  inner.setAttribute('height',H);
+  inner.setAttribute('viewBox',VX+' '+VY+' '+W+' '+H);
+  while(clone.firstChild) inner.appendChild(clone.firstChild);
+  wrap.appendChild(inner);
 
   var lg=document.getElementById(id+'-legend');
+  var ly=pad+topGap+H+26;
   if(lg){
     var items=lg.querySelectorAll('div');
-    var lx=pad, ly=pad+50+H+22, cx=lx;
+    var lx=pad, cx=lx;
     items.forEach(function(it){
       var sw=it.querySelector('span');
       if(!sw) return;
       var col=getComputedStyle(sw).backgroundColor;
       var lab=it.textContent.replace(/\s+/g,' ').trim();
       if(!lab) return;
+      if(cx+21+lab.length*6.6+22>W+pad){ cx=lx; ly+=21; }
       var sq=document.createElementNS(NS,'rect');
       sq.setAttribute('x',cx); sq.setAttribute('y',ly-9);
       sq.setAttribute('width',15); sq.setAttribute('height',11);
@@ -168,17 +216,16 @@ function png(btn){
       var tx=document.createElementNS(NS,'text');
       tx.setAttribute('x',cx+21); tx.setAttribute('y',ly);
       tx.setAttribute('font-family','system-ui,-apple-system,Segoe UI,sans-serif');
-      tx.setAttribute('font-size','12'); tx.setAttribute('fill',ink);
-      tx.setAttribute('opacity','0.82');
+      tx.setAttribute('font-size','12.5'); tx.setAttribute('fill',ink);
+      tx.setAttribute('opacity','0.84');
       tx.textContent=lab;
       wrap.appendChild(tx);
-      cx+=21+lab.length*6.6+22;
-      if(cx>W-140){ cx=lx; ly+=21; }
+      cx+=21+lab.length*6.6+24;
     });
   }
 
   var cred=document.createElementNS(NS,'text');
-  cred.setAttribute('x',pad); cred.setAttribute('y',H+pad*2+capH-14);
+  cred.setAttribute('x',pad); cred.setAttribute('y',totH-16);
   cred.setAttribute('font-family','system-ui,-apple-system,Segoe UI,sans-serif');
   cred.setAttribute('font-size','11.5'); cred.setAttribute('fill',ink);
   cred.setAttribute('opacity','0.55');
@@ -190,7 +237,7 @@ function png(btn){
   var scale=2;
   img.onload=function(){
     var cv=document.createElement('canvas');
-    cv.width=(W+pad*2)*scale; cv.height=(H+pad*2+capH)*scale;
+    cv.width=(W+pad*2)*scale; cv.height=totH*scale;
     var ctx=cv.getContext('2d');
     ctx.fillStyle=bg; ctx.fillRect(0,0,cv.width,cv.height);
     ctx.drawImage(img,0,0,cv.width,cv.height);
