@@ -26,8 +26,6 @@ sections:
 
         {{< footprint >}}
 
-        {{< mapdl id="fp" file="ecological-footprint" name="Ecological footprint and biocapacity" source="Global Footprint Network" >}}
-
         [Full page: methodology, how to read it, and related research →](/data/ecological-footprint/)
     design:
       columns: '1'
