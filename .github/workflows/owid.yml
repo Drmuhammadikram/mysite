@@ -208,6 +208,15 @@ jobs:
             "IDF Diabetes Atlas, WHO Global Health Observatory and FAO food balance sheets, via Our World in Data",
             Y5(1980,2025)|YR(2019,2025)|{"LATEST","YR"},derive=hlatest,dp=2)
 
+          build("emissions","data/emissions.json",
+            [("pc","co-emissions-per-capita","CO₂ emissions per capita"),
+             ("total","annual-co2-emissions-per-country","Annual CO₂ emissions"),
+             ("cons","consumption-co2-per-capita","Per capita consumption-based CO₂ emissions"),
+             ("ghg","total-ghg-emissions","Annual greenhouse gas emissions including land use"),
+             ("ghgpc","ghg-emissions-per-capita","Per capita greenhouse gas emissions including land use")],
+            "Global Carbon Budget and Climate Watch, via Our World in Data",
+            Y5(1950,2025)|YR(2019,2025),dp=3)
+
           if FAILED:
               print()
               print("Refused to overwrite: "+", ".join(FAILED))
@@ -218,7 +227,7 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/coal.json data/population.json data/energy.json data/ev.json data/aipub.json data/conflict.json data/foodsec.json data/homicide.json data/health.json
+          git add data/coal.json data/population.json data/energy.json data/ev.json data/aipub.json data/conflict.json data/foodsec.json data/homicide.json data/health.json data/emissions.json
           if git diff --cached --quiet; then
             echo "No change"
           else
