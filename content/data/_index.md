@@ -1,6 +1,6 @@
 ---
 title: Sustainability Data
-summary: Thirty-one interactive datasets on planetary boundaries, ecological footprint, biocapacity, human development, poverty, food security, metabolic health, economic indicators, macroeconomic outlook, natural resource rents, governance, internet access, population and demography, women's employment, literacy and education, ISO certifications, coal consumption, energy mix, oil refining, electric vehicles, water stress, water use, air quality, forests and deforestation, food waste, natural disasters, armed conflict, homicide, life satisfaction, research output, AI research, and progress toward the Sustainable Development Goals.
+summary: Thirty-two interactive datasets on planetary boundaries, ecological footprint, biocapacity, human development, poverty, food security, metabolic health, economic indicators, macroeconomic outlook, natural resource rents, governance, internet access, population and demography, women's employment, literacy and education, ISO certifications, coal consumption, carbon and greenhouse gas emissions, energy mix, oil refining, electric vehicles, water stress, water use, air quality, forests and deforestation, food waste, natural disasters, armed conflict, homicide, life satisfaction, research output, AI research, and progress toward the Sustainable Development Goals.
 type: landing
 sections:
   - block: markdown
@@ -271,7 +271,21 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '20 · Energy mix by source'
+      title: '20 · Carbon and greenhouse gas emissions'
+      subtitle: ''
+      text: |-
+        Production and consumption-based CO2, plus all greenhouse gases, across 187 countries from 1960. The consumption-based view is the one worth switching to: it reassigns the emissions of imported goods to the country that buys them, and several wealthy economies look considerably less improved once it does.
+
+        {{< emissions >}}
+
+        [Full page: where emissions happen, and who they are for →](/data/emissions/)
+    design:
+      columns: '1'
+      spacing:
+        padding: ['1rem', '0', '1rem', '0']
+  - block: markdown
+    content:
+      title: '21 · Energy mix by source'
       subtitle: ''
       text: |-
         Each source as a share of primary energy consumption — coal, oil, gas, nuclear, hydro, wind and solar — across 79 countries from 1990 to 2025. Primary energy covers transport and heating as well as electricity, which is why renewable shares look smaller here than in the headlines.
@@ -285,7 +299,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '21 · Oil refining'
+      title: '22 · Oil refining'
       subtitle: ''
       text: |-
         Refining capacity, throughput and utilisation across 74 countries from 1980. Crude oil is not a usable fuel — refining capacity determines whether a country can meet its own fuel demand or must import refined products. Morocco has reported none since its Mohammedia refinery closed in 2015.
@@ -299,7 +313,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '22 · Electric vehicle adoption'
+      title: '23 · Electric vehicle adoption'
       subtitle: ''
       text: |-
         Electric car sales and stock across 56 markets from 2010. Norway sells 97% electric but only 36% of its cars on the road are — the gap between those two figures is how long a vehicle fleet takes to turn over, and it is the number that matters for emissions.
@@ -313,7 +327,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '23 · Water stress worldwide'
+      title: '24 · Water stress worldwide'
       subtitle: ''
       text: |-
         Freshwater withdrawal as a share of available renewable resources, from 2000 to 2023. Values above 100% mean a country withdraws more than its renewable supply, drawing down aquifers or relying on desalination.
@@ -327,7 +341,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '24 · Water use and resources'
+      title: '25 · Water use and resources'
       subtitle: ''
       text: |-
         Withdrawal split between agriculture, industry and households, alongside renewable resources per person, across 183 countries. Agriculture takes roughly 70% of the world's freshwater and above 85% across South Asia and North Africa — which means water policy is mostly agricultural policy, however much the public campaigns focus on household use.
@@ -341,7 +355,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '25 · Air quality worldwide'
+      title: '26 · Air quality worldwide'
       subtitle: ''
       text: |-
         Mean annual exposure to PM2.5 across 171 countries from 1990. The WHO guideline is 5 micrograms per cubic metre; Morocco sits at 18.7, China at 32, India at 54. Almost no country meets the standard, which is why the WHO publishes four interim targets rather than one.
@@ -355,7 +369,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '26 · Forests and deforestation'
+      title: '27 · Forests and deforestation'
       subtitle: ''
       text: |-
         Forest cover, net change, deforestation and satellite-observed tree cover loss across 168 countries. These four measure different things and are routinely conflated — a country can show net forest gain while deforestation continues, if planting outpaces clearance.
@@ -369,7 +383,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '27 · Food waste per capita'
+      title: '28 · Food waste per capita'
       subtitle: ''
       text: |-
         Kilograms of food wasted per person per year across household, food service, and retail, in 184 countries. Read the full page before drawing country comparisons — most of these figures are modelled rather than measured.
@@ -383,7 +397,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '28 · Natural disasters worldwide'
+      title: '29 · Natural disasters worldwide'
       subtitle: ''
       text: |-
         Recorded natural hazard events from 2000 to 2025 across 180 countries, from the EM-DAT international disaster database. Switch between hazard types and between events, deaths, and people affected.
@@ -397,7 +411,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '29 · Life satisfaction worldwide'
+      title: '30 · Life satisfaction worldwide'
       subtitle: ''
       text: |-
         How people rate their own lives on a scale from 0 to 10, across 162 countries from 2011 to 2025. Drawn from the Gallup World Poll and published annually in the World Happiness Report.
@@ -411,7 +425,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '30 · Research output by country'
+      title: '31 · Research output by country'
       subtitle: ''
       text: |-
         Documents, citations, h-index and self-citation rates across 204 countries, cumulative 1996 to 2025. Switching between volume and citations per document reorders the map almost entirely — the first measures scale, the second measures reception, and they are routinely conflated.
@@ -425,7 +439,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '31 · AI research output'
+      title: '32 · AI research output'
       subtitle: ''
       text: |-
         Scholarly publications on artificial intelligence across 169 countries, 2016 to 2024. China leads on volume with 116,000 a year; Singapore leads on intensity at 765 per million, nine times China's rate. The map opens on per-capita, because the total view is largely a map of population.
