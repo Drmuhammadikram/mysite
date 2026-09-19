@@ -183,6 +183,24 @@ jobs:
                 "World Bank World Development Indicators",
                 set(str(y) for y in range(1990,2022,5))|set(str(y) for y in range(2017,2022)),dp=3)
 
+          def soclatest(M):
+              for k in ["gini","top10","bot20"]:
+                  src=M.get(k,{}); out={}
+                  for iso,ys in src.items():
+                      if not ys: continue
+                      y=max(ys)
+                      out[iso]={"LATEST":ys[y],"YR":float(y)}
+                  M[k]=out
+                  print("   %-6s latest reading for %d countries"%(k,len(out)))
+
+          build("social sustainability","data/social.json",
+                [("gini","SI.POV.GINI"),("top10","SI.DST.10TH.10"),
+                 ("bot20","SI.DST.FRST.20"),("water","SH.H2O.SMDW.ZS"),
+                 ("san","SH.STA.SMSS.ZS"),("oop","SH.XPD.OOPC.CH.ZS")],
+                "World Bank World Development Indicators and WHO/UNICEF Joint Monitoring Programme",
+                set(str(y) for y in range(2000,2023,5))|set(str(y) for y in range(2018,2023))
+                |{"LATEST","YR"},derive=soclatest,dp=2)
+
           if FAILED:
               print()
               print("Refused to overwrite: "+", ".join(FAILED))
@@ -193,7 +211,7 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/econ.json data/wgi.json data/air.json data/internet.json data/women.json data/macro.json data/education.json data/wateruse.json data/rents.json
+          git add data/econ.json data/wgi.json data/air.json data/internet.json data/women.json data/macro.json data/education.json data/wateruse.json data/rents.json data/social.json
           if git diff --cached --quiet; then
             echo "No change"
           else
