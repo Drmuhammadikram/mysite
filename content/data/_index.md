@@ -1,6 +1,6 @@
 ---
 title: Sustainability Data
-summary: Thirty-two interactive datasets on planetary boundaries, ecological footprint, biocapacity, human development, poverty, food security, metabolic health, economic indicators, macroeconomic outlook, natural resource rents, governance, internet access, population and demography, women's employment, literacy and education, ISO certifications, coal consumption, carbon and greenhouse gas emissions, energy mix, oil refining, electric vehicles, water stress, water use, air quality, forests and deforestation, food waste, natural disasters, armed conflict, homicide, life satisfaction, research output, AI research, and progress toward the Sustainable Development Goals.
+summary: Thirty-three interactive datasets on planetary boundaries, ecological footprint, biocapacity, human development, poverty, social sustainability, food security, metabolic health, economic indicators, macroeconomic outlook, natural resource rents, governance, internet access, population and demography, women's employment, literacy and education, ISO certifications, coal consumption, carbon and greenhouse gas emissions, energy mix, oil refining, electric vehicles, water stress, water use, air quality, forests and deforestation, food waste, natural disasters, armed conflict, homicide, life satisfaction, research output, AI research, and progress toward the Sustainable Development Goals.
 type: landing
 sections:
   - block: markdown
@@ -89,7 +89,21 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '7 · Food security'
+      title: '7 · Social sustainability'
+      subtitle: ''
+      text: |-
+        Income inequality, safely managed water and sanitation, and out-of-pocket health costs across 187 countries. The Gini index is the standard inequality measure and communicates almost nothing; the income shares beside it say the same thing in terms anyone can picture, and the hover panel divides one by the other to give the ratio per person.
+
+        {{< social >}}
+
+        [Full page: why income shares beat the Gini →](/data/social-sustainability/)
+    design:
+      columns: '1'
+      spacing:
+        padding: ['1rem', '0', '1rem', '0']
+  - block: markdown
+    content:
+      title: '8 · Food security'
       subtitle: ''
       text: |-
         Undernourishment, severe food insecurity, the cost of a healthy diet and calorie supply across 186 countries. Severe food insecurity is the measure that asks people directly whether they have gone without food — South Sudan records 63.1%, Italy 0.5%. Adequate nutrition costs between $2.50 and $7.29 a day depending on local prices; what varies far more is the income available to pay it.
@@ -103,7 +117,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '8 · Diabetes, obesity and sugar'
+      title: '9 · Diabetes, obesity and sugar'
       subtitle: ''
       text: |-
         Diabetes prevalence, adult obesity and sugar supply across 188 countries. The temptation is to read a chain from sugar to obesity to diabetes, and the data does not support it — several high-sugar countries have modest diabetes rates while parts of South Asia record severe prevalence on unremarkable sugar supply. Obesity is the one continuous series, running from 1980, and its trend is the most dramatic on this page.
@@ -117,7 +131,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '9 · Economic indicators'
+      title: '10 · Economic indicators'
       subtitle: ''
       text: |-
         GDP per capita, total GDP, trade openness, inflation and unemployment across 188 countries from 1990. Income is the strongest single predictor of almost every other indicator on this page — keeping it here makes that relationship checkable rather than assumed.
@@ -131,7 +145,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '10 · Macroeconomic outlook'
+      title: '11 · Macroeconomic outlook'
       subtitle: ''
       text: |-
         Seven macro indicators across 186 countries from 2000 — GDP growth, inflation, real interest rates, current account, fiscal balance, reserves, and currency movement against the dollar. Hovering any country shows all seven at once, which is the point: a single indicator rarely tells you much, and the combination is what analysts actually read.
@@ -145,7 +159,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '11 · Natural resource rents'
+      title: '12 · Natural resource rents'
       subtitle: ''
       text: |-
         Resource rents as a share of GDP across 186 countries, broken down by oil, gas, coal, minerals and forest. A rent is the surplus between what a commodity sells for and what it costs to extract — so this measures how much of an economy consists of drawing down natural capital rather than producing anything. Read alongside the governance map, the resource curse is visible and not subtle.
@@ -159,7 +173,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '12 · Governance indicators'
+      title: '13 · Governance indicators'
       subtitle: ''
       text: |-
         Six dimensions of institutional quality — government effectiveness, regulatory quality, rule of law, control of corruption, voice and accountability, and political stability — across 188 countries from 1996. Environmental policy does not implement itself, and these are the closest available proxy for the institutional capacity it requires.
@@ -173,7 +187,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '13 · Deaths in armed conflicts'
+      title: '14 · Deaths in armed conflicts'
       subtitle: ''
       text: |-
         Recorded deaths in armed conflicts across 185 countries, 1989 to 2025, by where the fighting occurred. These are documented deaths — UCDP counts only what it can verify from reported sources, so the real figures are higher. The hover panel shows UCDP's own low and high estimates alongside the central figure, and the distance between them says a good deal about how contested the reporting is.
@@ -187,7 +201,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '14 · Homicide and imprisonment'
+      title: '15 · Homicide and imprisonment'
       subtitle: ''
       text: |-
         Homicide rates, female victim rates and prison population across 183 countries from 1990. There is no general crime rate here deliberately: recorded crime is not comparable between countries, since it tracks reporting culture and police practice as much as incidence. Homicide is the exception, and the female victim rate behaves differently from the aggregate because women are far more often killed at home.
@@ -201,7 +215,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '15 · Internet access worldwide'
+      title: '16 · Internet access worldwide'
       subtitle: ''
       text: |-
         Internet use, mobile subscriptions and fixed broadband across 188 countries from 1995. Switching between mobile and broadband reorders the map substantially — much of the world came online without ever building fixed-line infrastructure, and that difference shapes what connectivity is actually good for.
@@ -215,7 +229,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '16 · Population and demography'
+      title: '17 · Population and demography'
       subtitle: ''
       text: |-
         Eleven demographic indicators across 182 countries from 1960 to 2023 — population, growth rate, median age, fertility, age structure, life expectancy, urbanisation and density. Demography sits underneath most of the other datasets here, since population is the multiplier on every per-capita figure.
@@ -229,7 +243,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: "17 · Women's employment"
+      title: "18 · Women's employment"
       subtitle: ''
       text: |-
         Female labour force participation and the gender participation gap across 174 countries from 1990. The map opens on the gap rather than the female rate, because participation is often highest in the poorest countries — where subsistence work counts as employment and not working is not an option. Morocco records a gap of 48.5 percentage points; Norway 7.1.
@@ -243,7 +257,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '18 · ISO management system certifications worldwide'
+      title: '19 · ISO management system certifications worldwide'
       subtitle: ''
       text: |-
         The number of valid certificates to ISO management system standards, reported by country. Switch between quality, environmental, occupational health and safety, food safety, and energy management standards.
@@ -257,7 +271,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '19 · Coal consumption worldwide'
+      title: '20 · Coal consumption worldwide'
       subtitle: ''
       text: |-
         Coal consumption across 79 countries from 1990 to 2025. Switch between total consumption, consumption per person, and coal's share of primary energy — each answers a different question about dependence and responsibility.
@@ -271,7 +285,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '20 · Carbon and greenhouse gas emissions'
+      title: '21 · Carbon and greenhouse gas emissions'
       subtitle: ''
       text: |-
         Production and consumption-based CO2, plus all greenhouse gases, across 187 countries from 1960. The consumption-based view is the one worth switching to: it reassigns the emissions of imported goods to the country that buys them, and several wealthy economies look considerably less improved once it does.
@@ -285,7 +299,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '21 · Energy mix by source'
+      title: '22 · Energy mix by source'
       subtitle: ''
       text: |-
         Each source as a share of primary energy consumption — coal, oil, gas, nuclear, hydro, wind and solar — across 79 countries from 1990 to 2025. Primary energy covers transport and heating as well as electricity, which is why renewable shares look smaller here than in the headlines.
@@ -299,7 +313,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '22 · Oil refining'
+      title: '23 · Oil refining'
       subtitle: ''
       text: |-
         Refining capacity, throughput and utilisation across 74 countries from 1980. Crude oil is not a usable fuel — refining capacity determines whether a country can meet its own fuel demand or must import refined products. Morocco has reported none since its Mohammedia refinery closed in 2015.
@@ -313,7 +327,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '23 · Electric vehicle adoption'
+      title: '24 · Electric vehicle adoption'
       subtitle: ''
       text: |-
         Electric car sales and stock across 56 markets from 2010. Norway sells 97% electric but only 36% of its cars on the road are — the gap between those two figures is how long a vehicle fleet takes to turn over, and it is the number that matters for emissions.
@@ -327,7 +341,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '24 · Water stress worldwide'
+      title: '25 · Water stress worldwide'
       subtitle: ''
       text: |-
         Freshwater withdrawal as a share of available renewable resources, from 2000 to 2023. Values above 100% mean a country withdraws more than its renewable supply, drawing down aquifers or relying on desalination.
@@ -341,7 +355,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '25 · Water use and resources'
+      title: '26 · Water use and resources'
       subtitle: ''
       text: |-
         Withdrawal split between agriculture, industry and households, alongside renewable resources per person, across 183 countries. Agriculture takes roughly 70% of the world's freshwater and above 85% across South Asia and North Africa — which means water policy is mostly agricultural policy, however much the public campaigns focus on household use.
@@ -355,7 +369,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '26 · Air quality worldwide'
+      title: '27 · Air quality worldwide'
       subtitle: ''
       text: |-
         Mean annual exposure to PM2.5 across 171 countries from 1990. The WHO guideline is 5 micrograms per cubic metre; Morocco sits at 18.7, China at 32, India at 54. Almost no country meets the standard, which is why the WHO publishes four interim targets rather than one.
@@ -369,7 +383,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '27 · Forests and deforestation'
+      title: '28 · Forests and deforestation'
       subtitle: ''
       text: |-
         Forest cover, net change, deforestation and satellite-observed tree cover loss across 168 countries. These four measure different things and are routinely conflated — a country can show net forest gain while deforestation continues, if planting outpaces clearance.
@@ -383,7 +397,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '28 · Food waste per capita'
+      title: '29 · Food waste per capita'
       subtitle: ''
       text: |-
         Kilograms of food wasted per person per year across household, food service, and retail, in 184 countries. Read the full page before drawing country comparisons — most of these figures are modelled rather than measured.
@@ -397,7 +411,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '29 · Natural disasters worldwide'
+      title: '30 · Natural disasters worldwide'
       subtitle: ''
       text: |-
         Recorded natural hazard events from 2000 to 2025 across 180 countries, from the EM-DAT international disaster database. Switch between hazard types and between events, deaths, and people affected.
@@ -411,7 +425,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '30 · Life satisfaction worldwide'
+      title: '31 · Life satisfaction worldwide'
       subtitle: ''
       text: |-
         How people rate their own lives on a scale from 0 to 10, across 162 countries from 2011 to 2025. Drawn from the Gallup World Poll and published annually in the World Happiness Report.
@@ -425,7 +439,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '31 · Research output by country'
+      title: '32 · Research output by country'
       subtitle: ''
       text: |-
         Documents, citations, h-index and self-citation rates across 204 countries, cumulative 1996 to 2025. Switching between volume and citations per document reorders the map almost entirely — the first measures scale, the second measures reception, and they are routinely conflated.
@@ -439,7 +453,7 @@ sections:
         padding: ['1rem', '0', '1rem', '0']
   - block: markdown
     content:
-      title: '32 · AI research output'
+      title: '33 · AI research output'
       subtitle: ''
       text: |-
         Scholarly publications on artificial intelligence across 169 countries, 2016 to 2024. China leads on volume with 116,000 a year; Singapore leads on intensity at 765 per million, nine times China's rate. The map opens on per-capita, because the total view is largely a map of population.
