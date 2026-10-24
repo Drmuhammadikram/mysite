@@ -23,8 +23,7 @@
   Source: {{ .source }}. Internet use counts anyone who has used the internet in the previous
   three months, by any device. Mobile subscriptions can exceed 100 per hundred people because
   many people hold more than one SIM. Fixed broadband counts household connections rather than
-  individuals, so it understates access where one connection serves several people. Total
-  internet users are reported only to 2021.
+  individuals, so it understates access where one connection serves several people.
 </p>
 
 <style>@media(max-width:760px){#in-wrap{grid-template-columns:1fr!important}}</style>
@@ -49,10 +48,7 @@ var M=[
   c:['#1c4f4a','#2d7f75','#6bb3a6','#c2b078','#a8613b']},
  {k:'bb',l:'Fixed broadband',u:'per 100 people',dp:1,suf:'',
   b:[[35,'over 35'],[22,'22 - 35'],[12,'12 - 22'],[4,'4 - 12'],[0,'under 4']],
-  c:['#3d2a52','#5c4079','#8a6ba8','#bcaacd','#e4dcec']},
- {k:'users',l:'Total users',u:'people',dp:0,suf:'',
-  b:[[2e8,'over 200M'],[5e7,'50 - 200M'],[1e7,'10 - 50M'],[2e6,'2 - 10M'],[0,'under 2M']],
-  c:['#123f63','#2a7fa8','#7fb8c9','#c3d5de','#e8eff3']}
+  c:['#3d2a52','#5c4079','#8a6ba8','#bcaacd','#e4dcec']}
 ];
 var mi=0, year=YEARS[YEARS.length-1], paths=null;
 
@@ -114,7 +110,6 @@ function show(k){
     row('Internet use','net',cur==='net')+
     row('Mobile','mob',cur==='mob')+
     row('Broadband','bb',cur==='bb')+
-    row('Total users','users',cur==='users')+
     trend+'</div>');
 }
 
@@ -133,9 +128,7 @@ function cards(){
     card('Year',year,'reporting year')+
     card('Highest',fmt(top[1],S),top[0])+
     card('Lowest',fmt(bot[1],S),bot[0])+
-    card(S.k==='users'?'World total':'Average',
-         S.k==='users'?fmt(sum,S):fmt(n?sum/n:0,S),
-         n+' countries'));
+    card('Average',fmt(n?sum/n:0,S),n+' countries'));
 }
 
 function render(){

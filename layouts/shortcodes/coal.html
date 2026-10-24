@@ -22,9 +22,7 @@
 <p style="font-size:0.72rem;opacity:0.55;margin-top:1.25rem;line-height:1.6;">
   Coal consumption covers commercial solid fuels only: hard coal, lignite, and other solid
   fuels. It excludes coal converted to liquid or gaseous fuels but includes coal consumed in
-  transformation processes such as electricity generation. Source: {{ .source }}. Coverage is
-  limited to the countries surveyed by the Energy Institute, so many smaller economies are
-  absent rather than at zero.
+    transformation processes such as electricity generation. Source: {{ .source }}. Coverage is limited to the countries surveyed by the Energy Institute, so many smaller economies are absent rather than at zero.
 </p>
 
 <style>@media(max-width:760px){#cl-wrap{grid-template-columns:1fr!important}}</style>
@@ -58,7 +56,7 @@ function colorFor(v){
   return COLS[COLS.length-1];
 }
 function key(f){ return ('00'+String(f.id)).slice(-3); }
-function val(k,m,y){ var c=DATA[k]; if(!c) return null; var g=c[m]; if(!g) return null;
+function val(k,m,y){ var c=DATA[k]; if(!c) return null; var g=c.d?c.d[m]:c[m]; if(!g) return null;
   var v=g[y]; return (v===undefined)?null:v; }
 function fmt(n){
   if(n>=1000) return n.toLocaleString('en-GB',{maximumFractionDigits:0});
@@ -143,7 +141,7 @@ d3.select('#cl-metric').selectAll('button').data(METRICS).join('button')
   .text(function(d){return d.l;})
   .on('click',function(e,d){ mi=METRICS.indexOf(d); render(); });
 
-var SHOW=YEARS.filter(function(y,i){ return i%5===0 || i===YEARS.length-1; });
+var SHOW=YEARS;
 d3.select('#cl-tabs').selectAll('button').data(SHOW).join('button')
   .attr('type','button')
   .style('font-size','0.75rem').style('padding','6px 11px').style('cursor','pointer')

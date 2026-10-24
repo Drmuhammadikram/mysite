@@ -8,7 +8,7 @@ sections:
       title: 'Coal consumption worldwide'
       subtitle: ''
       text: |-
-        Coal consumption across 79 countries from 1990 to 2024, switchable between total consumption, consumption per person, and coal's share of primary energy.
+        Coal consumption across 188 countries from 1990 to 2024, switchable between total consumption, consumption per person, and coal's share of primary energy.
 
         {{< coal >}}
     design:

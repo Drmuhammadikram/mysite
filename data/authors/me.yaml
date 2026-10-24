@@ -66,7 +66,25 @@ education:
     start: 2006-09-01
     end: 2010-07-29
 experience:
-  - role: Assistant Professor
+  - role: Associate Editor
+    org: Business Strategy and Development (Wiley)
+    start: 2026-09-11
+    summary: |
+      Handling submissions on corporate sustainability, environmental management and the
+      transition to low-carbon business models.
+  - role: Editor
+    org: Discover Sustainability (Springer Nature)
+    start: 2024-10-01
+    summary: |
+      Handling editor for submissions across sustainable development, environmental management
+      and the Sustainable Development Goals — assigning reviewers, evaluating reports and
+      taking editorial decisions.
+  - role: Section Editor
+    org: Sustainability (MDPI)
+    start: 2022-08-01
+    summary: |
+      Section on Development Goals towards Sustainability.
+  - role: Professor of Strategy and Sustainability
     org: Al Akhawayn University in Ifrane
     start: 2021-08-01
     summary: |
